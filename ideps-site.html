@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IDEPS — Instituto de Desenvolvimento Pró-Social</title>
+<link rel="icon" href="ideps-icone.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700&family=Public+Sans:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* paleta extraída da logo */
+  --azul:#120A8B; --azul-esc:#0C0660; --azul-claro:#EAE9F6;
+  --magenta:#F5008C; --magenta-forte:#D4007A; --magenta-claro:#FDE4F1;
+  --verde:#00C000; --verde-claro:#E2F7E2; --verde-esc:#046B04;
+  --agua:#00C87A; --agua-claro:#DDF7ED;
+  --laranja:#F98A00; --laranja-claro:#FFF1DC; --laranja-esc:#8A4C00;
+  --vermelho:#EE0000; --amarelo:#F7E600;
+  /* neutros derivados do azul da marca */
+  --papel:#FFFFFF; --papel-2:#F4F5FA;
+  --linha:#DFE0EC; --texto:#161540; --texto-2:#585780;
+  --escala:1;
+  --display:'Bricolage Grotesque',system-ui,sans-serif;
+  --corpo:'Public Sans',system-ui,sans-serif;
+  --dado:'IBM Plex Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--papel);color:var(--texto);font-family:var(--corpo);
+  font-size:calc(18px * var(--escala));line-height:1.65;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit}
+button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+:focus-visible{outline:3px solid var(--magenta);outline-offset:3px;border-radius:3px}
+.wrap{width:100%;max-width:1160px;margin:0 auto;padding:0 24px}
+
+h1,h2,h3{font-family:var(--display);font-weight:700;line-height:1.08;letter-spacing:-.02em;color:var(--azul)}
+h1{font-size:clamp(2.4rem,6vw,4.1rem)}
+h2{font-size:clamp(1.8rem,3.6vw,2.6rem)}
+h3{font-size:1.32rem;line-height:1.25}
+.eyebrow{font-family:var(--dado);font-size:.75rem;font-weight:500;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--magenta-forte);display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--linha)}
+.lead{font-size:1.16rem;color:var(--texto-2);max-width:62ch}
+
+.aviso{background:var(--azul);color:#C6C3EC;font-family:var(--dado);font-size:.72rem;
+  letter-spacing:.06em;text-align:center;padding:7px 16px}
+
+/* faixa multicolor da marca */
+.faixa{display:flex;height:5px}
+.faixa i{flex:1}
+
+header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.95);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--linha)}
+.barra{display:flex;align-items:center;gap:24px;min-height:78px}
+.marca{flex-shrink:0}
+.marca img{height:34px;width:auto}
+nav{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap}
+nav a{text-decoration:none;padding:10px 15px;border-radius:99px;font-weight:500;
+  font-size:.97rem;color:var(--texto-2)}
+nav a:hover{background:var(--azul-claro);color:var(--azul)}
+nav a.ativo{color:#fff;background:var(--azul)}
+.ferramentas{display:flex;align-items:center;gap:8px}
+.tamanho{display:flex;border:1.5px solid var(--linha);border-radius:99px;overflow:hidden}
+.tamanho button{padding:6px 12px;font-weight:700;color:var(--texto-2);line-height:1}
+.tamanho button[aria-pressed="true"]{background:var(--azul);color:#fff}
+.tamanho button:first-child{font-size:.8rem}
+.tamanho button:last-child{font-size:1.05rem}
+.btn{display:inline-block;background:var(--magenta-forte);color:#fff;text-decoration:none;
+  padding:13px 24px;border-radius:99px;font-weight:700;font-size:.97rem;transition:background .15s}
+.btn:hover{background:#AB0062}
+.btn.linha{background:transparent;color:var(--azul);box-shadow:inset 0 0 0 1.5px var(--azul)}
+.btn.linha:hover{background:var(--azul);color:#fff}
+.menu-btn{display:none;font-size:1.6rem;padding:8px 12px;margin-left:auto;color:var(--azul)}
+
+.hero{padding:76px 0 0}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:end}
+.hero h1 em{font-style:normal;position:relative;white-space:nowrap}
+.hero h1 em::after{content:"";position:absolute;left:-.04em;right:-.04em;bottom:.06em;height:.24em;
+  background:var(--amarelo);z-index:-1;border-radius:3px}
+.hero p{margin-top:26px;font-size:1.2rem;color:var(--texto-2);max-width:52ch}
+.hero-acoes{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}
+.hero-foto{aspect-ratio:4/5;border-radius:24px;overflow:hidden;background:var(--azul-claro);
+  box-shadow:14px 14px 0 var(--amarelo)}
+.hero-foto img{width:100%;height:100%;object-fit:cover}
+
+.numeros{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--linha);
+  border-top:1px solid var(--linha);border-bottom:1px solid var(--linha);margin-top:76px}
+.numeros div{background:var(--papel);padding:30px 24px}
+.numeros strong{display:block;font-family:var(--display);font-size:2.7rem;font-weight:700;
+  line-height:1;letter-spacing:-.03em}
+.numeros span{font-family:var(--dado);font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--texto-2);display:block;margin-top:10px}
+.numeros div:nth-child(1) strong{color:var(--azul)}
+.numeros div:nth-child(2) strong{color:var(--magenta)}
+.numeros div:nth-child(3) strong{color:var(--verde)}
+.numeros div:nth-child(4) strong{color:var(--laranja)}
+
+section{padding:88px 0}
+.claro{background:var(--papel-2)}
+.secao-cabeca{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;
+  margin-bottom:44px;flex-wrap:wrap}
+
+/* ---------- linha do tempo ---------- */
+.tempo{background:var(--azul);color:#CFCCF0}
+.tempo .eyebrow{color:var(--amarelo)}
+.tempo .eyebrow::after{background:#3A32A6}
+.tempo h2{color:#fff}
+.tempo .lead{color:#B4AFE8}
+.tl{margin-top:44px;border-top:1px solid #3A32A6}
+.tl-anos{display:flex;font-family:var(--dado);font-size:.72rem;color:#948DD6;padding:10px 0 16px}
+.tl-anos span{flex:1;border-left:1px solid #3A32A6;padding-left:6px}
+.tl-linha{padding:7px 0;border-top:1px solid #2A2296}
+.tl-trilho{position:relative;height:38px}
+.tl-barra{position:absolute;top:0;height:38px;border-radius:99px;display:flex;align-items:center;
+  padding:0 16px;font-size:.86rem;font-weight:500;white-space:nowrap;overflow:hidden;cursor:pointer;
+  text-decoration:none;transition:transform .15s;text-overflow:ellipsis}
+.tl-barra:hover{transform:translateY(-2px)}
+.tl-barra.feito{background:transparent;color:#CFCCF0;box-shadow:inset 0 0 0 2px currentColor}
+.tl-legenda{display:flex;gap:10px 20px;margin-top:28px;flex-wrap:wrap;align-items:center}
+.tl-legenda span{font-size:.86rem;color:#CFCCF0;display:flex;align-items:center;gap:8px}
+.anel{width:15px;height:15px;border-radius:50%;border:3.5px solid;flex-shrink:0}
+.tl-nota{font-family:var(--dado);font-size:.74rem;color:#948DD6;margin-top:16px}
+.tl-rolagem{overflow-x:auto;padding-bottom:8px}
+.tl-conteudo{min-width:760px}
+
+/* ---------- cartões ---------- */
+.filtros{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:20px}
+.filtros button{padding:9px 18px;border-radius:99px;font-size:.92rem;font-weight:500;
+  box-shadow:inset 0 0 0 1.5px var(--linha);color:var(--texto-2)}
+.filtros button:hover{box-shadow:inset 0 0 0 1.5px var(--azul);color:var(--azul)}
+.filtros button[aria-pressed="true"]{background:var(--azul);color:#fff;box-shadow:none}
+.grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(292px,1fr));gap:26px}
+.cartao{background:var(--papel);border:1px solid var(--linha);border-radius:20px;overflow:hidden;
+  text-decoration:none;display:flex;flex-direction:column;transition:transform .15s,box-shadow .15s}
+.cartao:hover{transform:translateY(-4px);box-shadow:0 10px 0 -4px var(--cor)}
+.cartao-topo{aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;padding:22px;
+  background:var(--cor-clara)}
+.cartao-topo img{max-height:100%;width:auto;object-fit:contain}
+.cartao-corpo{padding:24px;display:flex;flex-direction:column;gap:11px;flex:1}
+.eixo-tag{display:flex;align-items:center;gap:8px;font-family:var(--dado);font-size:.68rem;
+  letter-spacing:.09em;text-transform:uppercase;color:var(--texto-2)}
+.eixo-tag i{width:11px;height:11px;border-radius:50%;background:var(--cor);flex-shrink:0}
+.cartao h3{font-size:1.16rem}
+.cartao p{font-size:.96rem;color:var(--texto-2);line-height:1.55}
+.cartao .ver{margin-top:auto;padding-top:14px;font-weight:700;color:var(--magenta-forte);font-size:.94rem}
+.selo{font-family:var(--dado);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:5px 12px;border-radius:99px;align-self:flex-start;font-weight:500}
+.selo.ativo{background:var(--magenta-claro);color:#A00060}
+.selo.feito{background:var(--azul-claro);color:var(--azul)}
+
+.voltar{font-family:var(--dado);font-size:.8rem;letter-spacing:.06em;color:var(--texto-2);
+  text-decoration:none;display:inline-block;margin-bottom:22px}
+.voltar:hover{color:var(--magenta-forte)}
+.projeto-grid{display:grid;grid-template-columns:1fr 340px;gap:56px;align-items:start}
+.ficha{background:var(--papel-2);border:1px solid var(--linha);border-radius:20px;padding:28px;
+  position:sticky;top:106px}
+.ficha dt{font-family:var(--dado);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--texto-2);margin-bottom:5px}
+.ficha dd{font-weight:500;margin-bottom:20px;line-height:1.4}
+.ficha dd:last-child{margin-bottom:0}
+.corpo-texto p{margin-bottom:20px;max-width:66ch}
+.corpo-texto h3{margin:36px 0 14px}
+.corpo-texto ul{margin:0 0 20px 22px;max-width:66ch}
+.corpo-texto li{margin-bottom:9px}
+
+.cursos-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.cursos-foto{border-radius:24px;overflow:hidden;aspect-ratio:5/4}
+.cursos-foto img{width:100%;height:100%;object-fit:cover}
+.lista-check{list-style:none;margin:26px 0 32px}
+.lista-check li{padding-left:34px;position:relative;margin-bottom:14px;color:var(--texto-2)}
+.lista-check li::before{content:"";position:absolute;left:0;top:.34em;width:18px;height:18px;
+  border-radius:50%;border:4px solid var(--magenta)}
+.lista-check li:nth-child(2)::before{border-color:var(--verde)}
+.lista-check li:nth-child(3)::before{border-color:var(--laranja)}
+.lista-check b{color:var(--azul)}
+
+.docs{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.doc{background:var(--papel);border:1px solid var(--linha);border-radius:16px;padding:24px;
+  text-decoration:none;display:block;border-left:5px solid var(--azul);transition:border-color .15s}
+.doc:hover{border-color:var(--magenta);border-left-color:var(--magenta)}
+.doc span{font-family:var(--dado);font-size:.72rem;letter-spacing:.09em;color:var(--texto-2);text-transform:uppercase}
+.doc strong{display:block;margin-top:9px;font-size:1.02rem;color:var(--azul)}
+
+.contato-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px}
+.contato-item{border-top:1px solid var(--linha);padding:22px 0}
+.contato-item dt{font-family:var(--dado);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--texto-2)}
+.contato-item dd{font-size:1.28rem;font-weight:500;margin-top:7px;color:var(--azul)}
+.mapa{border-radius:20px;overflow:hidden;border:1px solid var(--linha);min-height:340px;background:var(--azul-claro)}
+.mapa iframe{width:100%;height:100%;min-height:340px;border:0;display:block}
+
+footer{background:var(--papel-2);border-top:1px solid var(--linha);padding:64px 0 32px;font-size:.97rem}
+.rodape-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px}
+footer h4{font-family:var(--display);font-size:1.02rem;margin-bottom:16px;font-weight:700;color:var(--azul)}
+footer a{color:var(--texto-2);text-decoration:none;display:block;margin-bottom:10px}
+footer a:hover{color:var(--magenta-forte)}
+footer .logo-rodape{height:82px;margin-bottom:20px}
+.rodape-fim{border-top:1px solid var(--linha);margin-top:48px;padding-top:24px;display:flex;
+  justify-content:space-between;gap:20px;flex-wrap:wrap;font-family:var(--dado);font-size:.76rem;color:var(--texto-2)}
+
+@media (max-width:900px){
+  .hero-grid,.cursos-grid,.contato-grid,.projeto-grid{grid-template-columns:1fr;gap:36px}
+  .hero-foto{aspect-ratio:16/10;box-shadow:none}
+  .numeros{grid-template-columns:1fr 1fr}
+  .rodape-grid{grid-template-columns:1fr 1fr}
+  .ficha{position:static}
+  nav{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;flex-direction:column;
+    padding:16px 24px;border-bottom:1px solid var(--linha)}
+  nav.aberto{display:flex}
+  .menu-btn{display:block}
+  .ferramentas .btn{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<div class="aviso">PROTÓTIPO — textos, datas e valores são exemplos, a confirmar com a equipe do IDEPS</div>
+<div class="faixa"><i style="background:var(--vermelho)"></i><i style="background:var(--magenta)"></i><i style="background:var(--azul)"></i><i style="background:var(--agua)"></i><i style="background:var(--verde)"></i><i style="background:var(--amarelo)"></i><i style="background:var(--laranja)"></i></div>
+
+<header>
+  <div class="wrap barra">
+    <a class="marca" href="#/"><img src="ideps-wordmark.png" alt="IDEPS — Instituto de Desenvolvimento Pró-Social"></a>
+    <button class="menu-btn" id="menuBtn" aria-label="Abrir menu">☰</button>
+    <nav id="nav">
+      <a href="#/">Início</a>
+      <a href="#/quem-somos">Quem somos</a>
+      <a href="#/projetos">Projetos</a>
+      <a href="#/transparencia">Transparência</a>
+      <a href="#/contato">Contato</a>
+    </nav>
+    <div class="ferramentas">
+      <div class="tamanho" role="group" aria-label="Tamanho do texto">
+        <button id="tp" aria-pressed="true">A</button>
+        <button id="tg" aria-pressed="false">A</button>
+      </div>
+      <a class="btn" href="#/cursos">Cursos</a>
+    </div>
+  </div>
+</header>
+
+<main id="app"></main>
+
+<footer>
+  <div class="wrap">
+    <div class="rodape-grid">
+      <div>
+        <img class="logo-rodape" src="ideps-logo.png" alt="IDEPS">
+        <p style="max-width:34ch;color:var(--texto-2)">Organização da sociedade civil em Campo Grande, MS, dedicada ao acesso à informação e à educação como direitos.</p>
+      </div>
+      <div>
+        <h4>Navegar</h4>
+        <a href="#/quem-somos">Quem somos</a>
+        <a href="#/projetos">Projetos</a>
+        <a href="#/transparencia">Transparência</a>
+        <a href="#/contato">Contato</a>
+      </div>
+      <div>
+        <h4>Contato</h4>
+        <a href="tel:+5567992899775">67 99289-9775</a>
+        <a href="mailto:idepsms@gmail.com">idepsms@gmail.com</a>
+        <a href="#/contato">Rua Dona Rosemaria, 633<br>Tiradentes — Campo Grande</a>
+      </div>
+      <div>
+        <h4>Acompanhe</h4>
+        <a href="#">Instagram</a>
+        <a href="#">Facebook</a>
+        <a href="#/cursos">Plataforma de cursos</a>
+      </div>
+    </div>
+    <div class="rodape-fim">
+      <span>IDEPS © 2026 — CNPJ 00.000.000/0001-00</span>
+      <span><a href="#" style="display:inline">Política de privacidade</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const IMG='https://idepsms.org/wp-content/uploads/';
+
+/* cada área de atuação tem uma cor da logo */
+const EIXOS={
+  'Direitos e cidadania':{cor:'var(--azul)',clara:'var(--azul-claro)'},
+  'Pessoas idosas':{cor:'var(--laranja)',clara:'var(--laranja-claro)'},
+  'Mulheres':{cor:'var(--magenta)',clara:'var(--magenta-claro)'},
+  'Segurança alimentar':{cor:'var(--verde)',clara:'var(--verde-claro)'},
+  'Saúde e convivência':{cor:'var(--agua)',clara:'var(--agua-claro)'},
+  'Juventude':{cor:'var(--vermelho)',clara:'#FDE6E6'}
+};
+
+const PROJETOS=[
+ {id:'quem-somos-60',nome:'Quem Somos 60',titulo:'Pessoas idosas no município de Campo Grande/MS',
+  status:'ativo',eixo:'Pessoas idosas',ini:2023,fim:2026,capa:IMG+'2025/10/Quem-Somos-60-300x300.png',
+  termo:'TF-12-S-FMAS/2023',periodo:'36 meses',valor:'R$ 000.000,00',publico:'120 pessoas idosas',
+  resumo:'Mapeia e acompanha a população idosa do município, garantindo acesso a direitos e serviços.',
+  objeto:'Levantar o perfil das pessoas idosas do município e articular a rede de proteção para ampliar o acesso a serviços públicos.',
+  texto:'O projeto nasce da constatação de que boa parte da população idosa do bairro Tiradentes desconhece os serviços a que tem direito. A ação combina escuta ativa, visitas domiciliares e articulação com a rede socioassistencial.',
+  resultados:['Perfil socioeconômico das participantes mapeado','Encaminhamentos à rede de proteção social','Grupos de convivência formados no território']},
+
+ {id:'mulheres-que-apoiam-mulheres',nome:'Mulheres que Apoiam',titulo:'Mulheres que Apoiam Mulheres',
+  status:'ativo',eixo:'Mulheres',ini:2024,fim:2026,capa:IMG+'2025/10/Mulheres-que-apoiam-mulheres-300x300.png',
+  termo:'TF-08-S-FMAS/2024',periodo:'24 meses',valor:'R$ 000.000,00',publico:'80 mulheres',
+  resumo:'Rede de apoio mútuo, formação sobre direitos e enfrentamento à violência doméstica.',
+  objeto:'Fortalecer redes de apoio entre mulheres em situação de vulnerabilidade, com formação em direitos e autonomia econômica.',
+  texto:'A iniciativa cria espaços seguros de escuta e formação, onde as participantes reconhecem situações de violência, conhecem os canais de denúncia e constroem alternativas de geração de renda.',
+  resultados:['Rodas de conversa mensais no território','Formação sobre a Lei Maria da Penha','Encaminhamento para serviços especializados']},
+
+ {id:'bem-estar',nome:'Bem-Estar IDEPS',titulo:'Projeto Bem-Estar IDEPS',
+  status:'ativo',eixo:'Saúde e convivência',ini:2024,fim:2026,capa:IMG+'2025/10/Bem-estar-IDEPS-300x300.png',
+  termo:'TF-19-S-FMAS/2024',periodo:'24 meses',valor:'R$ 000.000,00',publico:'90 pessoas idosas',
+  resumo:'Pilates, massagem terapêutica, nutrição e escuta psicológica para as idosas do Tiradentes.',
+  objeto:'Promover saúde física e mental de pessoas idosas por meio de atividades continuadas de bem-estar.',
+  texto:'As atividades acontecem semanalmente na sede do instituto e combinam movimento, cuidado corporal e acompanhamento profissional. A frequência regular é o que sustenta o vínculo das participantes com o instituto.',
+  resultados:['Turmas semanais de pilates adaptado','Atendimento nutricional individual','Escuta psicológica sob demanda']},
+
+ {id:'conhecer-para-participar',nome:'Conhecer para Participar',titulo:'Conhecer para Participar — IDEPS',
+  status:'ativo',eixo:'Direitos e cidadania',ini:2025,fim:2026,capa:IMG+'2025/10/Conhecer-para-participar-300x300.png',
+  termo:'TF-30-S-FMAS/2025',periodo:'12 meses',valor:'R$ 000.000,00',publico:'100 participantes',
+  resumo:'Oficinas sobre políticas públicas, direitos humanos e participação cidadã.',
+  objeto:'Oportunizar o acesso a informações sobre políticas públicas, direitos humanos e participação cidadã, estimulando o protagonismo social e a autonomia.',
+  texto:'O projeto surge da necessidade de oferecer espaços de formação cidadã para populações vulneráveis, visando o fortalecimento de vínculos comunitários. A iniciativa promove o empoderamento e o acesso a direitos para ressignificar trajetórias de vida.',
+  resultados:['Ampliação do conhecimento sobre direitos','Desenvolvimento do protagonismo social','Fortalecimento dos vínculos familiares e comunitários']},
+
+ {id:'apoio-as-familias',nome:'Apoio às Famílias',titulo:'Projeto Apoio às Famílias',
+  status:'ativo',eixo:'Segurança alimentar',ini:2025,fim:2026,capa:IMG+'2025/02/Imagem-do-WhatsApp-de-2025-02-19-as-21.38.26_5eb9fdb6-300x300.jpg',
+  termo:'TF-27-S-FMAS/2025',periodo:'12 meses',valor:'R$ 000.000,00',publico:'150 famílias',
+  resumo:'Kits nutricionais e alimentos do Mesa Brasil SESC para famílias do território.',
+  objeto:'Garantir segurança alimentar a famílias em vulnerabilidade por meio da distribuição de kits e da articulação com parceiros doadores.',
+  texto:'Os kits nutricionais são obtidos via doações de parceiros e complementados com alimentos do Mesa Brasil SESC. A entrega é feita junto ao acompanhamento das famílias, e não como ação isolada.',
+  resultados:['Entrega mensal de kits nutricionais','Parceria ativa com o Mesa Brasil SESC','Acompanhamento das famílias atendidas']},
+
+ {id:'alimentando-direitos',nome:'Alimentando Direitos',titulo:'Alimentando Direitos',
+  status:'feito',eixo:'Segurança alimentar',ini:2022,fim:2023,capa:IMG+'2024/11/2-1-300x300.png',
+  termo:'TF-14-S-FMAS/2022',periodo:'18 meses',valor:'R$ 000.000,00',publico:'200 famílias',
+  resumo:'Segurança alimentar associada à formação sobre o direito humano à alimentação.',
+  objeto:'Associar a distribuição de alimentos à formação sobre o direito humano à alimentação adequada.',
+  texto:'Mais do que distribuir alimentos, o projeto tratou a alimentação como direito, formando as famílias sobre as políticas públicas às quais podem recorrer.',
+  resultados:['Formação sobre direito à alimentação','Distribuição continuada de alimentos','Famílias inseridas na rede de proteção']},
+
+ {id:'fala-jovem',nome:'Fala Jovem',titulo:'Fala Jovem',
+  status:'feito',eixo:'Juventude',ini:2020,fim:2022,capa:IMG+'2024/11/1-300x300.png',
+  termo:'TF-05-S-FMAS/2020',periodo:'24 meses',valor:'R$ 000.000,00',publico:'70 jovens',
+  resumo:'Protagonismo juvenil e participação em espaços de decisão.',
+  objeto:'Estimular o protagonismo de adolescentes e jovens do território em espaços de participação social.',
+  texto:'O projeto formou jovens do bairro para atuar em conselhos e coletivos, tratando participação como habilidade que se aprende na prática.',
+  resultados:['Jovens formados em participação social','Coletivo juvenil constituído','Participação em conselhos municipais']},
+
+ {id:'cozinhar-bem-faz-bem',nome:'Cozinhar Bem Faz Bem',titulo:'Cozinhar Bem Faz Bem',
+  status:'feito',eixo:'Segurança alimentar',ini:2020,fim:2021,capa:IMG+'2025/02/Imagem-do-WhatsApp-de-2025-02-19-as-21.38.26_f0c2e00e-300x300.jpg',
+  termo:'TF-11-S-FMAS/2020',periodo:'12 meses',valor:'R$ 000.000,00',publico:'60 participantes',
+  resumo:'Oficinas de aproveitamento integral de alimentos e geração de renda.',
+  objeto:'Capacitar participantes no aproveitamento integral dos alimentos, com foco em nutrição e geração de renda.',
+  texto:'As oficinas ensinaram técnicas de aproveitamento integral, reduzindo desperdício e abrindo caminho para pequenas atividades de geração de renda.',
+  resultados:['Oficinas culinárias realizadas','Redução do desperdício nas casas','Iniciativas de renda a partir da cozinha']},
+
+ {id:'familias-em-seguranca-alimentar',nome:'Famílias em Seg. Alimentar',titulo:'Famílias em Segurança Alimentar e Nutricional',
+  status:'feito',eixo:'Segurança alimentar',ini:2021,fim:2022,capa:IMG+'2025/02/Imagem-do-WhatsApp-de-2025-02-19-as-21.38.25_09bcd780-300x300.jpg',
+  termo:'TF-09-S-FMAS/2021',periodo:'12 meses',valor:'R$ 000.000,00',publico:'130 famílias',
+  resumo:'Acompanhamento nutricional de famílias em insegurança alimentar.',
+  objeto:'Acompanhar famílias em situação de insegurança alimentar com apoio nutricional e encaminhamento à rede.',
+  texto:'O acompanhamento nutricional identificou situações de risco e permitiu encaminhamentos rápidos à rede de saúde e assistência.',
+  resultados:['Avaliação nutricional das famílias','Encaminhamentos à rede de saúde','Apoio alimentar continuado']},
+
+ {id:'semeando-direitos-humanos',nome:'Semeando Direitos',titulo:'Semeando Direitos Humanos',
+  status:'feito',eixo:'Direitos e cidadania',ini:2018,fim:2020,capa:IMG+'2024/04/Semeando-DH.png',
+  termo:'TF-03-S-FMAS/2018',periodo:'24 meses',valor:'R$ 000.000,00',publico:'150 participantes',
+  resumo:'Educação em direitos humanos em escolas e espaços comunitários.',
+  objeto:'Difundir a educação em direitos humanos em escolas e espaços comunitários do município.',
+  texto:'O projeto levou formação em direitos humanos para dentro de escolas e associações de bairro, alcançando públicos que não chegariam à sede do instituto.',
+  resultados:['Formações em escolas do município','Material educativo produzido','Multiplicadores formados no território']},
+
+ {id:'participar-e-preciso',nome:'Participar é Preciso',titulo:'Participar é Preciso',
+  status:'feito',eixo:'Direitos e cidadania',ini:2016,fim:2018,capa:IMG+'2024/04/Logo-Participar-e-Preciso-8-sem-fundo-300x300.png',
+  termo:'TF-01-S-FMAS/2016',periodo:'24 meses',valor:'R$ 000.000,00',publico:'90 participantes',
+  resumo:'Formação de lideranças comunitárias para o controle social.',
+  objeto:'Formar lideranças comunitárias para atuação qualificada em conselhos e instâncias de controle social.',
+  texto:'Um dos primeiros projetos do instituto, formou lideranças que seguem atuando no território até hoje.',
+  resultados:['Lideranças comunitárias formadas','Participação em conselhos ampliada','Base para os projetos seguintes']}
+];
+
+const app=document.getElementById('app');
+let filtroStatus='todos', filtroEixo='Todos';
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const cor=p=>EIXOS[p.eixo]||{cor:'var(--azul)',clara:'var(--azul-claro)'};
+
+function cartao(p){
+  const c=cor(p);
+  return `<a class="cartao" href="#/projeto/${p.id}" style="--cor:${c.cor};--cor-clara:${c.clara}">
+    <div class="cartao-topo"><img src="${p.capa}" alt=""></div>
+    <div class="cartao-corpo">
+      <span class="eixo-tag"><i></i>${esc(p.eixo)}</span>
+      <h3>${esc(p.titulo)}</h3>
+      <p>${esc(p.resumo)}</p>
+      <span class="selo ${p.status}">${p.status==='ativo'?'Em andamento':'Finalizado'}</span>
+      <span class="ver">Ver o projeto →</span>
+    </div></a>`;
+}
+
+function linhaDoTempo(){
+  const A0=2016,A1=2027,span=A1-A0,anos=[];
+  for(let a=A0;a<A1;a+=2) anos.push(`<span>${a}</span>`);
+  const barras=[...PROJETOS].sort((a,b)=>a.ini-b.ini).map(p=>{
+    const c=cor(p), esq=((p.ini-A0)/span)*100, larg=((Math.min(p.fim,A1)-p.ini)/span)*100;
+    const estilo = p.status==='ativo'
+      ? `background:${c.cor};color:${p.eixo==='Segurança alimentar'||p.eixo==='Saúde e convivência'?'#062F06':'#fff'}`
+      : `color:${c.cor}`;
+    return `<div class="tl-linha"><div class="tl-trilho">
+      <a class="tl-barra ${p.status}" href="#/projeto/${p.id}"
+         style="left:${esq.toFixed(2)}%;width:${Math.max(larg,10).toFixed(2)}%;${estilo}"
+         title="${esc(p.titulo)} — ${p.ini} a ${p.fim}">${esc(p.nome)}</a>
+    </div></div>`;
+  }).join('');
+  const legenda=Object.entries(EIXOS).map(([n,c])=>
+    `<span><i class="anel" style="border-color:${c.cor}"></i>${n}</span>`).join('');
+  return `<div class="tl"><div class="tl-rolagem"><div class="tl-conteudo">
+    <div class="tl-anos">${anos.join('')}</div>${barras}</div></div>
+    <div class="tl-legenda">${legenda}</div>
+    <p class="tl-nota">Barra preenchida = em andamento · barra vazada = concluído · largura = tempo de execução do termo de fomento</p>
+  </div>`;
+}
+
+const paginas={
+
+'/':()=>`
+ <div class="hero"><div class="wrap"><div class="hero-grid">
+   <div>
+     <p class="eyebrow">Campo Grande, MS · desde 2014</p>
+     <h1>Informação é o primeiro <em>direito</em> a ser garantido.</h1>
+     <p>O IDEPS leva conhecimento sobre políticas públicas e direitos a quem mais precisa, para que cada pessoa possa decidir sobre a própria vida.</p>
+     <div class="hero-acoes">
+       <a class="btn" href="#/projetos">Conheça os projetos</a>
+       <a class="btn linha" href="#/cursos">Estudar de graça</a>
+     </div>
+   </div>
+   <div class="hero-foto"><img src="${IMG}2024/11/image13-1024x800.jpg" alt="Atividade do IDEPS com participantes"></div>
+ </div></div></div>
+
+ <div class="wrap"><div class="numeros">
+   <div><strong>12</strong><span>anos de atuação</span></div>
+   <div><strong>11</strong><span>projetos executados</span></div>
+   <div><strong>5</strong><span>projetos em andamento</span></div>
+   <div><strong>+900</strong><span>pessoas atendidas</span></div>
+ </div></div>
+
+ <section class="tempo"><div class="wrap">
+   <div class="secao-cabeca"><div style="max-width:60ch">
+     <p class="eyebrow">Uma década de trabalho</p>
+     <h2>Cada projeto tem começo, meio e prestação de contas.</h2>
+     <p class="lead">Nada aqui é permanente por acaso: cada linha abaixo é um termo de fomento com prazo, meta e recurso público acompanhado. A cor indica a área de atuação.</p>
+   </div></div>
+   ${linhaDoTempo()}
+ </div></section>
+
+ <section><div class="wrap">
+   <div class="secao-cabeca">
+     <div><p class="eyebrow">Em andamento agora</p><h2>Cinco frentes ativas</h2></div>
+     <a class="btn linha" href="#/projetos">Ver todos os projetos</a>
+   </div>
+   <div class="grade">${PROJETOS.filter(p=>p.status==='ativo').map(cartao).join('')}</div>
+ </div></section>
+
+ <section class="claro"><div class="wrap"><div class="cursos-grid">
+   <div>
+     <p class="eyebrow">Plataforma de cursos</p>
+     <h2>Aprender também é um direito.</h2>
+     <p class="lead">Cursos online e gratuitos, feitos para caber na rotina de quem trabalha, cuida da casa e da família.</p>
+     <ul class="lista-check">
+       <li><b>Gratuitos.</b> Falta de dinheiro não pode impedir ninguém de estudar.</li>
+       <li><b>No seu horário.</b> Você assiste quando der, de onde estiver.</li>
+       <li><b>Com certificado.</b> Para usar em processos seletivos e no currículo.</li>
+     </ul>
+     <a class="btn" href="#/cursos">Acessar a plataforma</a>
+   </div>
+   <div class="cursos-foto"><img src="${IMG}2025/10/jovem-aluna-ouvindo-professora-de-ingles-1024x617.jpg" alt="Aluna estudando online"></div>
+ </div></div></section>`,
+
+'/quem-somos':()=>`
+ <section><div class="wrap">
+   <p class="eyebrow">Quem somos</p>
+   <h2 style="max-width:22ch">Uma ponte entre a sociedade civil e a equidade social.</h2>
+   <div class="projeto-grid" style="margin-top:44px">
+     <div class="corpo-texto">
+       <p class="lead">O Instituto de Desenvolvimento Pró-Social é uma organização da sociedade civil com sede em Campo Grande, Mato Grosso do Sul, que atua na defesa de direitos e no desenvolvimento comunitário.</p>
+       <p>Nossa missão é ampliar o acesso à informação e à educação como direitos fundamentais. Acreditamos que, ao conhecer seus direitos e as políticas públicas disponíveis, as pessoas passam a ocupar seus espaços, decidir por si e participar da vida da cidade.</p>
+       <p>A sede fica no bairro Tiradentes, e é lá que a maior parte do trabalho acontece: atendimento a pessoas idosas, oficinas de formação cidadã, apoio a famílias em insegurança alimentar e cuidado continuado com quem chega até nós.</p>
+       <h3>No que acreditamos</h3>
+       <ul>
+         <li><b>Direito à informação.</b> Ninguém acessa o que não sabe que existe.</li>
+         <li><b>Protagonismo.</b> As pessoas atendidas decidem o rumo do próprio percurso.</li>
+         <li><b>Vínculo.</b> Presença continuada vale mais do que ação pontual.</li>
+         <li><b>Transparência.</b> Recurso público exige prestação de contas aberta.</li>
+       </ul>
+       <h3>Como nos organizamos</h3>
+       <p>O instituto é formado por uma diretoria voluntária, uma equipe técnica multidisciplinar — assistência social, psicologia, nutrição e educação física — e uma rede de parceiros que viabiliza as ações no território.</p>
+     </div>
+     <div class="ficha"><dl>
+       <dt>Razão social</dt><dd>Instituto de Desenvolvimento Pró-Social</dd>
+       <dt>Natureza jurídica</dt><dd>Associação de defesa de direitos sociais</dd>
+       <dt>Fundação</dt><dd>2014</dd>
+       <dt>Sede</dt><dd>Rua Dona Rosemaria, 633<br>Tiradentes — Campo Grande, MS</dd>
+       <dt>CNPJ</dt><dd>00.000.000/0001-00</dd>
+     </dl></div>
+   </div>
+ </div></section>`,
+
+'/projetos':()=>{
+  const lista=PROJETOS.filter(p=>
+    (filtroStatus==='todos'||p.status===filtroStatus)&&(filtroEixo==='Todos'||p.eixo===filtroEixo));
+  return `<section><div class="wrap">
+    <p class="eyebrow">Projetos</p>
+    <h2>Tudo o que já fizemos, e o que está em curso.</h2>
+    <p class="lead" style="margin-top:16px">Filtre por situação ou por área de atuação.</p>
+    <div class="filtros" style="margin-top:36px" role="group" aria-label="Situação">
+      ${[['todos','Todos'],['ativo','Em andamento'],['feito','Finalizados']].map(([v,r])=>
+        `<button data-status="${v}" aria-pressed="${filtroStatus===v}">${r}</button>`).join('')}
+    </div>
+    <div class="filtros" style="margin-bottom:38px" role="group" aria-label="Área de atuação">
+      <button data-eixo="Todos" aria-pressed="${filtroEixo==='Todos'}">Todas as áreas</button>
+      ${Object.entries(EIXOS).map(([n,c])=>
+        `<button data-eixo="${n}" aria-pressed="${filtroEixo===n}"
+          style="${filtroEixo===n?`background:${c.cor};box-shadow:none;color:${n==='Segurança alimentar'||n==='Saúde e convivência'?'#062F06':'#fff'}`:''}">${n}</button>`).join('')}
+    </div>
+    <div class="grade">${lista.length?lista.map(cartao).join('')
+      :'<p class="lead">Nenhum projeto nessa combinação de filtros. Ajuste a seleção acima.</p>'}</div>
+  </div></section>`;
+},
+
+'/transparencia':()=>`
+ <section><div class="wrap">
+   <p class="eyebrow">Transparência</p>
+   <h2 style="max-width:24ch">Recurso público se acompanha de perto.</h2>
+   <p class="lead" style="margin-top:18px">Publicamos aqui os relatórios de atividade, as prestações de contas e os termos de fomento firmados com o poder público.</p>
+   <h3 style="margin:56px 0 22px">Relatórios anuais</h3>
+   <div class="docs">
+     ${[2025,2024,2023,2022].map(a=>`<a class="doc" href="#"><span>PDF · ${a}</span><strong>Relatório de atividades ${a}</strong></a>`).join('')}
+   </div>
+   <h3 style="margin:56px 0 22px">Prestação de contas</h3>
+   <div class="docs">
+     ${PROJETOS.filter(p=>p.status==='ativo').map(p=>
+       `<a class="doc" href="#" style="border-left-color:${cor(p).cor}"><span>${p.termo}</span><strong>${esc(p.titulo)}</strong></a>`).join('')}
+   </div>
+   <h3 style="margin:56px 0 22px">Parceiros e financiadores</h3>
+   <p class="lead">Fundo Municipal de Assistência Social de Campo Grande, Mesa Brasil SESC, Comper e demais parceiros doadores que sustentam as ações no território.</p>
+ </div></section>`,
+
+'/contato':()=>`
+ <section><div class="wrap">
+   <p class="eyebrow">Contato</p>
+   <h2>Venha até a sede ou fale com a gente.</h2>
+   <div class="contato-grid" style="margin-top:44px">
+     <div>
+       <dl>
+         <div class="contato-item"><dt>Telefone e WhatsApp</dt><dd><a href="tel:+5567992899775" style="text-decoration:none">67 99289-9775</a></dd></div>
+         <div class="contato-item"><dt>E-mail</dt><dd><a href="mailto:idepsms@gmail.com" style="text-decoration:none">idepsms@gmail.com</a></dd></div>
+         <div class="contato-item"><dt>Endereço</dt><dd>Rua Dona Rosemaria, 633<br>Tiradentes — Campo Grande, MS</dd></div>
+         <div class="contato-item"><dt>Atendimento</dt><dd>Segunda a sexta, das 8h às 17h</dd></div>
+       </dl>
+       <a class="btn" style="margin-top:28px" href="https://wa.me/5567992899775">Chamar no WhatsApp</a>
+     </div>
+     <div class="mapa"><iframe title="Mapa da sede do IDEPS" loading="lazy"
+       src="https://maps.google.com/maps?q=Rua%20Dona%20Rosemaria%2C%20633%20Campo%20Grande&t=m&z=15&output=embed&iwloc=near"></iframe></div>
+   </div>
+ </div></section>`,
+
+'/cursos':()=>`
+ <section><div class="wrap">
+   <p class="eyebrow">Plataforma de cursos</p>
+   <h2 style="max-width:20ch">Cursos gratuitos, do seu jeito.</h2>
+   <p class="lead" style="margin-top:18px">A plataforma de cursos continua sendo a mesma que você já usa. O acesso é por aqui.</p>
+   <div style="margin-top:36px;display:flex;gap:12px;flex-wrap:wrap">
+     <a class="btn" href="https://cursos.idepsms.org">Entrar na plataforma</a>
+     <a class="btn linha" href="https://cursos.idepsms.org">Criar minha conta</a>
+   </div>
+   <p style="margin-top:44px;font-family:var(--dado);font-size:.82rem;color:var(--texto-2);max-width:62ch">
+     Nota técnica do protótipo: a plataforma de cursos segue em WordPress, movida para o subdomínio cursos.idepsms.org na mesma hospedagem Hostinger. O site institucional apenas encaminha para ela.</p>
+ </div></section>`
+};
+
+function paginaProjeto(id){
+  const p=PROJETOS.find(x=>x.id===id);
+  if(!p) return `<section><div class="wrap"><h2>Projeto não encontrado</h2>
+    <p class="lead" style="margin-top:16px">Esse endereço não corresponde a nenhum projeto.</p>
+    <a class="btn" style="margin-top:24px" href="#/projetos">Ver todos os projetos</a></div></section>`;
+  const c=cor(p);
+  const campos=[['Termo de fomento',p.termo],['Período de execução',p.periodo],
+    ['Valor do investimento',p.valor],['Público atendido',p.publico],['Área de atuação',p.eixo]]
+    .filter(([,v])=>v&&String(v).trim());
+  return `<section><div class="wrap">
+    <a class="voltar" href="#/projetos">← Todos os projetos</a>
+    <span class="eixo-tag" style="--cor:${c.cor};margin-bottom:12px"><i></i>${esc(p.eixo)}</span>
+    <h2 style="max-width:20ch">${esc(p.titulo)}</h2>
+    <span class="selo ${p.status}" style="display:inline-block;margin-top:16px">${p.status==='ativo'?'Em andamento':'Finalizado'}</span>
+    <div class="projeto-grid" style="margin-top:44px">
+      <div class="corpo-texto">
+        <p class="lead">${esc(p.objeto)}</p>
+        <p>${esc(p.texto)}</p>
+        <h3>Resultados esperados</h3>
+        <ul>${p.resultados.map(r=>`<li>${esc(r)}</li>`).join('')}</ul>
+        <h3>Quer participar?</h3>
+        <p>As inscrições acontecem na sede, no bairro Tiradentes, ou pelo telefone 67 99289-9775.</p>
+        <a class="btn" href="#/contato">Falar com a equipe</a>
+      </div>
+      <div class="ficha" style="border-top:5px solid ${c.cor}"><dl>
+        ${campos.map(([r,v])=>`<dt>${r}</dt><dd>${esc(v)}</dd>`).join('')}
+      </dl></div>
+    </div>
+  </div></section>`;
+}
+
+function render(){
+  const rota=location.hash.replace(/^#/,'')||'/';
+  app.innerHTML = rota.startsWith('/projeto/')?paginaProjeto(rota.split('/')[2]):(paginas[rota]||paginas['/'])();
+  document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('ativo',a.getAttribute('href')==='#'+rota));
+  document.getElementById('nav').classList.remove('aberto');
+  window.scrollTo(0,0);
+  document.querySelectorAll('[data-status]').forEach(b=>b.onclick=()=>{filtroStatus=b.dataset.status;render();});
+  document.querySelectorAll('[data-eixo]').forEach(b=>b.onclick=()=>{filtroEixo=b.dataset.eixo;render();});
+}
+document.getElementById('menuBtn').onclick=()=>document.getElementById('nav').classList.toggle('aberto');
+const tp=document.getElementById('tp'),tg=document.getElementById('tg');
+function escala(g){document.documentElement.style.setProperty('--escala',g?1.18:1);
+  tp.setAttribute('aria-pressed',!g);tg.setAttribute('aria-pressed',g);}
+tp.onclick=()=>escala(false); tg.onclick=()=>escala(true);
+window.addEventListener('hashchange',render);
+render();
+</script>
+</body>
+</html>

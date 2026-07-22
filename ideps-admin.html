@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel do site — IDEPS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Public+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* paleta extraída da logo do IDEPS */
+  --papel:#F4F5FA; --branco:#FFF;
+  --folha:#120A8B; --mata:#3A32A6; --mata-claro:#EAE9F6;
+  --ipe:#D4007A; --ipe-claro:#FDE4F1;
+  --amarelo:#F98A00; --amarelo-claro:#FFF1DC;
+  --verde:#00C000; --agua:#00C87A; --laranja:#F98A00; --vermelho:#EE0000; --magenta:#F5008C;
+  --linha:#DFE0EC; --texto:#161540; --texto-2:#585780;
+  --display:'Bricolage Grotesque',sans-serif;
+  --corpo:'Public Sans',system-ui,sans-serif;
+  --dado:'IBM Plex Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--papel);color:var(--texto);font-family:var(--corpo);font-size:15px;line-height:1.6}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:none;background:none}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid var(--ipe);outline-offset:2px;border-radius:3px}
+h1{font-family:var(--display);font-size:1.85rem;letter-spacing:-.02em;line-height:1.15}
+h2{font-family:var(--display);font-size:1.15rem;font-weight:700;letter-spacing:-.01em}
+
+.aviso{background:var(--folha);color:#CFE0D7;font-family:var(--dado);font-size:.7rem;
+  letter-spacing:.06em;text-align:center;padding:6px 16px}
+
+.faixa{display:flex;height:5px}
+.faixa i{flex:1}
+.app{display:grid;grid-template-columns:252px 1fr;min-height:calc(100vh - 26px)}
+
+/* ---------- lateral ---------- */
+aside{background:var(--folha);color:#C6C3EC;padding:24px 16px;display:flex;flex-direction:column;gap:26px}
+.logo{display:flex;align-items:center;gap:10px;padding:0 8px 6px}
+.logo img{height:32px}
+.logo b{font-family:var(--display);color:#fff;font-size:1.15rem;letter-spacing:-.02em}
+.logo small{display:block;font-family:var(--dado);font-size:.62rem;letter-spacing:.11em;
+  text-transform:uppercase;color:#948DD6;font-weight:400}
+.grupo-titulo{font-family:var(--dado);font-size:.63rem;letter-spacing:.13em;text-transform:uppercase;
+  color:#6D66C4;padding:0 10px;margin-bottom:8px}
+aside nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:9px;
+  font-size:.94rem;font-weight:500;margin-bottom:2px;transition:background .12s}
+aside nav a:hover{background:#2A2296;color:#fff}
+aside nav a.ativo{background:var(--ipe);color:#fff}
+aside nav a .conta{margin-left:auto;font-family:var(--dado);font-size:.72rem;opacity:.7}
+.usuario{margin-top:auto;border-top:1px solid #3A32A6;padding-top:18px;display:flex;align-items:center;gap:11px}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--mata);color:#fff;font-weight:700;
+  display:grid;place-items:center;flex-shrink:0}
+.usuario small{display:block;font-size:.76rem;color:#948DD6}
+
+/* ---------- área principal ---------- */
+main{padding:34px 40px 64px;overflow-x:auto}
+.topo{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:30px;flex-wrap:wrap}
+.topo p{color:var(--texto-2);margin-top:6px;max-width:62ch}
+.btn{background:var(--ipe);color:#fff;padding:11px 19px;border-radius:99px;font-weight:700;font-size:.92rem;
+  display:inline-flex;align-items:center;gap:8px;transition:background .12s}
+.btn:hover{background:#AB0062}
+.btn.linha{background:transparent;color:var(--folha);box-shadow:inset 0 0 0 1.5px var(--linha)}
+.btn.linha:hover{background:var(--branco);box-shadow:inset 0 0 0 1.5px var(--folha)}
+.btn.fantasma{background:transparent;color:var(--texto-2);padding:9px 12px}
+.btn.fantasma:hover{background:var(--mata-claro);color:var(--folha)}
+
+/* ---------- cartões e tabelas ---------- */
+.painel{background:var(--branco);border:1px solid var(--linha);border-radius:14px;overflow:hidden}
+.painel-cabeca{padding:18px 22px;border-bottom:1px solid var(--linha);display:flex;
+  justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-family:var(--dado);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--texto-2);font-weight:500;padding:13px 22px;border-bottom:1px solid var(--linha)}
+td{padding:15px 22px;border-bottom:1px solid var(--linha);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tbody tr:hover{background:#FAFBF9}
+.item{display:flex;align-items:center;gap:13px}
+.miniatura{width:42px;height:42px;border-radius:9px;background:var(--mata-claro);object-fit:contain;
+  padding:4px;flex-shrink:0}
+.item b{display:block;font-weight:500}
+.item small{color:var(--texto-2);font-family:var(--dado);font-size:.74rem}
+.selo{font-family:var(--dado);font-size:.66rem;letter-spacing:.09em;text-transform:uppercase;
+  padding:4px 9px;border-radius:5px;font-weight:500;white-space:nowrap}
+.selo.publicado{background:var(--mata-claro);color:var(--folha)}
+.selo.rascunho{background:var(--amarelo-claro);color:#8A4C00}
+.selo.ativo{background:var(--ipe-claro);color:#A00060}
+.acoes{display:flex;gap:4px;justify-content:flex-end}
+
+/* ---------- resumo ---------- */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:30px}
+.card{background:var(--branco);border:1px solid var(--linha);border-radius:14px;padding:20px}
+.card strong{display:block;font-family:var(--display);font-size:2.1rem;line-height:1;letter-spacing:-.03em}
+.card span{font-family:var(--dado);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--texto-2);display:block;margin-top:9px}
+.card.alerta{border-color:var(--amarelo);background:var(--amarelo-claro)}
+.card.alerta strong{color:#8A4C00}
+
+/* ---------- formulário ---------- */
+.form{display:grid;grid-template-columns:1fr 320px;gap:26px;align-items:start}
+.campo{margin-bottom:20px}
+label{display:block;font-weight:500;font-size:.9rem;margin-bottom:6px}
+label small{display:block;font-weight:400;color:var(--texto-2);font-size:.82rem;margin-top:2px}
+input[type=text],input[type=date],select,textarea{
+  width:100%;padding:11px 13px;border:1.5px solid var(--linha);border-radius:9px;
+  background:var(--branco);font-size:.95rem}
+input:focus,select:focus,textarea:focus{border-color:var(--mata);outline:none}
+textarea{min-height:120px;resize:vertical;line-height:1.6}
+.dois{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.caixa{background:var(--branco);border:1px solid var(--linha);border-radius:14px;padding:22px}
+.caixa h2{margin-bottom:16px}
+.dica{background:var(--mata-claro);border-radius:10px;padding:14px 16px;font-size:.87rem;
+  color:var(--folha);margin-top:18px}
+.dica b{display:block;margin-bottom:4px}
+.contador{font-family:var(--dado);font-size:.74rem;color:var(--texto-2);text-align:right;margin-top:5px}
+.repetidor{border:1.5px dashed var(--linha);border-radius:10px;padding:14px;margin-bottom:10px;
+  display:flex;gap:10px;align-items:center}
+.repetidor input{flex:1;border:none;padding:4px 0}
+.rodape-form{display:flex;gap:10px;justify-content:flex-end;margin-top:26px;
+  border-top:1px solid var(--linha);padding-top:22px}
+.upload{border:1.5px dashed var(--linha);border-radius:12px;padding:28px;text-align:center;
+  color:var(--texto-2);font-size:.9rem;background:#FAFBF9}
+.upload b{display:block;color:var(--folha);margin-bottom:4px}
+
+/* ---------- mídia ---------- */
+.midia{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.midia figure{background:var(--branco);border:1px solid var(--linha);border-radius:12px;overflow:hidden}
+.midia img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:var(--mata-claro)}
+.midia figcaption{padding:9px 11px;font-family:var(--dado);font-size:.7rem;color:var(--texto-2);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.vazio{padding:56px 22px;text-align:center;color:var(--texto-2)}
+.vazio b{display:block;font-family:var(--display);font-size:1.15rem;color:var(--folha);margin-bottom:6px}
+
+@media (max-width:1000px){
+  .app{grid-template-columns:1fr}
+  aside{flex-direction:row;flex-wrap:wrap;align-items:center;gap:12px;padding:14px}
+  aside nav{display:flex;gap:4px;flex-wrap:wrap}
+  .grupo-titulo,.usuario{display:none}
+  .form{grid-template-columns:1fr}
+  main{padding:24px 20px 48px}
+}
+</style>
+</head>
+<body>
+
+<div class="aviso">PROTÓTIPO — painel de gerenciamento do site institucional, sem back-end conectado</div>
+
+<div class="faixa"><i style="background:var(--vermelho)"></i><i style="background:var(--magenta)"></i><i style="background:var(--folha)"></i><i style="background:var(--agua)"></i><i style="background:var(--verde)"></i><i style="background:#F7E600"></i><i style="background:var(--laranja)"></i></div>
+<div class="app">
+<aside>
+  <div class="logo">
+    <span class="placa"><img src="ideps-wordmark.png" alt="IDEPS"></span>
+    <small>Painel do site</small>
+  </div>
+  <div>
+    <p class="grupo-titulo">Conteúdo</p>
+    <nav id="nav">
+      <a href="#/">Resumo</a>
+      <a href="#/projetos">Projetos <span class="conta">11</span></a>
+      <a href="#/paginas">Páginas <span class="conta">4</span></a>
+      <a href="#/transparencia">Transparência <span class="conta">9</span></a>
+      <a href="#/numeros">Números do topo</a>
+      <a href="#/midia">Fotos e arquivos</a>
+    </nav>
+  </div>
+  <div>
+    <p class="grupo-titulo">Configurações</p>
+    <nav id="nav2">
+      <a href="#/contato">Contato e rodapé</a>
+      <a href="#/equipe">Quem tem acesso</a>
+    </nav>
+  </div>
+  <div class="usuario">
+    <div class="avatar">MC</div>
+    <div><b style="font-size:.9rem;color:#fff">Maria Clara</b><small>Comunicação</small></div>
+  </div>
+</aside>
+
+<main id="app"></main>
+</div>
+
+<script>
+const IMG='https://idepsms.org/wp-content/uploads/';
+const PROJETOS=[
+ {id:'quem-somos-60',t:'Pessoas idosas no município de Campo Grande/MS',termo:'TF-12-S-FMAS/2023',eixo:'Pessoas idosas',st:'ativo',pub:'publicado',cap:IMG+'2025/10/Quem-Somos-60-300x300.png',at:'12/07/2026'},
+ {id:'mulheres',t:'Mulheres que Apoiam Mulheres',termo:'TF-08-S-FMAS/2024',eixo:'Mulheres',st:'ativo',pub:'publicado',cap:IMG+'2025/10/Mulheres-que-apoiam-mulheres-300x300.png',at:'02/07/2026'},
+ {id:'bem-estar',t:'Projeto Bem-Estar IDEPS',termo:'TF-19-S-FMAS/2024',eixo:'Saúde e convivência',st:'ativo',pub:'publicado',cap:IMG+'2025/10/Bem-estar-IDEPS-300x300.png',at:'28/06/2026'},
+ {id:'conhecer',t:'Conhecer para Participar — IDEPS',termo:'TF-30-S-FMAS/2025',eixo:'Direitos e cidadania',st:'ativo',pub:'rascunho',cap:IMG+'2025/10/Conhecer-para-participar-300x300.png',at:'21/07/2026'},
+ {id:'apoio',t:'Projeto Apoio às Famílias',termo:'TF-27-S-FMAS/2025',eixo:'Segurança alimentar',st:'ativo',pub:'publicado',cap:IMG+'2025/02/Imagem-do-WhatsApp-de-2025-02-19-as-21.38.26_5eb9fdb6-300x300.jpg',at:'15/05/2026'},
+ {id:'alimentando',t:'Alimentando Direitos',termo:'TF-14-S-FMAS/2022',eixo:'Segurança alimentar',st:'feito',pub:'publicado',cap:IMG+'2024/11/2-1-300x300.png',at:'10/01/2024'},
+ {id:'fala-jovem',t:'Fala Jovem',termo:'TF-05-S-FMAS/2020',eixo:'Juventude',st:'feito',pub:'publicado',cap:IMG+'2024/11/1-300x300.png',at:'03/03/2023'},
+ {id:'semeando',t:'Semeando Direitos Humanos',termo:'TF-03-S-FMAS/2018',eixo:'Direitos e cidadania',st:'feito',pub:'publicado',cap:IMG+'2024/04/Semeando-DH.png',at:'19/11/2021'},
+ {id:'participar',t:'Participar é Preciso',termo:'TF-01-S-FMAS/2016',eixo:'Direitos e cidadania',st:'feito',pub:'publicado',cap:IMG+'2024/04/Logo-Participar-e-Preciso-8-sem-fundo-300x300.png',at:'08/09/2019'}
+];
+const CORES={'Direitos e cidadania':'var(--folha)','Pessoas idosas':'var(--laranja)',
+ 'Mulheres':'var(--magenta)','Segurança alimentar':'var(--verde)',
+ 'Saúde e convivência':'var(--agua)','Juventude':'var(--vermelho)'};
+const ponto=e=>`<span style="display:inline-block;width:11px;height:11px;border-radius:50%;
+ background:${CORES[e]||'var(--folha)'};margin-right:9px;vertical-align:-1px"></span>`;
+const app=document.getElementById('app');
+
+const selo=p=>`<span class="selo ${p}">${p==='publicado'?'Publicado':'Rascunho'}</span>`;
+
+const paginas={
+
+'/':()=>`
+ <div class="topo">
+   <div><h1>Bom dia, Maria Clara</h1><p>Um resumo do que está no ar e do que precisa da sua atenção.</p></div>
+   <a class="btn" href="#/projeto/novo">+ Novo projeto</a>
+ </div>
+ <div class="cards">
+   <div class="card"><strong style="color:var(--folha)">10</strong><span>projetos publicados</span></div>
+   <div class="card"><strong style="color:var(--magenta)">5</strong><span>em andamento</span></div>
+   <div class="card alerta"><strong>1</strong><span>rascunho parado</span></div>
+   <div class="card"><strong style="color:var(--verde)">4</strong><span>relatórios anuais</span></div>
+ </div>
+
+ <div class="painel" style="margin-bottom:24px">
+   <div class="painel-cabeca"><h2>Precisa de atenção</h2></div>
+   <table><tbody>
+     <tr><td><div class="item"><img class="miniatura" src="${IMG}2025/10/Conhecer-para-participar-300x300.png" alt="">
+       <div><b>Conhecer para Participar — IDEPS</b><small>Rascunho desde 21/07/2026</small></div></div></td>
+       <td style="color:var(--texto-2)">Falta preencher meta e valor do investimento</td>
+       <td class="acoes"><a class="btn linha" href="#/projeto/conhecer">Terminar</a></td></tr>
+     <tr><td><div class="item"><div class="miniatura" style="display:grid;place-items:center;font-family:var(--dado);font-size:.7rem">PDF</div>
+       <div><b>Relatório de atividades 2025</b><small>Transparência</small></div></div></td>
+       <td style="color:var(--texto-2)">Ainda não foi enviado</td>
+       <td class="acoes"><a class="btn linha" href="#/transparencia">Enviar arquivo</a></td></tr>
+   </tbody></table>
+ </div>
+
+ <div class="painel">
+   <div class="painel-cabeca"><h2>Alterações recentes</h2><a class="btn fantasma" href="#/projetos">Ver projetos →</a></div>
+   <table><tbody>
+     ${PROJETOS.slice(0,4).map(p=>`<tr>
+       <td><div class="item"><img class="miniatura" src="${p.cap}" alt="">
+         <div><b>${p.t}</b><small>${p.termo}</small></div></div></td>
+       <td>${selo(p.pub)}</td>
+       <td style="font-family:var(--dado);font-size:.8rem;color:var(--texto-2)">${p.at}</td>
+       <td class="acoes"><a class="btn fantasma" href="#/projeto/${p.id}">Editar</a></td></tr>`).join('')}
+   </tbody></table>
+ </div>`,
+
+'/projetos':()=>`
+ <div class="topo">
+   <div><h1>Projetos</h1><p>Cada projeto vira uma página no site e uma barra na linha do tempo da página inicial.</p></div>
+   <a class="btn" href="#/projeto/novo">+ Novo projeto</a>
+ </div>
+ <div class="painel">
+   <div class="painel-cabeca">
+     <div style="display:flex;gap:8px;flex-wrap:wrap">
+       <input type="text" placeholder="Buscar por nome ou termo de fomento" style="width:290px">
+       <select style="width:auto"><option>Todas as situações</option><option>Em andamento</option><option>Finalizados</option></select>
+     </div>
+     <span style="font-family:var(--dado);font-size:.76rem;color:var(--texto-2)">${PROJETOS.length} projetos</span>
+   </div>
+   <table>
+     <thead><tr><th>Projeto</th><th>Área</th><th>Situação</th><th>No site</th><th>Editado</th><th></th></tr></thead>
+     <tbody>${PROJETOS.map(p=>`<tr>
+       <td><div class="item"><img class="miniatura" src="${p.cap}" alt="">
+         <div><b>${p.t}</b><small>${p.termo}</small></div></div></td>
+       <td style="color:var(--texto-2)">${ponto(p.eixo)}${p.eixo}</td>
+       <td><span class="selo ${p.st==='ativo'?'ativo':'publicado'}">${p.st==='ativo'?'Em andamento':'Finalizado'}</span></td>
+       <td>${selo(p.pub)}</td>
+       <td style="font-family:var(--dado);font-size:.8rem;color:var(--texto-2)">${p.at}</td>
+       <td class="acoes"><a class="btn fantasma" href="#/projeto/${p.id}">Editar</a></td></tr>`).join('')}
+     </tbody>
+   </table>
+ </div>`,
+
+'/paginas':()=>`
+ <div class="topo"><div><h1>Páginas</h1><p>Os textos fixos do site. Edite direto, sem mexer no layout.</p></div></div>
+ <div class="painel"><table>
+   <thead><tr><th>Página</th><th>Endereço</th><th>No site</th><th>Editado</th><th></th></tr></thead>
+   <tbody>
+     ${[['Início','/','publicado','20/07/2026'],['Quem somos','/quem-somos','publicado','14/06/2026'],
+        ['Transparência','/transparencia','publicado','01/07/2026'],['Contato','/contato','publicado','22/03/2026']]
+       .map(([n,u,p,d])=>`<tr><td><b>${n}</b></td>
+         <td style="font-family:var(--dado);font-size:.82rem;color:var(--texto-2)">${u}</td>
+         <td>${selo(p)}</td>
+         <td style="font-family:var(--dado);font-size:.8rem;color:var(--texto-2)">${d}</td>
+         <td class="acoes"><a class="btn fantasma" href="#/pagina">Editar</a></td></tr>`).join('')}
+   </tbody>
+ </table></div>`,
+
+'/pagina':()=>`
+ <div class="topo"><div><a class="btn fantasma" href="#/paginas" style="padding-left:0">← Páginas</a>
+   <h1 style="margin-top:6px">Quem somos</h1></div></div>
+ <div class="form">
+   <div class="caixa">
+     <div class="campo"><label>Título da página</label><input type="text" value="Uma ponte entre a sociedade civil e a equidade social."></div>
+     <div class="campo"><label>Texto de abertura<small>Aparece maior, logo abaixo do título.</small></label>
+       <textarea style="min-height:90px">O Instituto de Desenvolvimento Pró-Social é uma organização da sociedade civil com sede em Campo Grande, Mato Grosso do Sul, que atua na defesa de direitos e no desenvolvimento comunitário.</textarea></div>
+     <div class="campo"><label>Conteúdo</label>
+       <textarea style="min-height:260px">Nossa missão é ampliar o acesso à informação e à educação como direitos fundamentais. Acreditamos que, ao conhecer seus direitos e as políticas públicas disponíveis, as pessoas passam a ocupar seus espaços, decidir por si e participar da vida da cidade.
+
+A sede fica no bairro Tiradentes, e é lá que a maior parte do trabalho acontece.</textarea></div>
+     <div class="rodape-form"><button class="btn linha">Salvar rascunho</button><button class="btn">Publicar</button></div>
+   </div>
+   <div>
+     <div class="caixa"><h2>Ficha lateral</h2>
+       <div class="campo"><label>Fundação</label><input type="text" value="2014"></div>
+       <div class="campo"><label>CNPJ</label><input type="text" value="00.000.000/0001-00"></div>
+       <div class="campo" style="margin-bottom:0"><label>Natureza jurídica</label><input type="text" value="Associação de defesa de direitos sociais"></div>
+     </div>
+     <div class="dica"><b>Campo vazio some do site</b>Se você deixar um campo em branco, ele simplesmente não aparece na página — nada de rótulo solto sem informação.</div>
+   </div>
+ </div>`,
+
+'/transparencia':()=>`
+ <div class="topo">
+   <div><h1>Transparência</h1><p>Relatórios e prestações de contas que ficam públicos no site.</p></div>
+   <button class="btn">+ Enviar documento</button>
+ </div>
+ <div class="upload" style="margin-bottom:24px"><b>Arraste um PDF aqui</b>ou clique para escolher do computador — até 20 MB</div>
+ <div class="painel"><table>
+   <thead><tr><th>Documento</th><th>Categoria</th><th>Ano</th><th>No site</th><th></th></tr></thead>
+   <tbody>
+     ${[['Relatório de atividades 2025','Relatório anual','2025','rascunho'],
+        ['Relatório de atividades 2024','Relatório anual','2024','publicado'],
+        ['Prestação de contas — TF-30-S-FMAS/2025','Prestação de contas','2025','publicado'],
+        ['Prestação de contas — TF-27-S-FMAS/2025','Prestação de contas','2025','publicado'],
+        ['Estatuto social','Documento institucional','2014','publicado']]
+       .map(([n,c,a,p])=>`<tr>
+         <td><div class="item"><div class="miniatura" style="display:grid;place-items:center;font-family:var(--dado);font-size:.66rem">PDF</div><b>${n}</b></div></td>
+         <td style="color:var(--texto-2)">${c}</td>
+         <td style="font-family:var(--dado);font-size:.82rem">${a}</td>
+         <td>${selo(p)}</td>
+         <td class="acoes"><button class="btn fantasma">Substituir</button><button class="btn fantasma">Remover</button></td></tr>`).join('')}
+   </tbody>
+ </table></div>`,
+
+'/numeros':()=>`
+ <div class="topo"><div><h1>Números do topo</h1><p>A faixa de números que aparece logo abaixo da capa. Máximo de quatro.</p></div></div>
+ <div class="form">
+   <div class="caixa">
+     ${[['12','anos de atuação'],['11','projetos executados'],['5','projetos em andamento'],['+900','pessoas atendidas']]
+       .map(([n,r])=>`<div class="repetidor">
+         <input type="text" value="${n}" style="max-width:90px;font-family:var(--display);font-size:1.3rem;font-weight:700">
+         <input type="text" value="${r}">
+         <button class="btn fantasma" aria-label="Remover">✕</button></div>`).join('')}
+     <div class="rodape-form"><button class="btn">Salvar e publicar</button></div>
+   </div>
+   <div class="dica" style="margin-top:0"><b>Mantenha atualizado</b>Número desatualizado no topo do site é o tipo de detalhe que financiador percebe. Revise sempre que um projeto começa ou termina.</div>
+ </div>`,
+
+'/midia':()=>`
+ <div class="topo"><div><h1>Fotos e arquivos</h1><p>Tudo que você já enviou. Use fotos reais das atividades sempre que possível.</p></div>
+   <button class="btn">+ Enviar fotos</button></div>
+ <div class="midia">
+   ${[[IMG+'2024/11/image13-1024x800.jpg','oficina-tiradentes.jpg'],
+      [IMG+'2024/02/closeup-diverse-people-joining-their-hands-1024x576.jpg','maos-comunidade.jpg'],
+      [IMG+'2024/11/image2-1-1024x472.jpg','palestra-uems.jpg'],
+      [IMG+'2024/11/image14.jpg','atividade-grupo.jpg'],
+      [IMG+'2025/10/jovem-aluna-ouvindo-professora-de-ingles-1024x617.jpg','aluna-curso-online.jpg'],
+      [IMG+'2025/10/logo-sem-fundo-crop.png','logo-ideps.png'],
+      [IMG+'2025/10/Bem-estar-IDEPS-300x300.png','capa-bem-estar.png'],
+      [IMG+'2025/10/Quem-Somos-60-300x300.png','capa-quem-somos-60.png']]
+     .map(([u,n])=>`<figure><img src="${u}" alt=""><figcaption>${n}</figcaption></figure>`).join('')}
+ </div>`,
+
+'/contato':()=>`
+ <div class="topo"><div><h1>Contato e rodapé</h1><p>Aparece na página de contato e no rodapé de todas as páginas.</p></div></div>
+ <div class="form">
+   <div class="caixa">
+     <div class="dois">
+       <div class="campo"><label>Telefone e WhatsApp</label><input type="text" value="67 99289-9775"></div>
+       <div class="campo"><label>E-mail</label><input type="text" value="idepsms@gmail.com"></div>
+     </div>
+     <div class="campo"><label>Endereço</label><input type="text" value="Rua Dona Rosemaria, 633 — Tiradentes, Campo Grande, MS"></div>
+     <div class="campo"><label>Horário de atendimento</label><input type="text" value="Segunda a sexta, das 8h às 17h"></div>
+     <div class="dois">
+       <div class="campo"><label>Instagram</label><input type="text" value="https://instagram.com/idepsms"></div>
+       <div class="campo"><label>Facebook</label><input type="text" value="https://facebook.com/idepsms"></div>
+     </div>
+     <div class="campo"><label>Endereço da plataforma de cursos<small>Para onde o botão "Cursos" leva.</small></label>
+       <input type="text" value="https://cursos.idepsms.org"></div>
+     <div class="rodape-form"><button class="btn">Salvar e publicar</button></div>
+   </div>
+   <div class="dica" style="margin-top:0"><b>Muda em todo lugar</b>O que você salva aqui é atualizado no rodapé de todas as páginas de uma vez.</div>
+ </div>`,
+
+'/equipe':()=>`
+ <div class="topo"><div><h1>Quem tem acesso</h1><p>Pessoas que podem entrar neste painel e o que cada uma pode fazer.</p></div>
+   <button class="btn">+ Convidar pessoa</button></div>
+ <div class="painel"><table>
+   <thead><tr><th>Pessoa</th><th>Permissão</th><th>Último acesso</th><th></th></tr></thead>
+   <tbody>
+     ${[['MC','Maria Clara','Comunicação','Edita e publica','Hoje, 08:12'],
+        ['RS','Rita Souza','Coordenação','Administra tudo','Ontem, 17:40'],
+        ['JP','João Paulo','Projetos','Edita, não publica','18/07/2026']]
+       .map(([i,n,c,perm,ac])=>`<tr>
+         <td><div class="item"><div class="avatar" style="background:var(--mata-claro);color:var(--folha);font-size:.8rem">${i}</div>
+           <div><b>${n}</b><small>${c}</small></div></div></td>
+         <td>${perm}</td>
+         <td style="font-family:var(--dado);font-size:.8rem;color:var(--texto-2)">${ac}</td>
+         <td class="acoes"><button class="btn fantasma">Alterar</button></td></tr>`).join('')}
+   </tbody>
+ </table></div>`
+};
+
+function formProjeto(id){
+  const p = PROJETOS.find(x=>x.id===id);
+  const novo = !p;
+  return `
+  <div class="topo">
+    <div><a class="btn fantasma" href="#/projetos" style="padding-left:0">← Projetos</a>
+      <h1 style="margin-top:6px">${novo?'Novo projeto':p.t}</h1></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn linha">Ver como fica no site</button>
+      <button class="btn">${novo?'Criar e publicar':'Salvar alterações'}</button>
+    </div>
+  </div>
+  <div class="form">
+    <div class="caixa">
+      <div class="campo"><label>Nome do projeto</label>
+        <input type="text" value="${novo?'':p.t}" placeholder="Ex.: Conhecer para Participar — IDEPS"></div>
+      <div class="campo"><label>Nome curto<small>Usado na linha do tempo da página inicial. Até 28 caracteres.</small></label>
+        <input type="text" value="${novo?'':p.t.split('—')[0].trim().slice(0,28)}" maxlength="28">
+        <div class="contador">0 / 28</div></div>
+      <div class="campo"><label>Resumo<small>Uma frase, aparece no cartão da lista de projetos.</small></label>
+        <textarea style="min-height:70px" maxlength="140" placeholder="Oficinas sobre políticas públicas, direitos humanos e participação cidadã."></textarea>
+        <div class="contador">0 / 140</div></div>
+      <div class="campo"><label>Objeto da parceria<small>Texto oficial, como consta no termo de fomento.</small></label>
+        <textarea style="min-height:90px"></textarea></div>
+      <div class="campo"><label>Sobre o projeto</label><textarea style="min-height:170px"></textarea></div>
+      <div class="campo"><label>Resultados esperados</label>
+        <div class="repetidor"><input type="text" placeholder="Ampliação do conhecimento sobre direitos"><button class="btn fantasma">✕</button></div>
+        <div class="repetidor"><input type="text" placeholder="Desenvolvimento do protagonismo social"><button class="btn fantasma">✕</button></div>
+        <button class="btn linha" style="margin-top:4px">+ Adicionar resultado</button></div>
+      <div class="rodape-form">
+        <button class="btn fantasma">Descartar</button>
+        <button class="btn linha">Salvar rascunho</button>
+        <button class="btn">Publicar no site</button>
+      </div>
+    </div>
+
+    <div>
+      <div class="caixa" style="margin-bottom:16px"><h2>Situação</h2>
+        <div class="campo"><label>No site</label><select><option>Publicado</option><option ${novo?'selected':''}>Rascunho</option></select></div>
+        <div class="campo" style="margin-bottom:0"><label>Andamento</label>
+          <select><option ${!novo&&p.st==='ativo'?'selected':''}>Em andamento</option><option ${!novo&&p.st==='feito'?'selected':''}>Finalizado</option></select></div>
+      </div>
+
+      <div class="caixa" style="margin-bottom:16px"><h2>Dados do termo</h2>
+        <div class="campo"><label>Termo de fomento</label><input type="text" value="${novo?'':p.termo}" placeholder="TF-00-S-FMAS/2026"></div>
+        <div class="dois">
+          <div class="campo"><label>Início</label><input type="date"></div>
+          <div class="campo"><label>Fim previsto</label><input type="date"></div>
+        </div>
+        <div class="campo"><label>Valor do investimento</label><input type="text" placeholder="R$ 000.000,00"></div>
+        <div class="campo" style="margin-bottom:0"><label>Público atendido</label><input type="text" placeholder="100 participantes"></div>
+      </div>
+
+      <div class="caixa" style="margin-bottom:16px"><h2>Área de atuação</h2>
+        <select><option>Direitos e cidadania</option><option>Pessoas idosas</option><option>Mulheres</option>
+          <option>Segurança alimentar</option><option>Saúde e convivência</option><option>Juventude</option></select>
+      </div>
+
+      <div class="caixa"><h2>Imagem de capa</h2>
+        ${novo?'<div class="upload"><b>Escolher imagem</b>PNG ou JPG, no mínimo 600×600</div>'
+              :`<img src="${p.cap}" alt="" style="width:100%;border-radius:10px;background:var(--mata-claro)">
+                <button class="btn linha" style="width:100%;margin-top:12px;justify-content:center">Trocar imagem</button>`}
+      </div>
+
+      <div class="dica"><b>Datas alimentam a linha do tempo</b>Início e fim previsto posicionam a barra do projeto na linha do tempo da página inicial. Sem datas, o projeto entra só na lista.</div>
+    </div>
+  </div>`;
+}
+
+function render(){
+  const r = location.hash.replace(/^#/,'') || '/';
+  app.innerHTML = r.startsWith('/projeto/') ? formProjeto(r.split('/')[2]) : (paginas[r]||paginas['/'])();
+  document.querySelectorAll('aside nav a').forEach(a=>{
+    const h = a.getAttribute('href').slice(1);
+    a.classList.toggle('ativo', h===r || (r.startsWith('/projeto/') && h==='/projetos'));
+  });
+  window.scrollTo(0,0);
+}
+window.addEventListener('hashchange', render);
+render();
+</script>
+</body>
+</html>
