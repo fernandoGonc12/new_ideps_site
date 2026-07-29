@@ -92,9 +92,25 @@ nav a.ativo{color:#fff;background:var(--azul)}
   background:var(--amarelo);z-index:-1;border-radius:3px}
 .hero p{margin-top:26px;font-size:1.2rem;color:var(--texto-2);max-width:52ch}
 .hero-acoes{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}
-.hero-foto{aspect-ratio:4/5;border-radius:24px;overflow:hidden;background:var(--azul-claro);
+.hero-foto{position:relative;aspect-ratio:4/5;border-radius:24px;overflow:hidden;background:var(--azul-claro);
   box-shadow:14px 14px 0 var(--amarelo)}
-.hero-foto img{width:100%;height:100%;object-fit:cover}
+.hero-foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:0;transition:opacity .9s ease}
+.hero-foto img.ativo{opacity:1}
+.hero-pontos{position:absolute;left:0;right:0;bottom:16px;z-index:2;
+  display:flex;justify-content:center;gap:8px}
+.hero-pontos button{width:9px;height:9px;padding:0;border-radius:99px;background:rgba(255,255,255,.6);
+  box-shadow:0 0 0 1px rgba(0,0,0,.22);transition:width .2s,background .2s}
+.hero-pontos button[aria-current="true"]{width:26px;background:#fff}
+.hero-seta{position:absolute;top:50%;transform:translateY(-50%);z-index:2;
+  width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.86);color:var(--azul);font-size:1.4rem;line-height:1;
+  box-shadow:0 2px 10px rgba(0,0,0,.18);transition:background .15s,transform .15s}
+.hero-seta:hover{background:#fff;transform:translateY(-50%) scale(1.07)}
+.hero-seta.ant{left:14px}
+.hero-seta.prox{right:14px}
+@media (max-width:520px){.hero-seta{width:36px;height:36px;font-size:1.2rem}
+  .hero-seta.ant{left:10px}.hero-seta.prox{right:10px}}
 
 .numeros{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--linha);
   border-top:1px solid var(--linha);border-bottom:1px solid var(--linha);margin-top:76px}
@@ -292,6 +308,14 @@ footer .logo-rodape{height:82px;margin-bottom:20px}
 <script>
 const IMG='imagens/';
 
+/* fotos do carrossel da página inicial — para adicionar, basta colocar o arquivo
+   em imagens/ e incluir mais uma linha aqui */
+const HERO_FOTOS=[
+  {src:IMG+'image13-1024x800.jpg',alt:'Participantes do IDEPS com seus certificados ao fim de uma formação'},
+  {src:IMG+'jovem-aluna-ouvindo-professora-de-ingles-1024x617.jpg',alt:'Aluna acompanhando uma aula na plataforma de cursos do IDEPS'}
+];
+const SEM_MOVIMENTO=window.matchMedia('(prefers-reduced-motion: reduce)');
+
 /* cada área de atuação tem uma cor da logo */
 const EIXOS={
   'Direitos e cidadania':{cor:'var(--azul)',clara:'var(--azul-claro)'},
@@ -392,6 +416,47 @@ const PROJETOS=[
   resultados:['Lideranças comunitárias formadas','Participação em conselhos ampliada','Base para os projetos seguintes']}
 ];
 
+/* ---------- contraste automático ----------
+   a linha do tempo tem fundo azul escuro e algumas cores de eixo somem nele.
+   em vez de tratar cada eixo na mão, a cor é clareada até destacar do fundo —
+   assim qualquer projeto ou área nova entra já legível. */
+function resolverCor(v){
+  const m=/^var\((--[\w-]+)\)$/.exec(String(v).trim());
+  const cor=m?getComputedStyle(document.documentElement).getPropertyValue(m[1]).trim():String(v).trim();
+  return cor||'#000000';
+}
+function paraRGB(h){
+  h=resolverCor(h).replace('#','');
+  if(h.length===3) h=h.split('').map(c=>c+c).join('');
+  return [0,2,4].map(i=>parseInt(h.slice(i,i+2),16)||0);
+}
+const paraHex=r=>'#'+r.map(n=>
+  Math.round(Math.min(255,Math.max(0,n))).toString(16).padStart(2,'0')).join('');
+function luminancia(rgb){
+  const [r,g,b]=rgb.map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});
+  return .2126*r+.7152*g+.0722*b;
+}
+const contraste=(a,b)=>{
+  const l1=luminancia(a),l2=luminancia(b);
+  return (Math.max(l1,l2)+.05)/(Math.min(l1,l2)+.05);
+};
+const misturar=(a,b,t)=>a.map((v,i)=>v+(b[i]-v)*t);
+/* devolve a cor original se ela já se destaca do fundo; senão, clareia o mínimo necessário */
+function contrastar(cor,fundo,minimo=3.2){
+  const f=paraRGB(fundo), c=paraRGB(cor);
+  if(contraste(c,f)>=minimo) return paraHex(c);
+  for(let t=.1;t<1;t+=.05){
+    const nova=misturar(c,[255,255,255],t);
+    if(contraste(nova,f)>=minimo) return paraHex(nova);
+  }
+  return '#FFFFFF';
+}
+/* branco ou um tom escuro da própria cor, o que for mais legível sobre a barra */
+function textoSobre(cor){
+  const c=paraRGB(cor);
+  return contraste(c,[255,255,255])>=3.5?'#FFFFFF':paraHex(misturar(c,[0,0,0],.78));
+}
+
 const app=document.getElementById('app');
 let filtroStatus='todos', filtroEixo='Todos';
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -412,12 +477,14 @@ function cartao(p){
 
 function linhaDoTempo(){
   const A0=2016,A1=2027,span=A1-A0,anos=[];
+  const FUNDO='var(--azul)';                       /* fundo da seção .tempo */
+  const tom=p=>contrastar(cor(p).cor,FUNDO);
   for(let a=A0;a<A1;a+=2) anos.push(`<span>${a}</span>`);
   const barras=[...PROJETOS].sort((a,b)=>a.ini-b.ini).map(p=>{
-    const c=cor(p), esq=((p.ini-A0)/span)*100, larg=((Math.min(p.fim,A1)-p.ini)/span)*100;
+    const t=tom(p), esq=((p.ini-A0)/span)*100, larg=((Math.min(p.fim,A1)-p.ini)/span)*100;
     const estilo = p.status==='ativo'
-      ? `background:${c.cor};color:${p.eixo==='Segurança alimentar'||p.eixo==='Saúde e convivência'?'#062F06':'#fff'}`
-      : `color:${c.cor}`;
+      ? `background:${t};color:${textoSobre(t)}`
+      : `color:${t}`;
     return `<div class="tl-linha"><div class="tl-trilho">
       <a class="tl-barra ${p.status}" href="#/projeto/${p.id}"
          style="left:${esq.toFixed(2)}%;width:${Math.max(larg,10).toFixed(2)}%;${estilo}"
@@ -425,7 +492,7 @@ function linhaDoTempo(){
     </div></div>`;
   }).join('');
   const legenda=Object.entries(EIXOS).map(([n,c])=>
-    `<span><i class="anel" style="border-color:${c.cor}"></i>${n}</span>`).join('');
+    `<span><i class="anel" style="border-color:${contrastar(c.cor,FUNDO)}"></i>${n}</span>`).join('');
   return `<div class="tl"><div class="tl-rolagem"><div class="tl-conteudo">
     <div class="tl-anos">${anos.join('')}</div>${barras}</div></div>
     <div class="tl-legenda">${legenda}</div>
@@ -446,7 +513,15 @@ const paginas={
        <a class="btn linha" href="#/cursos">Estudar de graça</a>
      </div>
    </div>
-   <div class="hero-foto"><img src="${IMG}image13-1024x800.jpg" alt="Atividade do IDEPS com participantes"></div>
+   <div class="hero-foto" id="heroFoto" aria-roledescription="carrossel" aria-label="Fotos das atividades do IDEPS">
+     ${HERO_FOTOS.map((f,i)=>
+       `<img src="${f.src}" alt="${esc(f.alt)}" class="${i===0?'ativo':''}"${i?' loading="lazy"':''}>`).join('')}
+     ${HERO_FOTOS.length>1?`
+     <button type="button" class="hero-seta ant" data-passo="-1" aria-label="Foto anterior">‹</button>
+     <button type="button" class="hero-seta prox" data-passo="1" aria-label="Próxima foto">›</button>
+     <div class="hero-pontos">${HERO_FOTOS.map((f,i)=>
+       `<button type="button" aria-current="${i===0}" aria-label="Ver foto ${i+1} de ${HERO_FOTOS.length}"></button>`).join('')}</div>`:''}
+   </div>
  </div></div></div>
 
  <div class="wrap"><div class="numeros">
@@ -621,6 +696,36 @@ function paginaProjeto(id){
   </div></section>`;
 }
 
+let carrossel=null;
+function iniciarCarrossel(){
+  clearInterval(carrossel); carrossel=null;
+  const caixa=document.getElementById('heroFoto'); if(!caixa) return;
+  const fotos=[...caixa.querySelectorAll('img')];
+  const pontos=[...caixa.querySelectorAll('.hero-pontos button')];
+  if(fotos.length<2) return;
+  let atual=0;
+  const mostrar=i=>{
+    atual=(i+fotos.length)%fotos.length;
+    fotos.forEach((f,n)=>f.classList.toggle('ativo',n===atual));
+    pontos.forEach((p,n)=>p.setAttribute('aria-current',n===atual));
+  };
+  const parar=()=>{clearInterval(carrossel);carrossel=null;};
+  const tocar=()=>{parar(); if(SEM_MOVIMENTO.matches) return;
+    carrossel=setInterval(()=>mostrar(atual+1),5500);};
+  pontos.forEach((p,n)=>p.onclick=()=>{mostrar(n);tocar();});
+  caixa.querySelectorAll('[data-passo]').forEach(s=>
+    s.onclick=()=>{mostrar(atual+Number(s.dataset.passo));tocar();});
+  caixa.addEventListener('keydown',e=>{
+    if(e.key==='ArrowLeft'){mostrar(atual-1);tocar();}
+    if(e.key==='ArrowRight'){mostrar(atual+1);tocar();}
+  });
+  caixa.addEventListener('mouseenter',parar);
+  caixa.addEventListener('mouseleave',tocar);
+  caixa.addEventListener('focusin',parar);
+  caixa.addEventListener('focusout',tocar);
+  tocar();
+}
+
 function render(){
   const rota=location.hash.replace(/^#/,'')||'/';
   app.innerHTML = rota.startsWith('/projeto/')?paginaProjeto(rota.split('/')[2]):(paginas[rota]||paginas['/'])();
@@ -629,6 +734,7 @@ function render(){
   window.scrollTo(0,0);
   document.querySelectorAll('[data-status]').forEach(b=>b.onclick=()=>{filtroStatus=b.dataset.status;render();});
   document.querySelectorAll('[data-eixo]').forEach(b=>b.onclick=()=>{filtroEixo=b.dataset.eixo;render();});
+  iniciarCarrossel();
 }
 document.getElementById('menuBtn').onclick=()=>document.getElementById('nav').classList.toggle('aberto');
 const tp=document.getElementById('tp'),tg=document.getElementById('tg');
