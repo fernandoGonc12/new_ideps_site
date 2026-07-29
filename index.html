@@ -48,14 +48,14 @@ h3{font-size:1.32rem;line-height:1.25}
   letter-spacing:.06em;text-align:center;padding:7px 16px}
 
 /* selo de manutenção */
-.manutencao{position:fixed;right:18px;bottom:18px;z-index:200;display:flex;align-items:center;gap:9px;
-  background:var(--laranja);color:#3A2100;font-family:var(--dado);font-size:.76rem;font-weight:500;
-  letter-spacing:.05em;padding:10px 16px;border-radius:99px;box-shadow:0 6px 20px rgba(0,0,0,.22);
-  text-transform:uppercase}
-.manutencao i{width:9px;height:9px;border-radius:50%;background:#3A2100;flex-shrink:0;
+.manutencao{position:fixed;left:0;right:0;bottom:0;z-index:200;display:flex;align-items:center;
+  justify-content:center;gap:14px;background:var(--laranja);color:#3A2100;font-family:var(--dado);
+  font-size:1.05rem;font-weight:500;letter-spacing:.08em;padding:16px 24px;
+  box-shadow:0 -4px 20px rgba(0,0,0,.18);text-transform:uppercase}
+.manutencao i{width:13px;height:13px;border-radius:50%;background:#3A2100;flex-shrink:0;
   animation:pisca 1.4s ease-in-out infinite}
 @keyframes pisca{0%,100%{opacity:1}50%{opacity:.25}}
-@media (max-width:520px){.manutencao{right:12px;bottom:12px;font-size:.68rem;padding:9px 13px}}
+@media (max-width:520px){.manutencao{font-size:.86rem;padding:13px 16px;gap:10px}}
 @media (prefers-reduced-motion:reduce){.manutencao i{animation:none}}
 
 /* faixa multicolor da marca */
@@ -246,7 +246,7 @@ footer .logo-rodape{height:82px;margin-bottom:20px}
         <button id="tp" aria-pressed="true">A</button>
         <button id="tg" aria-pressed="false">A</button>
       </div>
-      <a class="btn" href="#/cursos">Cursos</a>
+      <a class="btn" href="https://cursos.idepsms.org" target="_blank" rel="noopener noreferrer">Cursos</a>
     </div>
   </div>
 </header>
@@ -279,7 +279,7 @@ footer .logo-rodape{height:82px;margin-bottom:20px}
         <h4>Acompanhe</h4>
         <a href="#">Instagram</a>
         <a href="#">Facebook</a>
-        <a href="#/cursos">Plataforma de cursos</a>
+        <a href="https://cursos.idepsms.org" target="_blank" rel="noopener noreferrer">Plataforma de cursos</a>
       </div>
     </div>
     <div class="rodape-fim">
@@ -290,7 +290,7 @@ footer .logo-rodape{height:82px;margin-bottom:20px}
 </footer>
 
 <script>
-const IMG='https://idepsms.org/wp-content/uploads/';
+const IMG='imagens/';
 
 /* cada área de atuação tem uma cor da logo */
 const EIXOS={
@@ -304,7 +304,7 @@ const EIXOS={
 
 const PROJETOS=[
  {id:'quem-somos-60',nome:'Quem Somos 60',titulo:'Pessoas idosas no município de Campo Grande/MS',
-  status:'ativo',eixo:'Pessoas idosas',ini:2023,fim:2026,capa:IMG+'2025/10/Quem-Somos-60-300x300.png',
+  status:'ativo',eixo:'Pessoas idosas',ini:2023,fim:2026,capa:IMG+'Quem-Somos-60-300x300.png',
   termo:'TF-12-S-FMAS/2023',periodo:'36 meses',valor:'R$ 000.000,00',publico:'120 pessoas idosas',
   resumo:'Mapeia e acompanha a população idosa do município, garantindo acesso a direitos e serviços.',
   objeto:'Levantar o perfil das pessoas idosas do município e articular a rede de proteção para ampliar o acesso a serviços públicos.',
@@ -312,7 +312,7 @@ const PROJETOS=[
   resultados:['Perfil socioeconômico das participantes mapeado','Encaminhamentos à rede de proteção social','Grupos de convivência formados no território']},
 
  {id:'mulheres-que-apoiam-mulheres',nome:'Mulheres que Apoiam',titulo:'Mulheres que Apoiam Mulheres',
-  status:'ativo',eixo:'Mulheres',ini:2024,fim:2026,capa:IMG+'2025/10/Mulheres-que-apoiam-mulheres-300x300.png',
+  status:'ativo',eixo:'Mulheres',ini:2024,fim:2026,capa:IMG+'Mulheres-que-apoiam-mulheres-300x300.png',
   termo:'TF-08-S-FMAS/2024',periodo:'24 meses',valor:'R$ 000.000,00',publico:'80 mulheres',
   resumo:'Rede de apoio mútuo, formação sobre direitos e enfrentamento à violência doméstica.',
   objeto:'Fortalecer redes de apoio entre mulheres em situação de vulnerabilidade, com formação em direitos e autonomia econômica.',
@@ -320,7 +320,7 @@ const PROJETOS=[
   resultados:['Rodas de conversa mensais no território','Formação sobre a Lei Maria da Penha','Encaminhamento para serviços especializados']},
 
  {id:'bem-estar',nome:'Bem-Estar IDEPS',titulo:'Projeto Bem-Estar IDEPS',
-  status:'ativo',eixo:'Saúde e convivência',ini:2024,fim:2026,capa:IMG+'2025/10/Bem-estar-IDEPS-300x300.png',
+  status:'ativo',eixo:'Saúde e convivência',ini:2024,fim:2026,capa:IMG+'Bem-estar-IDEPS-300x300.png',
   termo:'TF-19-S-FMAS/2024',periodo:'24 meses',valor:'R$ 000.000,00',publico:'90 pessoas idosas',
   resumo:'Pilates, massagem terapêutica, nutrição e escuta psicológica para as idosas do Tiradentes.',
   objeto:'Promover saúde física e mental de pessoas idosas por meio de atividades continuadas de bem-estar.',
@@ -328,7 +328,7 @@ const PROJETOS=[
   resultados:['Turmas semanais de pilates adaptado','Atendimento nutricional individual','Escuta psicológica sob demanda']},
 
  {id:'conhecer-para-participar',nome:'Conhecer para Participar',titulo:'Conhecer para Participar — IDEPS',
-  status:'ativo',eixo:'Direitos e cidadania',ini:2025,fim:2026,capa:IMG+'2025/10/Conhecer-para-participar-300x300.png',
+  status:'ativo',eixo:'Direitos e cidadania',ini:2025,fim:2026,capa:IMG+'Conhecer-para-participar-300x300.png',
   termo:'TF-30-S-FMAS/2025',periodo:'12 meses',valor:'R$ 000.000,00',publico:'100 participantes',
   resumo:'Oficinas sobre políticas públicas, direitos humanos e participação cidadã.',
   objeto:'Oportunizar o acesso a informações sobre políticas públicas, direitos humanos e participação cidadã, estimulando o protagonismo social e a autonomia.',
@@ -336,7 +336,7 @@ const PROJETOS=[
   resultados:['Ampliação do conhecimento sobre direitos','Desenvolvimento do protagonismo social','Fortalecimento dos vínculos familiares e comunitários']},
 
  {id:'apoio-as-familias',nome:'Apoio às Famílias',titulo:'Projeto Apoio às Famílias',
-  status:'ativo',eixo:'Segurança alimentar',ini:2025,fim:2026,capa:IMG+'2025/02/Imagem-do-WhatsApp-de-2025-02-19-as-21.38.26_5eb9fdb6-300x300.jpg',
+  status:'ativo',eixo:'Segurança alimentar',ini:2025,fim:2026,capa:IMG+'Imagem-do-WhatsApp-de-2025-02-19-as-21.38.26_5eb9fdb6-300x300.jpg',
   termo:'TF-27-S-FMAS/2025',periodo:'12 meses',valor:'R$ 000.000,00',publico:'150 famílias',
   resumo:'Kits nutricionais e alimentos do Mesa Brasil SESC para famílias do território.',
   objeto:'Garantir segurança alimentar a famílias em vulnerabilidade por meio da distribuição de kits e da articulação com parceiros doadores.',
@@ -344,7 +344,7 @@ const PROJETOS=[
   resultados:['Entrega mensal de kits nutricionais','Parceria ativa com o Mesa Brasil SESC','Acompanhamento das famílias atendidas']},
 
  {id:'alimentando-direitos',nome:'Alimentando Direitos',titulo:'Alimentando Direitos',
-  status:'feito',eixo:'Segurança alimentar',ini:2022,fim:2023,capa:IMG+'2024/11/2-1-300x300.png',
+  status:'feito',eixo:'Segurança alimentar',ini:2022,fim:2023,capa:IMG+'2-1-300x300.png',
   termo:'TF-14-S-FMAS/2022',periodo:'18 meses',valor:'R$ 000.000,00',publico:'200 famílias',
   resumo:'Segurança alimentar associada à formação sobre o direito humano à alimentação.',
   objeto:'Associar a distribuição de alimentos à formação sobre o direito humano à alimentação adequada.',
@@ -352,7 +352,7 @@ const PROJETOS=[
   resultados:['Formação sobre direito à alimentação','Distribuição continuada de alimentos','Famílias inseridas na rede de proteção']},
 
  {id:'fala-jovem',nome:'Fala Jovem',titulo:'Fala Jovem',
-  status:'feito',eixo:'Juventude',ini:2020,fim:2022,capa:IMG+'2024/11/1-300x300.png',
+  status:'feito',eixo:'Juventude',ini:2020,fim:2022,capa:IMG+'1-300x300.png',
   termo:'TF-05-S-FMAS/2020',periodo:'24 meses',valor:'R$ 000.000,00',publico:'70 jovens',
   resumo:'Protagonismo juvenil e participação em espaços de decisão.',
   objeto:'Estimular o protagonismo de adolescentes e jovens do território em espaços de participação social.',
@@ -360,7 +360,7 @@ const PROJETOS=[
   resultados:['Jovens formados em participação social','Coletivo juvenil constituído','Participação em conselhos municipais']},
 
  {id:'cozinhar-bem-faz-bem',nome:'Cozinhar Bem Faz Bem',titulo:'Cozinhar Bem Faz Bem',
-  status:'feito',eixo:'Segurança alimentar',ini:2020,fim:2021,capa:IMG+'2025/02/Imagem-do-WhatsApp-de-2025-02-19-as-21.38.26_f0c2e00e-300x300.jpg',
+  status:'feito',eixo:'Segurança alimentar',ini:2020,fim:2021,capa:IMG+'Imagem-do-WhatsApp-de-2025-02-19-as-21.38.26_f0c2e00e-300x300.jpg',
   termo:'TF-11-S-FMAS/2020',periodo:'12 meses',valor:'R$ 000.000,00',publico:'60 participantes',
   resumo:'Oficinas de aproveitamento integral de alimentos e geração de renda.',
   objeto:'Capacitar participantes no aproveitamento integral dos alimentos, com foco em nutrição e geração de renda.',
@@ -368,7 +368,7 @@ const PROJETOS=[
   resultados:['Oficinas culinárias realizadas','Redução do desperdício nas casas','Iniciativas de renda a partir da cozinha']},
 
  {id:'familias-em-seguranca-alimentar',nome:'Famílias em Seg. Alimentar',titulo:'Famílias em Segurança Alimentar e Nutricional',
-  status:'feito',eixo:'Segurança alimentar',ini:2021,fim:2022,capa:IMG+'2025/02/Imagem-do-WhatsApp-de-2025-02-19-as-21.38.25_09bcd780-300x300.jpg',
+  status:'feito',eixo:'Segurança alimentar',ini:2021,fim:2022,capa:IMG+'Imagem-do-WhatsApp-de-2025-02-19-as-21.38.25_09bcd780-300x300.jpg',
   termo:'TF-09-S-FMAS/2021',periodo:'12 meses',valor:'R$ 000.000,00',publico:'130 famílias',
   resumo:'Acompanhamento nutricional de famílias em insegurança alimentar.',
   objeto:'Acompanhar famílias em situação de insegurança alimentar com apoio nutricional e encaminhamento à rede.',
@@ -376,7 +376,7 @@ const PROJETOS=[
   resultados:['Avaliação nutricional das famílias','Encaminhamentos à rede de saúde','Apoio alimentar continuado']},
 
  {id:'semeando-direitos-humanos',nome:'Semeando Direitos',titulo:'Semeando Direitos Humanos',
-  status:'feito',eixo:'Direitos e cidadania',ini:2018,fim:2020,capa:IMG+'2024/04/Semeando-DH.png',
+  status:'feito',eixo:'Direitos e cidadania',ini:2018,fim:2020,capa:IMG+'Semeando-DH.png',
   termo:'TF-03-S-FMAS/2018',periodo:'24 meses',valor:'R$ 000.000,00',publico:'150 participantes',
   resumo:'Educação em direitos humanos em escolas e espaços comunitários.',
   objeto:'Difundir a educação em direitos humanos em escolas e espaços comunitários do município.',
@@ -384,7 +384,7 @@ const PROJETOS=[
   resultados:['Formações em escolas do município','Material educativo produzido','Multiplicadores formados no território']},
 
  {id:'participar-e-preciso',nome:'Participar é Preciso',titulo:'Participar é Preciso',
-  status:'feito',eixo:'Direitos e cidadania',ini:2016,fim:2018,capa:IMG+'2024/04/Logo-Participar-e-Preciso-8-sem-fundo-300x300.png',
+  status:'feito',eixo:'Direitos e cidadania',ini:2016,fim:2018,capa:IMG+'Logo-Participar-e-Preciso-8-sem-fundo-300x300.png',
   termo:'TF-01-S-FMAS/2016',periodo:'24 meses',valor:'R$ 000.000,00',publico:'90 participantes',
   resumo:'Formação de lideranças comunitárias para o controle social.',
   objeto:'Formar lideranças comunitárias para atuação qualificada em conselhos e instâncias de controle social.',
@@ -446,7 +446,7 @@ const paginas={
        <a class="btn linha" href="#/cursos">Estudar de graça</a>
      </div>
    </div>
-   <div class="hero-foto"><img src="${IMG}2024/11/image13-1024x800.jpg" alt="Atividade do IDEPS com participantes"></div>
+   <div class="hero-foto"><img src="${IMG}image13-1024x800.jpg" alt="Atividade do IDEPS com participantes"></div>
  </div></div></div>
 
  <div class="wrap"><div class="numeros">
@@ -485,7 +485,7 @@ const paginas={
      </ul>
      <a class="btn" href="#/cursos">Acessar a plataforma</a>
    </div>
-   <div class="cursos-foto"><img src="${IMG}2025/10/jovem-aluna-ouvindo-professora-de-ingles-1024x617.jpg" alt="Aluna estudando online"></div>
+   <div class="cursos-foto"><img src="${IMG}jovem-aluna-ouvindo-professora-de-ingles-1024x617.jpg" alt="Aluna estudando online"></div>
  </div></div></section>`,
 
 '/quem-somos':()=>`
