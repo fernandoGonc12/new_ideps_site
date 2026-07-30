@@ -20,7 +20,6 @@
   /* neutros derivados do azul da marca */
   --papel:#FFFFFF; --papel-2:#F4F5FA;
   --linha:#DFE0EC; --texto:#161540; --texto-2:#585780;
-  --escala:1;
   --display:'Bricolage Grotesque',system-ui,sans-serif;
   --corpo:'Public Sans',system-ui,sans-serif;
   --dado:'IBM Plex Mono',ui-monospace,monospace;
@@ -28,7 +27,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{background:var(--papel);color:var(--texto);font-family:var(--corpo);
-  font-size:calc(18px * var(--escala));line-height:1.65;-webkit-font-smoothing:antialiased}
+  font-size:18px;line-height:1.65;-webkit-font-smoothing:antialiased}
 img{max-width:100%;display:block}
 a{color:inherit}
 button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
@@ -51,6 +50,25 @@ h3{font-size:1.32rem;line-height:1.25}
 .faixa{display:flex;height:5px}
 .faixa i{flex:1}
 
+/* ---------- abertura: cobre a busca dos projetos no banco ---------- */
+.abertura{position:fixed;inset:0;z-index:300;background:var(--papel);
+  display:grid;place-content:center;justify-items:center;gap:26px;
+  transition:opacity .45s ease,visibility .45s}
+.abertura.saindo{opacity:0;visibility:hidden}
+.abertura img{width:min(280px,58vw);animation:abre-marca .75s cubic-bezier(.16,.84,.34,1) both}
+/* as sete cores da marca sobem em sequência e viram a barra de carregamento */
+.abertura .faixa{width:min(280px,58vw);height:6px;border-radius:99px;overflow:hidden}
+.abertura .faixa i{transform-origin:center bottom;animation:abre-faixa .55s cubic-bezier(.16,.84,.34,1) both}
+.abertura .faixa i:nth-child(1){animation-delay:.24s}
+.abertura .faixa i:nth-child(2){animation-delay:.30s}
+.abertura .faixa i:nth-child(3){animation-delay:.36s}
+.abertura .faixa i:nth-child(4){animation-delay:.42s}
+.abertura .faixa i:nth-child(5){animation-delay:.48s}
+.abertura .faixa i:nth-child(6){animation-delay:.54s}
+.abertura .faixa i:nth-child(7){animation-delay:.60s}
+@keyframes abre-marca{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes abre-faixa{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+
 header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.95);
   backdrop-filter:blur(8px);border-bottom:1px solid var(--linha)}
 .barra{display:flex;align-items:center;gap:24px;min-height:78px}
@@ -62,11 +80,6 @@ nav a{text-decoration:none;padding:10px 15px;border-radius:99px;font-weight:500;
 nav a:hover{background:var(--azul-claro);color:var(--azul)}
 nav a.ativo{color:#fff;background:var(--azul)}
 .ferramentas{display:flex;align-items:center;gap:8px}
-.tamanho{display:flex;border:1.5px solid var(--linha);border-radius:99px;overflow:hidden}
-.tamanho button{padding:6px 12px;font-weight:700;color:var(--texto-2);line-height:1}
-.tamanho button[aria-pressed="true"]{background:var(--azul);color:#fff}
-.tamanho button:first-child{font-size:.8rem}
-.tamanho button:last-child{font-size:1.05rem}
 .btn{display:inline-block;background:var(--magenta-forte);color:#fff;text-decoration:none;
   padding:13px 24px;border-radius:99px;font-weight:700;font-size:.97rem;transition:background .15s}
 .btn:hover{background:#AB0062}
@@ -232,7 +245,12 @@ footer .logo-rodape{height:82px;margin-bottom:20px}
 </head>
 <body>
 
-<div class="aviso">PROTÓTIPO — textos, datas e valores são exemplos, a confirmar com a equipe do IDEPS</div>
+<div class="abertura" id="abertura" role="status" aria-label="Carregando o site">
+  <img src="ideps-wordmark.png" alt="">
+  <div class="faixa"><i style="background:var(--vermelho)"></i><i style="background:var(--magenta)"></i><i style="background:var(--azul)"></i><i style="background:var(--agua)"></i><i style="background:var(--verde)"></i><i style="background:var(--amarelo)"></i><i style="background:var(--laranja)"></i></div>
+</div>
+
+<!-- <div class="aviso">PROTÓTIPO — textos, datas e valores são exemplos, a confirmar com a equipe do IDEPS</div> -->
 <div class="faixa"><i style="background:var(--vermelho)"></i><i style="background:var(--magenta)"></i><i style="background:var(--azul)"></i><i style="background:var(--agua)"></i><i style="background:var(--verde)"></i><i style="background:var(--amarelo)"></i><i style="background:var(--laranja)"></i></div>
 
 <header>
@@ -247,10 +265,6 @@ footer .logo-rodape{height:82px;margin-bottom:20px}
       <a href="#/contato">Contato</a>
     </nav>
     <div class="ferramentas">
-      <div class="tamanho" role="group" aria-label="Tamanho do texto">
-        <button id="tp" aria-pressed="true">A</button>
-        <button id="tg" aria-pressed="false">A</button>
-      </div>
       <a class="btn" href="https://cursos.idepsms.org" target="_blank" rel="noopener noreferrer">Cursos</a>
     </div>
   </div>
@@ -275,18 +289,18 @@ footer .logo-rodape{height:82px;margin-bottom:20px}
       <div>
         <h4>Contato</h4>
         <a href="tel:+5567992899775">67 99289-9775</a>
-        <a href="mailto:idepsms@gmail.com">idepsms@gmail.com</a>
+        <a href="mailto:contato.idepsms@gmail.com">contato.idepsms@gmail.com</a>
         <a href="#/contato">Rua Dona Rosemaria, 633<br>Tiradentes — Campo Grande</a>
       </div>
       <div>
         <h4>Acompanhe</h4>
-        <a href="#">Instagram</a>
-        <a href="#">Facebook</a>
+        <a href="https://www.instagram.com/idepsms/" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href="https://www.facebook.com/idepsms" target="_blank" rel="noopener noreferrer">Facebook</a>
         <a href="https://cursos.idepsms.org" target="_blank" rel="noopener noreferrer">Plataforma de cursos</a>
       </div>
     </div>
     <div class="rodape-fim">
-      <span>IDEPS © 2026 — CNPJ 00.000.000/0001-00</span>
+      <span>IDEPS © 2026 — CNPJ 29.768.758/0001-56</span>
       <span><a href="#" style="display:inline">Política de privacidade</a></span>
     </div>
   </div>
@@ -684,10 +698,6 @@ function render(){
   iniciarCarrossel();
 }
 document.getElementById('menuBtn').onclick=()=>document.getElementById('nav').classList.toggle('aberto');
-const tp=document.getElementById('tp'),tg=document.getElementById('tg');
-function escala(g){document.documentElement.style.setProperty('--escala',g?1.18:1);
-  tp.setAttribute('aria-pressed',!g);tg.setAttribute('aria-pressed',g);}
-tp.onclick=()=>escala(false); tg.onclick=()=>escala(true);
 function telaCarregando(){
   return `<section><div class="wrap"><p class="eyebrow">Carregando</p>
     <h2>Um instante…</h2></div></section>`;
@@ -704,11 +714,31 @@ function telaErro(e){
   </div></section>`;
 }
 
+/* ---------- abertura ----------
+   A animação da marca cobre a ida ao banco. Fica no ar até os projetos
+   chegarem, com um mínimo para não dar um piscão em conexão rápida. */
+const ABERTURA_MINIMA=1400;
+const abertura=document.getElementById('abertura');
+const abriuEm=Date.now();
+let fechando=false;
+function fecharAbertura(){
+  if(fechando||!abertura) return;
+  fechando=true;
+  setTimeout(()=>{
+    abertura.classList.add('saindo');
+    setTimeout(()=>abertura.remove(),600);
+  },Math.max(0,ABERTURA_MINIMA-(Date.now()-abriuEm)));
+}
+/* se o banco travar sem responder, a abertura sai mesmo assim e o
+   visitante vê a tela de erro em vez de uma logo parada para sempre */
+setTimeout(fecharAbertura,10000);
+
 window.addEventListener('hashchange',render);
 app.innerHTML=telaCarregando();
 carregarProjetos()
   .then(d=>{PROJETOS=d;render();})
-  .catch(e=>{console.error(e);app.innerHTML=telaErro(e);});
+  .catch(e=>{console.error(e);app.innerHTML=telaErro(e);})
+  .finally(fecharAbertura);
 </script>
 </body>
 </html>
