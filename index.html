@@ -47,17 +47,6 @@ h3{font-size:1.32rem;line-height:1.25}
 .aviso{background:var(--azul);color:#C6C3EC;font-family:var(--dado);font-size:.72rem;
   letter-spacing:.06em;text-align:center;padding:7px 16px}
 
-/* selo de manutenção */
-.manutencao{position:fixed;left:0;right:0;bottom:0;z-index:200;display:flex;align-items:center;
-  justify-content:center;gap:14px;background:var(--laranja);color:#3A2100;font-family:var(--dado);
-  font-size:1.05rem;font-weight:500;letter-spacing:.08em;padding:16px 24px;
-  box-shadow:0 -4px 20px rgba(0,0,0,.18);text-transform:uppercase}
-.manutencao i{width:13px;height:13px;border-radius:50%;background:#3A2100;flex-shrink:0;
-  animation:pisca 1.4s ease-in-out infinite}
-@keyframes pisca{0%,100%{opacity:1}50%{opacity:.25}}
-@media (max-width:520px){.manutencao{font-size:.86rem;padding:13px 16px;gap:10px}}
-@media (prefers-reduced-motion:reduce){.manutencao i{animation:none}}
-
 /* faixa multicolor da marca */
 .faixa{display:flex;height:5px}
 .faixa i{flex:1}
@@ -269,8 +258,6 @@ footer .logo-rodape{height:82px;margin-bottom:20px}
 
 <main id="app"></main>
 
-<div class="manutencao" role="status" aria-label="Site em manutenção"><i></i>Em manutenção</div>
-
 <footer>
   <div class="wrap">
     <div class="rodape-grid">
@@ -326,95 +313,53 @@ const EIXOS={
   'Juventude':{cor:'var(--vermelho)',clara:'#FDE6E6'}
 };
 
-const PROJETOS=[
- {id:'quem-somos-60',nome:'Quem Somos 60',titulo:'Pessoas idosas no município de Campo Grande/MS',
-  status:'ativo',eixo:'Pessoas idosas',ini:2023,fim:2026,capa:IMG+'Quem-Somos-60-300x300.png',
-  termo:'TF-12-S-FMAS/2023',periodo:'36 meses',valor:'R$ 000.000,00',publico:'120 pessoas idosas',
-  resumo:'Mapeia e acompanha a população idosa do município, garantindo acesso a direitos e serviços.',
-  objeto:'Levantar o perfil das pessoas idosas do município e articular a rede de proteção para ampliar o acesso a serviços públicos.',
-  texto:'O projeto nasce da constatação de que boa parte da população idosa do bairro Tiradentes desconhece os serviços a que tem direito. A ação combina escuta ativa, visitas domiciliares e articulação com a rede socioassistencial.',
-  resultados:['Perfil socioeconômico das participantes mapeado','Encaminhamentos à rede de proteção social','Grupos de convivência formados no território']},
+/* ---------- de onde vêm os projetos ----------
+   Preencha com os dados do seu projeto no Supabase: Project Settings → API.
+   A chave "anon" é pública por natureza — quem protege o banco são as regras
+   de RLS de dados/supabase.sql. Nunca coloque aqui a chave service_role. */
+const SUPABASE_URL='https://asyqrlmdeptztggapdnn.supabase.co';
+const SUPABASE_ANON='sb_publishable_2MwWorspfb9vupsGpmsGyw_qKz9IG-N';
+const CACHE='ideps:projetos';
+/* aceita a URL colada com barra no fim ou já com /rest/v1 junto */
+const BASE=SUPABASE_URL.trim().replace(/\/+$/,'').replace(/\/rest\/v1$/,'');
 
- {id:'mulheres-que-apoiam-mulheres',nome:'Mulheres que Apoiam',titulo:'Mulheres que Apoiam Mulheres',
-  status:'ativo',eixo:'Mulheres',ini:2024,fim:2026,capa:IMG+'Mulheres-que-apoiam-mulheres-300x300.png',
-  termo:'TF-08-S-FMAS/2024',periodo:'24 meses',valor:'R$ 000.000,00',publico:'80 mulheres',
-  resumo:'Rede de apoio mútuo, formação sobre direitos e enfrentamento à violência doméstica.',
-  objeto:'Fortalecer redes de apoio entre mulheres em situação de vulnerabilidade, com formação em direitos e autonomia econômica.',
-  texto:'A iniciativa cria espaços seguros de escuta e formação, onde as participantes reconhecem situações de violência, conhecem os canais de denúncia e constroem alternativas de geração de renda.',
-  resultados:['Rodas de conversa mensais no território','Formação sobre a Lei Maria da Penha','Encaminhamento para serviços especializados']},
+let PROJETOS=[];
 
- {id:'bem-estar',nome:'Bem-Estar IDEPS',titulo:'Projeto Bem-Estar IDEPS',
-  status:'ativo',eixo:'Saúde e convivência',ini:2024,fim:2026,capa:IMG+'Bem-estar-IDEPS-300x300.png',
-  termo:'TF-19-S-FMAS/2024',periodo:'24 meses',valor:'R$ 000.000,00',publico:'90 pessoas idosas',
-  resumo:'Pilates, massagem terapêutica, nutrição e escuta psicológica para as idosas do Tiradentes.',
-  objeto:'Promover saúde física e mental de pessoas idosas por meio de atividades continuadas de bem-estar.',
-  texto:'As atividades acontecem semanalmente na sede do instituto e combinam movimento, cuidado corporal e acompanhamento profissional. A frequência regular é o que sustenta o vínculo das participantes com o instituto.',
-  resultados:['Turmas semanais de pilates adaptado','Atendimento nutricional individual','Escuta psicológica sob demanda']},
+const anoDe=d=>d?Number(String(d).slice(0,4)):null;
+/* o site trabalha com ini/fim em ano; o banco guarda datas completas */
+const normalizar=p=>({...p,ini:anoDe(p.inicio),fim:anoDe(p.fim),
+  resultados:Array.isArray(p.resultados)?p.resultados:[]});
 
- {id:'conhecer-para-participar',nome:'Conhecer para Participar',titulo:'Conhecer para Participar — IDEPS',
-  status:'ativo',eixo:'Direitos e cidadania',ini:2025,fim:2026,capa:IMG+'Conhecer-para-participar-300x300.png',
-  termo:'TF-30-S-FMAS/2025',periodo:'12 meses',valor:'R$ 000.000,00',publico:'100 participantes',
-  resumo:'Oficinas sobre políticas públicas, direitos humanos e participação cidadã.',
-  objeto:'Oportunizar o acesso a informações sobre políticas públicas, direitos humanos e participação cidadã, estimulando o protagonismo social e a autonomia.',
-  texto:'O projeto surge da necessidade de oferecer espaços de formação cidadã para populações vulneráveis, visando o fortalecimento de vínculos comunitários. A iniciativa promove o empoderamento e o acesso a direitos para ressignificar trajetórias de vida.',
-  resultados:['Ampliação do conhecimento sobre direitos','Desenvolvimento do protagonismo social','Fortalecimento dos vínculos familiares e comunitários']},
+async function buscarNoSupabase(){
+  if(!BASE||!SUPABASE_ANON) return null;
+  const r=await fetch(
+    `${BASE}/rest/v1/projetos?select=*&publicado=eq.true&order=inicio.asc`,
+    {headers:{apikey:SUPABASE_ANON,Authorization:'Bearer '+SUPABASE_ANON},
+     signal:AbortSignal.timeout?AbortSignal.timeout(6000):undefined});
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  const d=await r.json();
+  if(!d.length) throw new Error('nenhum projeto publicado');
+  return d;
+}
 
- {id:'apoio-as-familias',nome:'Apoio às Famílias',titulo:'Projeto Apoio às Famílias',
-  status:'ativo',eixo:'Segurança alimentar',ini:2025,fim:2026,capa:IMG+'Imagem-do-WhatsApp-de-2025-02-19-as-21.38.26_5eb9fdb6-300x300.jpg',
-  termo:'TF-27-S-FMAS/2025',periodo:'12 meses',valor:'R$ 000.000,00',publico:'150 famílias',
-  resumo:'Kits nutricionais e alimentos do Mesa Brasil SESC para famílias do território.',
-  objeto:'Garantir segurança alimentar a famílias em vulnerabilidade por meio da distribuição de kits e da articulação com parceiros doadores.',
-  texto:'Os kits nutricionais são obtidos via doações de parceiros e complementados com alimentos do Mesa Brasil SESC. A entrega é feita junto ao acompanhamento das famílias, e não como ação isolada.',
-  resultados:['Entrega mensal de kits nutricionais','Parceria ativa com o Mesa Brasil SESC','Acompanhamento das famílias atendidas']},
-
- {id:'alimentando-direitos',nome:'Alimentando Direitos',titulo:'Alimentando Direitos',
-  status:'feito',eixo:'Segurança alimentar',ini:2022,fim:2023,capa:IMG+'2-1-300x300.png',
-  termo:'TF-14-S-FMAS/2022',periodo:'18 meses',valor:'R$ 000.000,00',publico:'200 famílias',
-  resumo:'Segurança alimentar associada à formação sobre o direito humano à alimentação.',
-  objeto:'Associar a distribuição de alimentos à formação sobre o direito humano à alimentação adequada.',
-  texto:'Mais do que distribuir alimentos, o projeto tratou a alimentação como direito, formando as famílias sobre as políticas públicas às quais podem recorrer.',
-  resultados:['Formação sobre direito à alimentação','Distribuição continuada de alimentos','Famílias inseridas na rede de proteção']},
-
- {id:'fala-jovem',nome:'Fala Jovem',titulo:'Fala Jovem',
-  status:'feito',eixo:'Juventude',ini:2020,fim:2022,capa:IMG+'1-300x300.png',
-  termo:'TF-05-S-FMAS/2020',periodo:'24 meses',valor:'R$ 000.000,00',publico:'70 jovens',
-  resumo:'Protagonismo juvenil e participação em espaços de decisão.',
-  objeto:'Estimular o protagonismo de adolescentes e jovens do território em espaços de participação social.',
-  texto:'O projeto formou jovens do bairro para atuar em conselhos e coletivos, tratando participação como habilidade que se aprende na prática.',
-  resultados:['Jovens formados em participação social','Coletivo juvenil constituído','Participação em conselhos municipais']},
-
- {id:'cozinhar-bem-faz-bem',nome:'Cozinhar Bem Faz Bem',titulo:'Cozinhar Bem Faz Bem',
-  status:'feito',eixo:'Segurança alimentar',ini:2020,fim:2021,capa:IMG+'Imagem-do-WhatsApp-de-2025-02-19-as-21.38.26_f0c2e00e-300x300.jpg',
-  termo:'TF-11-S-FMAS/2020',periodo:'12 meses',valor:'R$ 000.000,00',publico:'60 participantes',
-  resumo:'Oficinas de aproveitamento integral de alimentos e geração de renda.',
-  objeto:'Capacitar participantes no aproveitamento integral dos alimentos, com foco em nutrição e geração de renda.',
-  texto:'As oficinas ensinaram técnicas de aproveitamento integral, reduzindo desperdício e abrindo caminho para pequenas atividades de geração de renda.',
-  resultados:['Oficinas culinárias realizadas','Redução do desperdício nas casas','Iniciativas de renda a partir da cozinha']},
-
- {id:'familias-em-seguranca-alimentar',nome:'Famílias em Seg. Alimentar',titulo:'Famílias em Segurança Alimentar e Nutricional',
-  status:'feito',eixo:'Segurança alimentar',ini:2021,fim:2022,capa:IMG+'Imagem-do-WhatsApp-de-2025-02-19-as-21.38.25_09bcd780-300x300.jpg',
-  termo:'TF-09-S-FMAS/2021',periodo:'12 meses',valor:'R$ 000.000,00',publico:'130 famílias',
-  resumo:'Acompanhamento nutricional de famílias em insegurança alimentar.',
-  objeto:'Acompanhar famílias em situação de insegurança alimentar com apoio nutricional e encaminhamento à rede.',
-  texto:'O acompanhamento nutricional identificou situações de risco e permitiu encaminhamentos rápidos à rede de saúde e assistência.',
-  resultados:['Avaliação nutricional das famílias','Encaminhamentos à rede de saúde','Apoio alimentar continuado']},
-
- {id:'semeando-direitos-humanos',nome:'Semeando Direitos',titulo:'Semeando Direitos Humanos',
-  status:'feito',eixo:'Direitos e cidadania',ini:2018,fim:2020,capa:IMG+'Semeando-DH.png',
-  termo:'TF-03-S-FMAS/2018',periodo:'24 meses',valor:'R$ 000.000,00',publico:'150 participantes',
-  resumo:'Educação em direitos humanos em escolas e espaços comunitários.',
-  objeto:'Difundir a educação em direitos humanos em escolas e espaços comunitários do município.',
-  texto:'O projeto levou formação em direitos humanos para dentro de escolas e associações de bairro, alcançando públicos que não chegariam à sede do instituto.',
-  resultados:['Formações em escolas do município','Material educativo produzido','Multiplicadores formados no território']},
-
- {id:'participar-e-preciso',nome:'Participar é Preciso',titulo:'Participar é Preciso',
-  status:'feito',eixo:'Direitos e cidadania',ini:2016,fim:2018,capa:IMG+'Logo-Participar-e-Preciso-8-sem-fundo-300x300.png',
-  termo:'TF-01-S-FMAS/2016',periodo:'24 meses',valor:'R$ 000.000,00',publico:'90 participantes',
-  resumo:'Formação de lideranças comunitárias para o controle social.',
-  objeto:'Formar lideranças comunitárias para atuação qualificada em conselhos e instâncias de controle social.',
-  texto:'Um dos primeiros projetos do instituto, formou lideranças que seguem atuando no território até hoje.',
-  resultados:['Lideranças comunitárias formadas','Participação em conselhos ampliada','Base para os projetos seguintes']}
-];
+/* Supabase → cópia da última visita → snapshot versionado no repositório.
+   Uma instabilidade do banco não pode deixar a página inicial sem projetos. */
+async function carregarProjetos(){
+  try{
+    const d=await buscarNoSupabase();
+    if(d){
+      try{localStorage.setItem(CACHE,JSON.stringify(d));}catch(e){}
+      return d.map(normalizar);
+    }
+  }catch(e){ console.warn('Supabase indisponível:',e.message); }
+  try{
+    const c=localStorage.getItem(CACHE);
+    if(c) return JSON.parse(c).map(normalizar);
+  }catch(e){}
+  const r=await fetch('dados/projetos.json');
+  if(!r.ok) throw new Error('snapshot indisponível (HTTP '+r.status+')');
+  return (await r.json()).map(normalizar);
+}
 
 /* ---------- contraste automático ----------
    a linha do tempo tem fundo azul escuro e algumas cores de eixo somem nele.
@@ -480,7 +425,9 @@ function linhaDoTempo(){
   const FUNDO='var(--azul)';                       /* fundo da seção .tempo */
   const tom=p=>contrastar(cor(p).cor,FUNDO);
   for(let a=A0;a<A1;a+=2) anos.push(`<span>${a}</span>`);
-  const barras=[...PROJETOS].sort((a,b)=>a.ini-b.ini).map(p=>{
+  /* projeto sem datas não vira barra: entraria com posição inválida */
+  const comData=PROJETOS.filter(p=>Number.isInteger(p.ini)&&Number.isInteger(p.fim));
+  const barras=[...comData].sort((a,b)=>a.ini-b.ini).map(p=>{
     const t=tom(p), esq=((p.ini-A0)/span)*100, larg=((Math.min(p.fim,A1)-p.ini)/span)*100;
     const estilo = p.status==='ativo'
       ? `background:${t};color:${textoSobre(t)}`
@@ -525,9 +472,9 @@ const paginas={
  </div></div></div>
 
  <div class="wrap"><div class="numeros">
-   <div><strong>12</strong><span>anos de atuação</span></div>
-   <div><strong>11</strong><span>projetos executados</span></div>
-   <div><strong>5</strong><span>projetos em andamento</span></div>
+   <div><strong>${new Date().getFullYear()-2014}</strong><span>anos de atuação</span></div>
+   <div><strong>${PROJETOS.length}</strong><span>projetos executados</span></div>
+   <div><strong>${PROJETOS.filter(p=>p.status==='ativo').length}</strong><span>projetos em andamento</span></div>
    <div><strong>+900</strong><span>pessoas atendidas</span></div>
  </div></div>
 
@@ -741,8 +688,27 @@ const tp=document.getElementById('tp'),tg=document.getElementById('tg');
 function escala(g){document.documentElement.style.setProperty('--escala',g?1.18:1);
   tp.setAttribute('aria-pressed',!g);tg.setAttribute('aria-pressed',g);}
 tp.onclick=()=>escala(false); tg.onclick=()=>escala(true);
+function telaCarregando(){
+  return `<section><div class="wrap"><p class="eyebrow">Carregando</p>
+    <h2>Um instante…</h2></div></section>`;
+}
+function telaErro(e){
+  const arquivo = location.protocol==='file:';
+  return `<section><div class="wrap">
+    <p class="eyebrow">Não foi possível carregar</p>
+    <h2 style="max-width:26ch">Os projetos não puderam ser carregados.</h2>
+    <p class="lead" style="margin-top:18px">${arquivo
+      ? 'A página foi aberta direto do arquivo, e nesse modo o navegador bloqueia a leitura dos dados. Sirva a pasta por HTTP — <b>python -m http.server 8000</b> — e abra <b>http://localhost:8000</b>.'
+      : 'Recarregue em instantes. Se continuar assim, o banco de dados pode estar fora do ar.'}</p>
+    <p style="font-family:var(--dado);font-size:.78rem;color:var(--texto-2);margin-top:20px">${esc(e.message||e)}</p>
+  </div></section>`;
+}
+
 window.addEventListener('hashchange',render);
-render();
+app.innerHTML=telaCarregando();
+carregarProjetos()
+  .then(d=>{PROJETOS=d;render();})
+  .catch(e=>{console.error(e);app.innerHTML=telaErro(e);});
 </script>
 </body>
 </html>

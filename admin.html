@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Painel do site — IDEPS</title>
+<link rel="icon" href="ideps-icone.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Public+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -38,8 +39,10 @@ h2{font-family:var(--display);font-size:1.15rem;font-weight:700;letter-spacing:-
 
 /* ---------- lateral ---------- */
 aside{background:var(--folha);color:#C6C3EC;padding:24px 16px;display:flex;flex-direction:column;gap:26px}
-.logo{display:flex;align-items:center;gap:10px;padding:0 8px 6px}
-.logo img{height:32px}
+.logo{display:flex;flex-direction:column;align-items:flex-start;gap:9px;padding:0 8px 6px}
+/* o wordmark tem letras no mesmo azul do fundo: precisa de placa clara atrás */
+.placa{background:var(--branco);border-radius:10px;padding:8px 11px;display:inline-flex}
+.logo img{height:28px;display:block}
 .logo b{font-family:var(--display);color:#fff;font-size:1.15rem;letter-spacing:-.02em}
 .logo small{display:block;font-family:var(--dado);font-size:.62rem;letter-spacing:.11em;
   text-transform:uppercase;color:#948DD6;font-weight:400}
@@ -134,6 +137,35 @@ textarea{min-height:120px;resize:vertical;line-height:1.6}
 .vazio{padding:56px 22px;text-align:center;color:var(--texto-2)}
 .vazio b{display:block;font-family:var(--display);font-size:1.15rem;color:var(--folha);margin-bottom:6px}
 
+/* o atributo hidden precisa vencer o display:grid/flex dos blocos */
+[hidden]{display:none!important}
+
+/* ---------- tela de entrada ---------- */
+.portao{position:fixed;inset:0;z-index:300;display:grid;place-items:center;
+  background:var(--folha);padding:24px}
+.portao-caixa{background:var(--branco);border-radius:16px;padding:34px;width:100%;max-width:400px;
+  box-shadow:0 18px 50px rgba(0,0,0,.3)}
+.portao-caixa img{height:30px;margin-bottom:22px}
+.portao-caixa h1{font-size:1.5rem;margin-bottom:6px}
+.portao-caixa p.abre{color:var(--texto-2);margin-bottom:22px;font-size:.92rem}
+.portao-caixa .btn{width:100%;justify-content:center;margin-top:6px}
+.erro{background:#FDE8E8;color:#A00000;border-radius:8px;padding:10px 13px;font-size:.86rem;margin-bottom:14px}
+.sair{font-family:var(--dado);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;
+  color:#948DD6;margin-left:auto;padding:6px 9px;border-radius:7px}
+.sair:hover{background:#2A2296;color:#fff}
+
+/* ---------- telas ainda não conectadas ---------- */
+.maquete{background:var(--amarelo-claro);color:#8A4C00;border:1px solid var(--amarelo);
+  border-radius:10px;padding:12px 16px;font-size:.88rem;margin-bottom:22px}
+.maquete b{font-weight:700}
+
+/* ---------- retorno de ação ---------- */
+.recado{position:fixed;right:24px;bottom:24px;z-index:400;max-width:380px;
+  background:var(--folha);color:#fff;padding:13px 18px;border-radius:10px;font-size:.9rem;
+  box-shadow:0 8px 26px rgba(0,0,0,.24)}
+.recado.ruim{background:#B00020}
+.contador.estourou{color:#B00020;font-weight:700}
+
 @media (max-width:1000px){
   .app{grid-template-columns:1fr}
   aside{flex-direction:row;flex-wrap:wrap;align-items:center;gap:12px;padding:14px}
@@ -146,10 +178,26 @@ textarea{min-height:120px;resize:vertical;line-height:1.6}
 </head>
 <body>
 
-<div class="aviso">PROTÓTIPO — painel de gerenciamento do site institucional, sem back-end conectado</div>
+<div class="portao" id="portao" hidden>
+  <form class="portao-caixa" id="formLogin">
+    <img src="ideps-wordmark.png" alt="IDEPS">
+    <h1>Painel do site</h1>
+    <p class="abre" id="portaoTexto">Entre com seu e-mail e senha para editar os projetos.</p>
+    <p class="erro" id="erroLogin" hidden></p>
+    <div id="camposLogin">
+      <div class="campo"><label for="email">E-mail</label>
+        <input id="email" type="text" autocomplete="username" required></div>
+      <div class="campo"><label for="senha">Senha</label>
+        <input id="senha" type="password" autocomplete="current-password" required></div>
+      <button class="btn" type="submit" id="btnEntrar">Entrar</button>
+    </div>
+  </form>
+</div>
+
+<div class="aviso" id="tarja">Projetos conectados ao banco. As demais telas ainda são demonstração.</div>
 
 <div class="faixa"><i style="background:var(--vermelho)"></i><i style="background:var(--magenta)"></i><i style="background:var(--folha)"></i><i style="background:var(--agua)"></i><i style="background:var(--verde)"></i><i style="background:#F7E600"></i><i style="background:var(--laranja)"></i></div>
-<div class="app">
+<div class="app" id="app-grade" hidden>
 <aside>
   <div class="logo">
     <span class="placa"><img src="ideps-wordmark.png" alt="IDEPS"></span>
@@ -159,9 +207,9 @@ textarea{min-height:120px;resize:vertical;line-height:1.6}
     <p class="grupo-titulo">Conteúdo</p>
     <nav id="nav">
       <a href="#/">Resumo</a>
-      <a href="#/projetos">Projetos <span class="conta">11</span></a>
-      <a href="#/paginas">Páginas <span class="conta">4</span></a>
-      <a href="#/transparencia">Transparência <span class="conta">9</span></a>
+      <a href="#/projetos">Projetos <span class="conta" id="contaProjetos"></span></a>
+      <a href="#/paginas">Páginas</a>
+      <a href="#/transparencia">Transparência</a>
       <a href="#/numeros">Números do topo</a>
       <a href="#/midia">Fotos e arquivos</a>
     </nav>
@@ -174,75 +222,214 @@ textarea{min-height:120px;resize:vertical;line-height:1.6}
     </nav>
   </div>
   <div class="usuario">
-    <div class="avatar">MC</div>
-    <div><b style="font-size:.9rem;color:#fff">Maria Clara</b><small>Comunicação</small></div>
+    <div class="avatar" id="avatar">··</div>
+    <div><b style="font-size:.9rem;color:#fff" id="usuarioNome">—</b><small id="usuarioEmail"></small></div>
+    <button class="sair" id="btnSair">Sair</button>
   </div>
 </aside>
 
 <main id="app"></main>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-const IMG='https://idepsms.org/wp-content/uploads/';
-const PROJETOS=[
- {id:'quem-somos-60',t:'Pessoas idosas no município de Campo Grande/MS',termo:'TF-12-S-FMAS/2023',eixo:'Pessoas idosas',st:'ativo',pub:'publicado',cap:IMG+'2025/10/Quem-Somos-60-300x300.png',at:'12/07/2026'},
- {id:'mulheres',t:'Mulheres que Apoiam Mulheres',termo:'TF-08-S-FMAS/2024',eixo:'Mulheres',st:'ativo',pub:'publicado',cap:IMG+'2025/10/Mulheres-que-apoiam-mulheres-300x300.png',at:'02/07/2026'},
- {id:'bem-estar',t:'Projeto Bem-Estar IDEPS',termo:'TF-19-S-FMAS/2024',eixo:'Saúde e convivência',st:'ativo',pub:'publicado',cap:IMG+'2025/10/Bem-estar-IDEPS-300x300.png',at:'28/06/2026'},
- {id:'conhecer',t:'Conhecer para Participar — IDEPS',termo:'TF-30-S-FMAS/2025',eixo:'Direitos e cidadania',st:'ativo',pub:'rascunho',cap:IMG+'2025/10/Conhecer-para-participar-300x300.png',at:'21/07/2026'},
- {id:'apoio',t:'Projeto Apoio às Famílias',termo:'TF-27-S-FMAS/2025',eixo:'Segurança alimentar',st:'ativo',pub:'publicado',cap:IMG+'2025/02/Imagem-do-WhatsApp-de-2025-02-19-as-21.38.26_5eb9fdb6-300x300.jpg',at:'15/05/2026'},
- {id:'alimentando',t:'Alimentando Direitos',termo:'TF-14-S-FMAS/2022',eixo:'Segurança alimentar',st:'feito',pub:'publicado',cap:IMG+'2024/11/2-1-300x300.png',at:'10/01/2024'},
- {id:'fala-jovem',t:'Fala Jovem',termo:'TF-05-S-FMAS/2020',eixo:'Juventude',st:'feito',pub:'publicado',cap:IMG+'2024/11/1-300x300.png',at:'03/03/2023'},
- {id:'semeando',t:'Semeando Direitos Humanos',termo:'TF-03-S-FMAS/2018',eixo:'Direitos e cidadania',st:'feito',pub:'publicado',cap:IMG+'2024/04/Semeando-DH.png',at:'19/11/2021'},
- {id:'participar',t:'Participar é Preciso',termo:'TF-01-S-FMAS/2016',eixo:'Direitos e cidadania',st:'feito',pub:'publicado',cap:IMG+'2024/04/Logo-Participar-e-Preciso-8-sem-fundo-300x300.png',at:'08/09/2019'}
-];
+/* ============================================================
+   Painel do IDEPS
+   Nesta etapa só a área de Projetos grava de verdade; as demais
+   telas seguem como demonstração e estão marcadas como tal.
+
+   Configuração: Supabase → Project Settings → API.
+   A chave "anon" é pública por natureza — quem protege o banco são
+   as regras de RLS de dados/supabase.sql. Nunca use aqui a chave
+   service_role, que ignora todas as regras.
+   ============================================================ */
+const SUPABASE_URL='https://asyqrlmdeptztggapdnn.supabase.co';
+const SUPABASE_ANON='sb_publishable_2MwWorspfb9vupsGpmsGyw_qKz9IG-N';
+
+const IMG='imagens/';
+/* aceita a URL colada com barra no fim ou já com /rest/v1 junto:
+   o SDK monta os caminhos sozinho a partir da Project URL */
+const BASE=SUPABASE_URL.trim().replace(/\/+$/,'').replace(/\/rest\/v1$/,'');
+const sb=(BASE&&SUPABASE_ANON&&window.supabase)
+  ? window.supabase.createClient(BASE,SUPABASE_ANON) : null;
+
+const app=document.getElementById('app');
+const grade=document.getElementById('app-grade');
+const portao=document.getElementById('portao');
+
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+/* usado na busca: "seguranca" precisa encontrar "Segurança" */
+const semAcento=s=>String(s||'').normalize('NFD').replace(/\p{Diacritic}/gu,'').toLowerCase();
+/* usado no endereço do projeto — o corte de 60 vale só aqui */
+const slug=s=>semAcento(s).replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'').slice(0,60);
+const dataBR=d=>{const x=d?new Date(d):null;return x&&!isNaN(x)?x.toLocaleDateString('pt-BR'):'—'};
+const soData=d=>d?String(d).slice(0,10):'';
+const saudacao=()=>{const h=new Date().getHours();return h<12?'Bom dia':h<18?'Boa tarde':'Boa noite'};
+
+const EIXOS=['Direitos e cidadania','Pessoas idosas','Mulheres',
+ 'Segurança alimentar','Saúde e convivência','Juventude'];
 const CORES={'Direitos e cidadania':'var(--folha)','Pessoas idosas':'var(--laranja)',
  'Mulheres':'var(--magenta)','Segurança alimentar':'var(--verde)',
  'Saúde e convivência':'var(--agua)','Juventude':'var(--vermelho)'};
 const ponto=e=>`<span style="display:inline-block;width:11px;height:11px;border-radius:50%;
  background:${CORES[e]||'var(--folha)'};margin-right:9px;vertical-align:-1px"></span>`;
-const app=document.getElementById('app');
+const selo=pub=>`<span class="selo ${pub?'publicado':'rascunho'}">${pub?'Publicado':'Rascunho'}</span>`;
+const maquete=`<div class="maquete"><b>Tela de demonstração.</b> Esta parte ainda não está ligada ao
+ banco: o que você editar aqui não é salvo. Por enquanto só a área de Projetos grava.</div>`;
 
-const selo=p=>`<span class="selo ${p}">${p==='publicado'?'Publicado':'Rascunho'}</span>`;
+let PROJETOS=[];
+let usuario='';
+let edicao={id:null,capa:'',sujo:false};
+
+/* ---------- retorno de ação ---------- */
+let recadoTimer=null;
+function recado(msg,ruim){
+  document.querySelectorAll('.recado').forEach(n=>n.remove());
+  const d=document.createElement('div');
+  d.className='recado'+(ruim?' ruim':'');
+  d.setAttribute('role','status');
+  d.textContent=msg;
+  document.body.appendChild(d);
+  clearTimeout(recadoTimer);
+  recadoTimer=setTimeout(()=>d.remove(),ruim?8000:3500);
+}
+
+/* ---------- entrada ---------- */
+async function iniciar(){
+  if(!sb) return portaoSemConfig();
+  const {data:{session}}=await sb.auth.getSession();
+  if(session) await abrirPainel(session); else mostrarPortao();
+  sb.auth.onAuthStateChange((_ev,s)=>{if(!s){PROJETOS=[];mostrarPortao();}});
+}
+
+function portaoSemConfig(){
+  portao.hidden=false; grade.hidden=true;
+  document.getElementById('camposLogin').hidden=true;
+  document.getElementById('portaoTexto').innerHTML=
+    'Falta ligar o banco de dados. Rode <b>dados/supabase.sql</b> no SQL Editor do Supabase, '+
+    'crie seu usuário em Authentication → Users e preencha <b>SUPABASE_URL</b> e '+
+    '<b>SUPABASE_ANON</b> no topo do script deste arquivo e do index.html.';
+}
+
+function mostrarPortao(){portao.hidden=false;grade.hidden=true;}
+
+async function abrirPainel(session){
+  const email=session.user.email||'';
+  usuario=email.split('@')[0];
+  document.getElementById('usuarioEmail').textContent=email;
+  document.getElementById('usuarioNome').textContent=usuario;
+  document.getElementById('avatar').textContent=email.slice(0,2).toUpperCase();
+  portao.hidden=true; grade.hidden=false;
+  await carregar();
+  render();
+}
+
+document.getElementById('formLogin').onsubmit=async e=>{
+  e.preventDefault();
+  if(!sb) return;
+  const erro=document.getElementById('erroLogin'), btn=document.getElementById('btnEntrar');
+  erro.hidden=true; btn.disabled=true; btn.textContent='Entrando…';
+  const {data,error}=await sb.auth.signInWithPassword({
+    email:document.getElementById('email').value.trim(),
+    password:document.getElementById('senha').value});
+  btn.disabled=false; btn.textContent='Entrar';
+  if(error){
+    erro.textContent='Não foi possível entrar. Confira e-mail e senha.';
+    erro.hidden=false; return;
+  }
+  document.getElementById('senha').value='';
+  abrirPainel(data.session);
+};
+
+document.getElementById('btnSair').onclick=async()=>{
+  if(edicao.sujo&&!confirm('Há alterações não salvas. Sair mesmo assim?')) return;
+  edicao.sujo=false;
+  await sb.auth.signOut();
+  PROJETOS=[];
+  location.hash='#/';
+  mostrarPortao();   /* não depender só do onAuthStateChange para fechar o painel */
+};
+
+/* ---------- dados ---------- */
+async function carregar(){
+  const {data,error}=await sb.from('projetos').select('*')
+    .order('atualizado_em',{ascending:false});
+  if(error){recado('Não foi possível carregar os projetos: '+error.message,true);return;}
+  PROJETOS=data||[];
+  document.getElementById('contaProjetos').textContent=PROJETOS.length;
+}
+
+/* ---------- telas ---------- */
+const linhaProjeto=p=>`<tr>
+  <td><div class="item"><img class="miniatura" src="${esc(p.capa)}" alt="">
+    <div><b>${esc(p.titulo)}</b><small>${esc(p.termo||'sem termo de fomento')}</small></div></div></td>
+  <td style="color:var(--texto-2)">${ponto(p.eixo)}${esc(p.eixo)}</td>
+  <td><span class="selo ${p.status==='ativo'?'ativo':'publicado'}">${p.status==='ativo'?'Em andamento':'Finalizado'}</span></td>
+  <td>${selo(p.publicado)}</td>
+  <td style="font-family:var(--dado);font-size:.8rem;color:var(--texto-2)">${dataBR(p.atualizado_em)}</td>
+  <td class="acoes"><a class="btn fantasma" href="#/projeto/${encodeURIComponent(p.id)}">Editar</a></td></tr>`;
+
+const linhasProjetos=l=>l.length?l.map(linhaProjeto).join('')
+  :`<tr><td colspan="6"><div class="vazio"><b>Nada encontrado</b>Ajuste a busca ou o filtro acima.</div></td></tr>`;
+
+const pendencias=p=>{
+  const f=[];
+  if(!p.publicado) f.push('está como rascunho');
+  if(!p.inicio||!p.fim) f.push('faltam as datas do termo');
+  if(!p.valor) f.push('falta o valor do investimento');
+  if(!p.publico) f.push('falta o público atendido');
+  if(!p.resumo) f.push('falta o resumo');
+  return f;
+};
 
 const paginas={
 
-'/':()=>`
+'/':()=>{
+  const publicados=PROJETOS.filter(p=>p.publicado);
+  const rascunhos=PROJETOS.filter(p=>!p.publicado);
+  const ativos=PROJETOS.filter(p=>p.status==='ativo');
+  const atencao=PROJETOS.map(p=>[p,pendencias(p)]).filter(([,f])=>f.length);
+  return `
  <div class="topo">
-   <div><h1>Bom dia, Maria Clara</h1><p>Um resumo do que está no ar e do que precisa da sua atenção.</p></div>
+   <div><h1>${saudacao()}${usuario?', '+esc(usuario):''}</h1>
+     <p>Um resumo do que está no ar e do que precisa da sua atenção.</p></div>
    <a class="btn" href="#/projeto/novo">+ Novo projeto</a>
  </div>
  <div class="cards">
-   <div class="card"><strong style="color:var(--folha)">10</strong><span>projetos publicados</span></div>
-   <div class="card"><strong style="color:var(--magenta)">5</strong><span>em andamento</span></div>
-   <div class="card alerta"><strong>1</strong><span>rascunho parado</span></div>
-   <div class="card"><strong style="color:var(--verde)">4</strong><span>relatórios anuais</span></div>
+   <div class="card"><strong style="color:var(--folha)">${publicados.length}</strong><span>projetos publicados</span></div>
+   <div class="card"><strong style="color:var(--magenta)">${ativos.length}</strong><span>em andamento</span></div>
+   <div class="card ${rascunhos.length?'alerta':''}"><strong ${rascunhos.length?'':'style="color:var(--verde)"'}>${rascunhos.length}</strong>
+     <span>${rascunhos.length===1?'rascunho parado':'rascunhos parados'}</span></div>
+   <div class="card"><strong style="color:var(--verde)">${PROJETOS.length}</strong><span>projetos no total</span></div>
  </div>
 
  <div class="painel" style="margin-bottom:24px">
-   <div class="painel-cabeca"><h2>Precisa de atenção</h2></div>
-   <table><tbody>
-     <tr><td><div class="item"><img class="miniatura" src="${IMG}2025/10/Conhecer-para-participar-300x300.png" alt="">
-       <div><b>Conhecer para Participar — IDEPS</b><small>Rascunho desde 21/07/2026</small></div></div></td>
-       <td style="color:var(--texto-2)">Falta preencher meta e valor do investimento</td>
-       <td class="acoes"><a class="btn linha" href="#/projeto/conhecer">Terminar</a></td></tr>
-     <tr><td><div class="item"><div class="miniatura" style="display:grid;place-items:center;font-family:var(--dado);font-size:.7rem">PDF</div>
-       <div><b>Relatório de atividades 2025</b><small>Transparência</small></div></div></td>
-       <td style="color:var(--texto-2)">Ainda não foi enviado</td>
-       <td class="acoes"><a class="btn linha" href="#/transparencia">Enviar arquivo</a></td></tr>
-   </tbody></table>
+   <div class="painel-cabeca"><h2>Precisa de atenção</h2>
+     <span style="font-family:var(--dado);font-size:.76rem;color:var(--texto-2)">${atencao.length} projeto${atencao.length===1?'':'s'}</span></div>
+   ${atencao.length?`<table><tbody>
+     ${atencao.map(([p,f])=>`<tr>
+       <td><div class="item"><img class="miniatura" src="${esc(p.capa)}" alt="">
+         <div><b>${esc(p.titulo)}</b><small>Editado em ${dataBR(p.atualizado_em)}</small></div></div></td>
+       <td style="color:var(--texto-2)">${esc(f.join(', '))}</td>
+       <td class="acoes"><a class="btn linha" href="#/projeto/${encodeURIComponent(p.id)}">Terminar</a></td></tr>`).join('')}
+   </tbody></table>`
+   :`<div class="vazio"><b>Nada pendente</b>Todos os projetos estão publicados e completos.</div>`}
  </div>
 
  <div class="painel">
    <div class="painel-cabeca"><h2>Alterações recentes</h2><a class="btn fantasma" href="#/projetos">Ver projetos →</a></div>
-   <table><tbody>
+   ${PROJETOS.length?`<table><tbody>
      ${PROJETOS.slice(0,4).map(p=>`<tr>
-       <td><div class="item"><img class="miniatura" src="${p.cap}" alt="">
-         <div><b>${p.t}</b><small>${p.termo}</small></div></div></td>
-       <td>${selo(p.pub)}</td>
-       <td style="font-family:var(--dado);font-size:.8rem;color:var(--texto-2)">${p.at}</td>
-       <td class="acoes"><a class="btn fantasma" href="#/projeto/${p.id}">Editar</a></td></tr>`).join('')}
-   </tbody></table>
- </div>`,
+       <td><div class="item"><img class="miniatura" src="${esc(p.capa)}" alt="">
+         <div><b>${esc(p.titulo)}</b><small>${esc(p.termo||'sem termo de fomento')}</small></div></div></td>
+       <td>${selo(p.publicado)}</td>
+       <td style="font-family:var(--dado);font-size:.8rem;color:var(--texto-2)">${dataBR(p.atualizado_em)}</td>
+       <td class="acoes"><a class="btn fantasma" href="#/projeto/${encodeURIComponent(p.id)}">Editar</a></td></tr>`).join('')}
+   </tbody></table>`
+   :`<div class="vazio"><b>Nenhum projeto ainda</b>Comece criando o primeiro.</div>`}
+ </div>`;
+},
 
 '/projetos':()=>`
  <div class="topo">
@@ -252,35 +439,33 @@ const paginas={
  <div class="painel">
    <div class="painel-cabeca">
      <div style="display:flex;gap:8px;flex-wrap:wrap">
-       <input type="text" placeholder="Buscar por nome ou termo de fomento" style="width:290px">
-       <select style="width:auto"><option>Todas as situações</option><option>Em andamento</option><option>Finalizados</option></select>
+       <input type="text" id="busca" placeholder="Buscar por nome ou termo de fomento" style="width:290px">
+       <select id="situacao" style="width:auto">
+         <option value="">Todas as situações</option>
+         <option value="ativo">Em andamento</option>
+         <option value="feito">Finalizados</option>
+         <option value="rascunho">Só rascunhos</option>
+       </select>
      </div>
-     <span style="font-family:var(--dado);font-size:.76rem;color:var(--texto-2)">${PROJETOS.length} projetos</span>
+     <span id="contaLista" style="font-family:var(--dado);font-size:.76rem;color:var(--texto-2)">${PROJETOS.length} projetos</span>
    </div>
    <table>
      <thead><tr><th>Projeto</th><th>Área</th><th>Situação</th><th>No site</th><th>Editado</th><th></th></tr></thead>
-     <tbody>${PROJETOS.map(p=>`<tr>
-       <td><div class="item"><img class="miniatura" src="${p.cap}" alt="">
-         <div><b>${p.t}</b><small>${p.termo}</small></div></div></td>
-       <td style="color:var(--texto-2)">${ponto(p.eixo)}${p.eixo}</td>
-       <td><span class="selo ${p.st==='ativo'?'ativo':'publicado'}">${p.st==='ativo'?'Em andamento':'Finalizado'}</span></td>
-       <td>${selo(p.pub)}</td>
-       <td style="font-family:var(--dado);font-size:.8rem;color:var(--texto-2)">${p.at}</td>
-       <td class="acoes"><a class="btn fantasma" href="#/projeto/${p.id}">Editar</a></td></tr>`).join('')}
-     </tbody>
+     <tbody id="corpoProjetos">${linhasProjetos(PROJETOS)}</tbody>
    </table>
  </div>`,
 
 '/paginas':()=>`
  <div class="topo"><div><h1>Páginas</h1><p>Os textos fixos do site. Edite direto, sem mexer no layout.</p></div></div>
+ ${maquete}
  <div class="painel"><table>
    <thead><tr><th>Página</th><th>Endereço</th><th>No site</th><th>Editado</th><th></th></tr></thead>
    <tbody>
-     ${[['Início','/','publicado','20/07/2026'],['Quem somos','/quem-somos','publicado','14/06/2026'],
-        ['Transparência','/transparencia','publicado','01/07/2026'],['Contato','/contato','publicado','22/03/2026']]
-       .map(([n,u,p,d])=>`<tr><td><b>${n}</b></td>
+     ${[['Início','/','20/07/2026'],['Quem somos','/quem-somos','14/06/2026'],
+        ['Transparência','/transparencia','01/07/2026'],['Contato','/contato','22/03/2026']]
+       .map(([n,u,d])=>`<tr><td><b>${n}</b></td>
          <td style="font-family:var(--dado);font-size:.82rem;color:var(--texto-2)">${u}</td>
-         <td>${selo(p)}</td>
+         <td>${selo(true)}</td>
          <td style="font-family:var(--dado);font-size:.8rem;color:var(--texto-2)">${d}</td>
          <td class="acoes"><a class="btn fantasma" href="#/pagina">Editar</a></td></tr>`).join('')}
    </tbody>
@@ -289,6 +474,7 @@ const paginas={
 '/pagina':()=>`
  <div class="topo"><div><a class="btn fantasma" href="#/paginas" style="padding-left:0">← Páginas</a>
    <h1 style="margin-top:6px">Quem somos</h1></div></div>
+ ${maquete}
  <div class="form">
    <div class="caixa">
      <div class="campo"><label>Título da página</label><input type="text" value="Uma ponte entre a sociedade civil e a equidade social."></div>
@@ -315,15 +501,16 @@ A sede fica no bairro Tiradentes, e é lá que a maior parte do trabalho acontec
    <div><h1>Transparência</h1><p>Relatórios e prestações de contas que ficam públicos no site.</p></div>
    <button class="btn">+ Enviar documento</button>
  </div>
+ ${maquete}
  <div class="upload" style="margin-bottom:24px"><b>Arraste um PDF aqui</b>ou clique para escolher do computador — até 20 MB</div>
  <div class="painel"><table>
    <thead><tr><th>Documento</th><th>Categoria</th><th>Ano</th><th>No site</th><th></th></tr></thead>
    <tbody>
-     ${[['Relatório de atividades 2025','Relatório anual','2025','rascunho'],
-        ['Relatório de atividades 2024','Relatório anual','2024','publicado'],
-        ['Prestação de contas — TF-30-S-FMAS/2025','Prestação de contas','2025','publicado'],
-        ['Prestação de contas — TF-27-S-FMAS/2025','Prestação de contas','2025','publicado'],
-        ['Estatuto social','Documento institucional','2014','publicado']]
+     ${[['Relatório de atividades 2025','Relatório anual','2025',false],
+        ['Relatório de atividades 2024','Relatório anual','2024',true],
+        ['Prestação de contas — TF-30-S-FMAS/2025','Prestação de contas','2025',true],
+        ['Prestação de contas — TF-27-S-FMAS/2025','Prestação de contas','2025',true],
+        ['Estatuto social','Documento institucional','2014',true]]
        .map(([n,c,a,p])=>`<tr>
          <td><div class="item"><div class="miniatura" style="display:grid;place-items:center;font-family:var(--dado);font-size:.66rem">PDF</div><b>${n}</b></div></td>
          <td style="color:var(--texto-2)">${c}</td>
@@ -335,35 +522,39 @@ A sede fica no bairro Tiradentes, e é lá que a maior parte do trabalho acontec
 
 '/numeros':()=>`
  <div class="topo"><div><h1>Números do topo</h1><p>A faixa de números que aparece logo abaixo da capa. Máximo de quatro.</p></div></div>
+ ${maquete}
  <div class="form">
    <div class="caixa">
-     ${[['12','anos de atuação'],['11','projetos executados'],['5','projetos em andamento'],['+900','pessoas atendidas']]
+     ${[[String(new Date().getFullYear()-2014),'anos de atuação'],[String(PROJETOS.length),'projetos executados'],
+        [String(PROJETOS.filter(p=>p.status==='ativo').length),'projetos em andamento'],['+900','pessoas atendidas']]
        .map(([n,r])=>`<div class="repetidor">
          <input type="text" value="${n}" style="max-width:90px;font-family:var(--display);font-size:1.3rem;font-weight:700">
          <input type="text" value="${r}">
          <button class="btn fantasma" aria-label="Remover">✕</button></div>`).join('')}
      <div class="rodape-form"><button class="btn">Salvar e publicar</button></div>
    </div>
-   <div class="dica" style="margin-top:0"><b>Mantenha atualizado</b>Número desatualizado no topo do site é o tipo de detalhe que financiador percebe. Revise sempre que um projeto começa ou termina.</div>
+   <div class="dica" style="margin-top:0"><b>Três destes já se calculam sozinhos</b>Anos de atuação, projetos executados e projetos em andamento saem da própria lista de projetos e mudam sozinhos no site. Só "pessoas atendidas" é digitado.</div>
  </div>`,
 
 '/midia':()=>`
  <div class="topo"><div><h1>Fotos e arquivos</h1><p>Tudo que você já enviou. Use fotos reais das atividades sempre que possível.</p></div>
    <button class="btn">+ Enviar fotos</button></div>
+ ${maquete}
  <div class="midia">
-   ${[[IMG+'2024/11/image13-1024x800.jpg','oficina-tiradentes.jpg'],
-      [IMG+'2024/02/closeup-diverse-people-joining-their-hands-1024x576.jpg','maos-comunidade.jpg'],
-      [IMG+'2024/11/image2-1-1024x472.jpg','palestra-uems.jpg'],
-      [IMG+'2024/11/image14.jpg','atividade-grupo.jpg'],
-      [IMG+'2025/10/jovem-aluna-ouvindo-professora-de-ingles-1024x617.jpg','aluna-curso-online.jpg'],
-      [IMG+'2025/10/logo-sem-fundo-crop.png','logo-ideps.png'],
-      [IMG+'2025/10/Bem-estar-IDEPS-300x300.png','capa-bem-estar.png'],
-      [IMG+'2025/10/Quem-Somos-60-300x300.png','capa-quem-somos-60.png']]
-     .map(([u,n])=>`<figure><img src="${u}" alt=""><figcaption>${n}</figcaption></figure>`).join('')}
+   ${[['image13-1024x800.jpg','oficina-tiradentes.jpg'],
+      ['jovem-aluna-ouvindo-professora-de-ingles-1024x617.jpg','aluna-curso-online.jpg'],
+      ['Bem-estar-IDEPS-300x300.png','capa-bem-estar.png'],
+      ['Quem-Somos-60-300x300.png','capa-quem-somos-60.png'],
+      ['Mulheres-que-apoiam-mulheres-300x300.png','capa-mulheres.png'],
+      ['Conhecer-para-participar-300x300.png','capa-conhecer.png'],
+      ['Semeando-DH.png','capa-semeando.png'],
+      ['Logo-Participar-e-Preciso-8-sem-fundo-300x300.png','capa-participar.png']]
+     .map(([u,n])=>`<figure><img src="${IMG}${u}" alt=""><figcaption>${n}</figcaption></figure>`).join('')}
  </div>`,
 
 '/contato':()=>`
  <div class="topo"><div><h1>Contato e rodapé</h1><p>Aparece na página de contato e no rodapé de todas as páginas.</p></div></div>
+ ${maquete}
  <div class="form">
    <div class="caixa">
      <div class="dois">
@@ -386,6 +577,7 @@ A sede fica no bairro Tiradentes, e é lá que a maior parte do trabalho acontec
 '/equipe':()=>`
  <div class="topo"><div><h1>Quem tem acesso</h1><p>Pessoas que podem entrar neste painel e o que cada uma pode fazer.</p></div>
    <button class="btn">+ Convidar pessoa</button></div>
+ ${maquete}
  <div class="painel"><table>
    <thead><tr><th>Pessoa</th><th>Permissão</th><th>Último acesso</th><th></th></tr></thead>
    <tbody>
@@ -402,86 +594,274 @@ A sede fica no bairro Tiradentes, e é lá que a maior parte do trabalho acontec
  </table></div>`
 };
 
+/* ---------- formulário de projeto ---------- */
+const linhaResultado=t=>`<div class="repetidor">
+  <input type="text" data-resultado value="${esc(t)}" placeholder="Ampliação do conhecimento sobre direitos">
+  <button class="btn fantasma" data-remover type="button" aria-label="Remover">✕</button></div>`;
+
 function formProjeto(id){
-  const p = PROJETOS.find(x=>x.id===id);
-  const novo = !p;
+  const novo=id==='novo';
+  const p=novo?null:PROJETOS.find(x=>x.id===id);
+  if(!novo&&!p) return `
+    <div class="topo"><div><a class="btn fantasma" href="#/projetos" style="padding-left:0">← Projetos</a>
+      <h1 style="margin-top:6px">Projeto não encontrado</h1></div></div>
+    <div class="painel"><div class="vazio"><b>Esse endereço não existe</b>
+      O projeto pode ter sido removido. Volte para a lista.</div></div>`;
+
+  edicao={id:novo?null:p.id,capa:novo?'':(p.capa||''),sujo:false};
+  const v=(k,d='')=>novo?d:(p[k]??d);
+  const capa=v('capa');
+
   return `
   <div class="topo">
     <div><a class="btn fantasma" href="#/projetos" style="padding-left:0">← Projetos</a>
-      <h1 style="margin-top:6px">${novo?'Novo projeto':p.t}</h1></div>
+      <h1 style="margin-top:6px">${novo?'Novo projeto':esc(p.titulo)}</h1>
+      ${novo?'':`<p style="font-family:var(--dado);font-size:.78rem">Endereço no site: /#/projeto/${esc(p.id)}</p>`}</div>
     <div style="display:flex;gap:8px">
-      <button class="btn linha">Ver como fica no site</button>
-      <button class="btn">${novo?'Criar e publicar':'Salvar alterações'}</button>
+      <button class="btn linha" id="verSite" type="button">Ver como fica no site</button>
+      <button class="btn" id="salvarTopo" type="button">${novo?'Criar e publicar':'Salvar alterações'}</button>
     </div>
   </div>
   <div class="form">
     <div class="caixa">
       <div class="campo"><label>Nome do projeto</label>
-        <input type="text" value="${novo?'':p.t}" placeholder="Ex.: Conhecer para Participar — IDEPS"></div>
+        <input type="text" data-campo="titulo" value="${esc(v('titulo'))}" placeholder="Ex.: Conhecer para Participar — IDEPS"></div>
       <div class="campo"><label>Nome curto<small>Usado na linha do tempo da página inicial. Até 28 caracteres.</small></label>
-        <input type="text" value="${novo?'':p.t.split('—')[0].trim().slice(0,28)}" maxlength="28">
-        <div class="contador">0 / 28</div></div>
+        <input type="text" data-campo="nome" maxlength="28" value="${esc(v('nome'))}">
+        <div class="contador" data-contador="nome">0 / 28</div></div>
       <div class="campo"><label>Resumo<small>Uma frase, aparece no cartão da lista de projetos.</small></label>
-        <textarea style="min-height:70px" maxlength="140" placeholder="Oficinas sobre políticas públicas, direitos humanos e participação cidadã."></textarea>
-        <div class="contador">0 / 140</div></div>
+        <textarea data-campo="resumo" style="min-height:70px" maxlength="140" placeholder="Oficinas sobre políticas públicas, direitos humanos e participação cidadã.">${esc(v('resumo'))}</textarea>
+        <div class="contador" data-contador="resumo">0 / 140</div></div>
       <div class="campo"><label>Objeto da parceria<small>Texto oficial, como consta no termo de fomento.</small></label>
-        <textarea style="min-height:90px"></textarea></div>
-      <div class="campo"><label>Sobre o projeto</label><textarea style="min-height:170px"></textarea></div>
+        <textarea data-campo="objeto" style="min-height:90px">${esc(v('objeto'))}</textarea></div>
+      <div class="campo"><label>Sobre o projeto</label>
+        <textarea data-campo="texto" style="min-height:170px">${esc(v('texto'))}</textarea></div>
       <div class="campo"><label>Resultados esperados</label>
-        <div class="repetidor"><input type="text" placeholder="Ampliação do conhecimento sobre direitos"><button class="btn fantasma">✕</button></div>
-        <div class="repetidor"><input type="text" placeholder="Desenvolvimento do protagonismo social"><button class="btn fantasma">✕</button></div>
-        <button class="btn linha" style="margin-top:4px">+ Adicionar resultado</button></div>
+        <div id="resultados">${((v('resultados',[])||[]).length?v('resultados'):['']).map(linhaResultado).join('')}</div>
+        <button class="btn linha" id="addResultado" type="button" style="margin-top:4px">+ Adicionar resultado</button></div>
       <div class="rodape-form">
-        <button class="btn fantasma">Descartar</button>
-        <button class="btn linha">Salvar rascunho</button>
-        <button class="btn">Publicar no site</button>
+        <button class="btn fantasma" id="descartar" type="button">Descartar</button>
+        <button class="btn linha" id="salvarRascunho" type="button">Salvar rascunho</button>
+        <button class="btn" id="publicar" type="button">Publicar no site</button>
       </div>
     </div>
 
     <div>
+      <div class="caixa" style="margin-bottom:16px"><h2>Imagem de capa</h2>
+        <img id="previaCapa" src="${esc(capa)}" alt="" ${capa?'':'hidden'}
+          style="width:100%;border-radius:10px;background:var(--mata-claro)">
+        <div class="upload" id="areaCapa" ${capa?'hidden':''}><b>Escolher imagem</b>PNG ou JPG, no mínimo 600×600</div>
+        <input type="file" id="arquivoCapa" accept="image/png,image/jpeg,image/webp" hidden>
+        <button class="btn linha" id="btnCapa" type="button" style="width:100%;margin-top:12px;justify-content:center">${capa?'Trocar imagem':'Escolher imagem'}</button>
+      </div>
+
       <div class="caixa" style="margin-bottom:16px"><h2>Situação</h2>
-        <div class="campo"><label>No site</label><select><option>Publicado</option><option ${novo?'selected':''}>Rascunho</option></select></div>
+        <div class="campo"><label>No site</label>
+          <div id="seloSite">${selo(novo?false:p.publicado)}</div>
+          <small style="color:var(--texto-2);display:block;margin-top:7px">Muda pelos botões “Salvar rascunho” e “Publicar no site”.</small></div>
         <div class="campo" style="margin-bottom:0"><label>Andamento</label>
-          <select><option ${!novo&&p.st==='ativo'?'selected':''}>Em andamento</option><option ${!novo&&p.st==='feito'?'selected':''}>Finalizado</option></select></div>
+          <select data-campo="status">
+            <option value="ativo" ${v('status','ativo')==='ativo'?'selected':''}>Em andamento</option>
+            <option value="feito" ${v('status')==='feito'?'selected':''}>Finalizado</option>
+          </select></div>
       </div>
 
       <div class="caixa" style="margin-bottom:16px"><h2>Dados do termo</h2>
-        <div class="campo"><label>Termo de fomento</label><input type="text" value="${novo?'':p.termo}" placeholder="TF-00-S-FMAS/2026"></div>
-        <div class="dois">
-          <div class="campo"><label>Início</label><input type="date"></div>
-          <div class="campo"><label>Fim previsto</label><input type="date"></div>
-        </div>
-        <div class="campo"><label>Valor do investimento</label><input type="text" placeholder="R$ 000.000,00"></div>
-        <div class="campo" style="margin-bottom:0"><label>Público atendido</label><input type="text" placeholder="100 participantes"></div>
+        <div class="campo"><label>Termo de fomento</label>
+          <input type="text" data-campo="termo" value="${esc(v('termo'))}" placeholder="TF-00-S-FMAS/2026"></div>
+        <div class="campo"><label>Início</label>
+          <input type="date" data-campo="inicio" value="${soData(v('inicio'))}"></div>
+        <div class="campo"><label>Fim previsto</label>
+          <input type="date" data-campo="fim" value="${soData(v('fim'))}"></div>
+        <div class="campo"><label>Duração<small>Como aparece na ficha do projeto.</small></label>
+          <input type="text" data-campo="periodo" value="${esc(v('periodo'))}" placeholder="12 meses"></div>
+        <div class="campo"><label>Valor do investimento</label>
+          <input type="text" data-campo="valor" value="${esc(v('valor'))}" placeholder="R$ 000.000,00"></div>
+        <div class="campo" style="margin-bottom:0"><label>Público atendido</label>
+          <input type="text" data-campo="publico" value="${esc(v('publico'))}" placeholder="100 participantes"></div>
       </div>
 
-      <div class="caixa" style="margin-bottom:16px"><h2>Área de atuação</h2>
-        <select><option>Direitos e cidadania</option><option>Pessoas idosas</option><option>Mulheres</option>
-          <option>Segurança alimentar</option><option>Saúde e convivência</option><option>Juventude</option></select>
+      <div class="caixa"><h2>Área de atuação</h2>
+        <select data-campo="eixo">
+          ${EIXOS.map(e=>`<option ${v('eixo')===e?'selected':''}>${e}</option>`).join('')}
+        </select>
       </div>
 
-      <div class="caixa"><h2>Imagem de capa</h2>
-        ${novo?'<div class="upload"><b>Escolher imagem</b>PNG ou JPG, no mínimo 600×600</div>'
-              :`<img src="${p.cap}" alt="" style="width:100%;border-radius:10px;background:var(--mata-claro)">
-                <button class="btn linha" style="width:100%;margin-top:12px;justify-content:center">Trocar imagem</button>`}
-      </div>
-
-      <div class="dica"><b>Datas alimentam a linha do tempo</b>Início e fim previsto posicionam a barra do projeto na linha do tempo da página inicial. Sem datas, o projeto entra só na lista.</div>
+      <div class="dica"><b>Datas alimentam a linha do tempo</b>Início e fim previsto posicionam a barra do projeto na linha do tempo da página inicial. Por isso são obrigatórios.</div>
     </div>
   </div>`;
 }
 
+function lerForm(){
+  const v=n=>{const el=app.querySelector(`[data-campo="${n}"]`);return el?el.value.trim():''};
+  return {
+    titulo:v('titulo'), nome:v('nome'), resumo:v('resumo'), objeto:v('objeto'), texto:v('texto'),
+    eixo:v('eixo'), status:v('status'), termo:v('termo'), periodo:v('periodo'),
+    valor:v('valor'), publico:v('publico'),
+    inicio:v('inicio')||null, fim:v('fim')||null,
+    capa:edicao.capa||null,
+    resultados:[...app.querySelectorAll('[data-resultado]')].map(i=>i.value.trim()).filter(Boolean)
+  };
+}
+
+function validar(d){
+  if(!d.titulo) return 'O nome do projeto é obrigatório.';
+  if(!d.nome) return 'O nome curto é obrigatório: é ele que aparece na linha do tempo.';
+  if(d.nome.length>28) return 'O nome curto passa de 28 caracteres.';
+  if(!EIXOS.includes(d.eixo)) return 'Escolha uma área de atuação.';
+  if(!d.inicio||!d.fim) return 'Informe início e fim previsto: são eles que posicionam a barra na linha do tempo.';
+  if(d.fim<d.inicio) return 'O fim previsto é anterior ao início.';
+  return '';
+}
+
+function travar(sim){
+  app.querySelectorAll('#salvarTopo,#salvarRascunho,#publicar,#descartar')
+    .forEach(b=>b.disabled=sim);
+}
+
+async function salvar(publicado){
+  const d=lerForm();
+  const problema=validar(d);
+  if(problema) return recado(problema,true);
+  const id=edicao.id||slug(d.nome||d.titulo);
+  if(!id) return recado('Não consegui gerar um endereço a partir desse nome.',true);
+  if(!edicao.id&&PROJETOS.some(x=>x.id===id))
+    return recado('Já existe um projeto no endereço "'+id+'". Mude o nome curto.',true);
+
+  travar(true);
+  const {error}=await sb.from('projetos').upsert({id,publicado,...d});
+  travar(false);
+  if(error) return recado('Não foi possível salvar: '+error.message,true);
+
+  const eraNovo=!edicao.id;
+  edicao.sujo=false;
+  await carregar();
+  recado(publicado?'Publicado no site.':'Salvo como rascunho.');
+  if(eraNovo) location.hash='#/projeto/'+encodeURIComponent(id); else render();
+}
+
+async function enviarCapa(arquivo){
+  const ext=(arquivo.name.split('.').pop()||'png').toLowerCase();
+  const base=slug(arquivo.name.replace(/\.[^.]+$/,''))||'capa';
+  const caminho=`${Date.now()}-${base}.${ext}`;
+  const {error}=await sb.storage.from('capas').upload(caminho,arquivo,{cacheControl:'3600'});
+  if(error) throw error;
+  return sb.storage.from('capas').getPublicUrl(caminho).data.publicUrl;
+}
+
+function ligarForm(){
+  app.querySelectorAll('input,textarea,select').forEach(el=>
+    el.addEventListener('input',()=>{edicao.sujo=true;contadores();}));
+  contadores();
+
+  const caixa=app.querySelector('#resultados');
+  app.querySelector('#addResultado').onclick=()=>{
+    caixa.insertAdjacentHTML('beforeend',linhaResultado(''));
+    const novo=caixa.lastElementChild.querySelector('input');
+    novo.addEventListener('input',()=>{edicao.sujo=true});
+    novo.focus(); edicao.sujo=true;
+  };
+  caixa.onclick=e=>{
+    const b=e.target.closest('[data-remover]'); if(!b) return;
+    if(caixa.children.length>1) b.parentElement.remove();
+    else b.parentElement.querySelector('input').value='';
+    edicao.sujo=true;
+  };
+
+  const arquivo=app.querySelector('#arquivoCapa');
+  const btnCapa=app.querySelector('#btnCapa');
+  const abrir=()=>arquivo.click();
+  btnCapa.onclick=abrir;
+  app.querySelector('#areaCapa').onclick=abrir;
+  arquivo.onchange=async()=>{
+    const f=arquivo.files[0]; if(!f) return;
+    if(f.size>5*1024*1024){arquivo.value='';return recado('Imagem maior que 5 MB. Reduza antes de enviar.',true);}
+    btnCapa.disabled=true; btnCapa.textContent='Enviando…';
+    try{
+      const url=await enviarCapa(f);
+      edicao.capa=url; edicao.sujo=true;
+      const previa=app.querySelector('#previaCapa');
+      previa.src=url; previa.hidden=false;
+      app.querySelector('#areaCapa').hidden=true;
+      btnCapa.textContent='Trocar imagem';
+      recado('Imagem enviada. Salve o projeto para valer.');
+    }catch(e){
+      recado('Não foi possível enviar a imagem: '+e.message,true);
+      btnCapa.textContent=edicao.capa?'Trocar imagem':'Escolher imagem';
+    }
+    btnCapa.disabled=false; arquivo.value='';
+  };
+
+  app.querySelector('#salvarTopo').onclick=()=>{
+    const atual=edicao.id?(PROJETOS.find(x=>x.id===edicao.id)||{}).publicado:true;
+    salvar(!!atual);
+  };
+  app.querySelector('#salvarRascunho').onclick=()=>salvar(false);
+  app.querySelector('#publicar').onclick=()=>salvar(true);
+  app.querySelector('#descartar').onclick=()=>{
+    if(edicao.sujo&&!confirm('Descartar as alterações não salvas?')) return;
+    edicao.sujo=false; location.hash='#/projetos';
+  };
+  app.querySelector('#verSite').onclick=()=>{
+    if(!edicao.id) return recado('Salve o projeto primeiro para poder vê-lo no site.',true);
+    const p=PROJETOS.find(x=>x.id===edicao.id);
+    if(p&&!p.publicado) recado('Este projeto está como rascunho: o site vai dizer que não encontrou.');
+    window.open('index.html#/projeto/'+encodeURIComponent(edicao.id),'_blank','noopener');
+  };
+}
+
+function contadores(){
+  app.querySelectorAll('[data-contador]').forEach(c=>{
+    const campo=app.querySelector(`[data-campo="${c.dataset.contador}"]`);
+    if(!campo) return;
+    const max=Number(campo.getAttribute('maxlength'))||0;
+    c.textContent=`${campo.value.length} / ${max}`;
+    c.classList.toggle('estourou',max&&campo.value.length>=max);
+  });
+}
+
+/* ---------- lista de projetos ---------- */
+function ligarLista(){
+  const busca=app.querySelector('#busca'), situacao=app.querySelector('#situacao'),
+        corpo=app.querySelector('#corpoProjetos'), conta=app.querySelector('#contaLista');
+  const aplicar=()=>{
+    const termo=semAcento(busca.value).trim();
+    const s=situacao.value;
+    const lista=PROJETOS.filter(p=>{
+      const acha=!termo||semAcento(`${p.titulo} ${p.nome} ${p.termo||''} ${p.eixo}`).includes(termo);
+      const bate=!s||(s==='rascunho'?!p.publicado:p.status===s);
+      return acha&&bate;
+    });
+    corpo.innerHTML=linhasProjetos(lista);
+    conta.textContent=lista.length===PROJETOS.length
+      ? `${PROJETOS.length} projetos`
+      : `${lista.length} de ${PROJETOS.length} projetos`;
+  };
+  busca.oninput=aplicar;
+  situacao.onchange=aplicar;
+}
+
+/* ---------- roteador ---------- */
 function render(){
-  const r = location.hash.replace(/^#/,'') || '/';
-  app.innerHTML = r.startsWith('/projeto/') ? formProjeto(r.split('/')[2]) : (paginas[r]||paginas['/'])();
+  const r=location.hash.replace(/^#/,'')||'/';
+  if(r.startsWith('/projeto/')){
+    app.innerHTML=formProjeto(decodeURIComponent(r.split('/')[2]||''));
+    if(app.querySelector('#resultados')) ligarForm();
+  }else{
+    edicao={id:null,capa:'',sujo:false};
+    app.innerHTML=(paginas[r]||paginas['/'])();
+    if(r==='/projetos') ligarLista();
+  }
   document.querySelectorAll('aside nav a').forEach(a=>{
-    const h = a.getAttribute('href').slice(1);
-    a.classList.toggle('ativo', h===r || (r.startsWith('/projeto/') && h==='/projetos'));
+    const h=a.getAttribute('href').slice(1);
+    a.classList.toggle('ativo', h===r || (r.startsWith('/projeto/')&&h==='/projetos'));
   });
   window.scrollTo(0,0);
 }
-window.addEventListener('hashchange', render);
-render();
+
+window.addEventListener('hashchange',render);
+window.addEventListener('beforeunload',e=>{if(edicao.sujo){e.preventDefault();e.returnValue='';}});
+iniciar();
 </script>
 </body>
 </html>
