@@ -236,20 +236,20 @@
     "eixo": "Direitos e cidadania",
     "status": "feito",
     "publicado": true,
-    "inicio": "2016-01-01",
-    "fim": "2018-12-31",
+    "inicio": "2022-07",
+    "fim": "2023-03",
     "capa": "imagens/Logo-Participar-e-Preciso-8-sem-fundo-300x300.png",
-    "termo": "TF-01-S-FMAS/2016",
-    "periodo": "24 meses",
-    "valor": "R$ 000.000,00",
-    "publico": "90 participantes",
-    "resumo": "Formação de lideranças comunitárias para o controle social.",
-    "objeto": "Formar lideranças comunitárias para atuação qualificada em conselhos e instâncias de controle social.",
-    "texto": "Um dos primeiros projetos do instituto, formou lideranças que seguem atuando no território até hoje.",
+    "termo": "32.074/2022",
+    "periodo": "8 meses",
+    "valor": "R$ 112.500,00",
+    "publico": "100 participantes",
+    "resumo": "O projeto tem como metas a adesão de 15 municípios, a capacitação de 100 pessoas, cursos e encontros, uma biblioteca virtual e 15 E-books dos diagnósticos socioterritoriais com ênfase na criança e no adolescente.",
+    "objeto": "Capacitar conselheiros de direito e adolescentes para participarem nos conselhos de direitos e do adolescente.",
+    "texto": "O projeto nasceu do Termo de Fomento nº 32.074/2022, firmado com a Secretaria de Estado de Direitos Humanos, Assistência Social e Trabalho (SEDHAST), e reuniu a adesão de 15 municípios de MS — Água Clara, Bataiporã, Corumbá, Coxim, Deodápolis, Dourados, Fátima do Sul, Iguatemi, Itaquiraí, Jardim, Ladário, Nova Andradina, Ribas do Rio Pardo, Três Lagoas e Ponta Porã — por meio de Termo de Adesão. As atividades começaram em julho de 2022 com o curso on-line \"Conhecer para Garantir\", dividido em 4 módulos (Participação, Sistema de Garantia de Direitos, Controle Social e Indicadores Sociais), oferecido pelo site do IDEPS junto com uma biblioteca virtual, encontros on-line e um encontro presencial em Campo Grande, no dia 30 de novembro. A meta de capacitar 100 pessoas foi superada: 338 se inscreveram e 131 foram certificadas até o fechamento do relatório, resultado que levou à prorrogação do Termo de Fomento para que o curso continuasse disponível aos cursistas.",
     "resultados": [
-      "Lideranças comunitárias formadas",
-      "Participação em conselhos ampliada",
-      "Base para os projetos seguintes"
+      "15 municípios de MS aderiram ao projeto por Termo de Adesão",
+      "338 inscritos e 131 certificados no curso \"Conhecer para Garantir\" (meta de 100 superada)",
+      "15 E-books de Diagnóstico Socioterritorial produzidos, com ênfase na criança e no adolescente"
     ]
   }
 ]
