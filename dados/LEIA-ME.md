@@ -12,7 +12,9 @@ mais rápido.
 ## 2. Criar as tabelas
 
 No painel do Supabase, abra **SQL Editor**, cole o conteúdo inteiro de
-[`supabase.sql`](supabase.sql) e rode. Isso cria a tabela de projetos, as regras
+[`supabase.sql`](supabase.sql) e rode. Depois repita com
+[`conteudo.sql`](conteudo.sql), que cria os blocos editáveis (números do topo,
+contato e rodapé). Isso cria a tabela de projetos, as regras
 de acesso, o espaço para as imagens de capa e já carrega os 11 projetos que
 estavam no site.
 
@@ -64,13 +66,16 @@ E abra <http://localhost:8000>. No ar, pelo GitHub Pages, funciona normalmente.
 
 ## O que ainda não salva
 
-Só a área de **Projetos** grava no banco. Páginas, Transparência, Números do
-topo, Fotos e arquivos, Contato e Quem tem acesso continuam como demonstração —
-cada uma dessas telas avisa isso no topo.
+Gravam no banco: **Projetos**, **Números do topo** e **Contato e rodapé**.
+Páginas, Transparência, Fotos e arquivos e Quem tem acesso continuam como
+demonstração — cada uma dessas telas avisa isso no topo.
+
+O andamento fica em [`../ESTADO.md`](../ESTADO.md).
 
 ## Os arquivos desta pasta
 
 | Arquivo | Para que serve |
 |---|---|
-| `supabase.sql` | Cria tudo no banco. Rodar uma vez. |
+| `supabase.sql` | Cria a tabela de projetos e o espaço das capas. Rodar uma vez. |
+| `conteudo.sql` | Cria a tabela dos blocos editáveis: números do topo e contato. Rodar uma vez, depois de `supabase.sql`. |
 | `projetos.json` | Cópia dos projetos que fica no repositório. O site recorre a ela se o banco estiver fora do ar, para a página inicial nunca ficar vazia. |

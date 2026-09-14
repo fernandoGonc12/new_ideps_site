@@ -121,6 +121,9 @@ textarea{min-height:120px;resize:vertical;line-height:1.6}
 .repetidor{border:1.5px dashed var(--linha);border-radius:10px;padding:14px;margin-bottom:10px;
   display:flex;gap:10px;align-items:center}
 .repetidor input{flex:1;border:none;padding:4px 0}
+.repetidor select{flex:0 0 auto;border:none;background:var(--mata-claro);
+  border-radius:7px;padding:6px 8px;font-size:.84rem;width:auto}
+.repetidor input:disabled{background:transparent;color:var(--texto-2)}
 .rodape-form{display:flex;gap:10px;justify-content:flex-end;margin-top:26px;
   border-top:1px solid var(--linha);padding-top:22px}
 .upload{border:1.5px dashed var(--linha);border-radius:12px;padding:28px;text-align:center;
@@ -194,7 +197,7 @@ textarea{min-height:120px;resize:vertical;line-height:1.6}
   </form>
 </div>
 
-<div class="aviso" id="tarja">Projetos conectados ao banco. As demais telas ainda são demonstração.</div>
+<div class="aviso" id="tarja">Projetos, Números e Contato gravam no banco. As demais telas ainda são demonstração.</div>
 
 <div class="faixa"><i style="background:var(--vermelho)"></i><i style="background:var(--magenta)"></i><i style="background:var(--folha)"></i><i style="background:var(--agua)"></i><i style="background:var(--verde)"></i><i style="background:#F7E600"></i><i style="background:var(--laranja)"></i></div>
 <div class="app" id="app-grade" hidden>
@@ -276,9 +279,10 @@ const ponto=e=>`<span style="display:inline-block;width:11px;height:11px;border-
  background:${CORES[e]||'var(--folha)'};margin-right:9px;vertical-align:-1px"></span>`;
 const selo=pub=>`<span class="selo ${pub?'publicado':'rascunho'}">${pub?'Publicado':'Rascunho'}</span>`;
 const maquete=`<div class="maquete"><b>Tela de demonstração.</b> Esta parte ainda não está ligada ao
- banco: o que você editar aqui não é salvo. Por enquanto só a área de Projetos grava.</div>`;
+ banco: o que você editar aqui não é salvo. Por enquanto gravam Projetos, Números do topo e Contato.</div>`;
 
 let PROJETOS=[];
+let CONTEUDO={};   /* blocos da tabela conteudo, por id */
 let usuario='';
 let edicao={id:null,capa:'',sujo:false};
 
@@ -358,6 +362,35 @@ async function carregar(){
   if(error){recado('Não foi possível carregar os projetos: '+error.message,true);return;}
   PROJETOS=data||[];
   document.getElementById('contaProjetos').textContent=PROJETOS.length;
+  await carregarConteudo();
+}
+
+/* Os blocos de conteúdo (números, contato) vivem numa tabela só, com o
+   conteúdo em jsonb. Se a tabela ainda não existir, o painel segue
+   funcionando: essas telas avisam que falta rodar dados/conteudo.sql. */
+async function carregarConteudo(){
+  const {data,error}=await sb.from('conteudo').select('id,dados');
+  if(error){CONTEUDO={_erro:error.message};return;}
+  CONTEUDO={};
+  (data||[]).forEach(r=>CONTEUDO[r.id]=r.dados||{});
+}
+
+const semTabela=()=>!!CONTEUDO._erro;
+const bloco=(id,padrao)=>({...padrao,...(CONTEUDO[id]||{})});
+
+const avisoTabela=`<div class="maquete"><b>Falta criar a tabela de conteúdo.</b>
+ Rode <b>dados/conteudo.sql</b> no SQL Editor do Supabase e recarregue esta página.
+ Até lá o que você editar aqui não é salvo.</div>`;
+
+async function salvarBloco(id,dados,botoes,msg){
+  if(semTabela()) return recado('A tabela de conteúdo ainda não existe. Rode dados/conteudo.sql.',true);
+  botoes.forEach(b=>b&&(b.disabled=true));
+  const {error}=await sb.from('conteudo').upsert({id,dados});
+  botoes.forEach(b=>b&&(b.disabled=false));
+  if(error) return recado('Não foi possível salvar: '+error.message,true);
+  CONTEUDO[id]=dados;
+  edicao.sujo=false;
+  recado(msg||'Salvo e publicado no site.');
 }
 
 /* ---------- telas ---------- */
@@ -382,6 +415,46 @@ const pendencias=p=>{
   if(!p.resumo) f.push('falta o resumo');
   return f;
 };
+
+/* ---------- números do topo ----------
+   Um número ou sai da lista de projetos (e aí muda sozinho no site,
+   sem ninguém precisar lembrar de atualizar) ou é digitado à mão. */
+const NUMEROS_PADRAO={desde:2014,itens:[
+  {fonte:'anos',rotulo:'anos de atuação'},
+  {fonte:'total',rotulo:'projetos executados'},
+  {fonte:'ativos',rotulo:'projetos em andamento'},
+  {fonte:'manual',numero:'+900',rotulo:'pessoas atendidas'}]};
+
+const FONTES={anos:'Anos de atuação',total:'Total de projetos',
+  ativos:'Projetos em andamento',manual:'Digitado à mão'};
+
+/* conta só os publicados: é o que o visitante vê na página inicial */
+const calcularNumero=(fonte,desde)=>{
+  const pub=PROJETOS.filter(p=>p.publicado);
+  if(fonte==='anos')   return String(new Date().getFullYear()-(Number(desde)||2014));
+  if(fonte==='total')  return String(pub.length);
+  if(fonte==='ativos') return String(pub.filter(p=>p.status==='ativo').length);
+  return '';
+};
+
+const linhaNumero=(it,desde)=>{
+  const fonte=it&&it.fonte||'manual', auto=fonte!=='manual';
+  const valor=auto?calcularNumero(fonte,desde):(it&&it.numero||'');
+  return `<div class="repetidor" data-numero>
+    <select data-n="fonte" aria-label="De onde vem o número">${Object.keys(FONTES).map(k=>
+      `<option value="${k}" ${fonte===k?'selected':''}>${FONTES[k]}</option>`).join('')}</select>
+    <input type="text" data-n="numero" value="${esc(valor)}" placeholder="+900" aria-label="Número"
+      style="max-width:96px;font-family:var(--display);font-size:1.3rem;font-weight:700" ${auto?'disabled':''}>
+    <input type="text" data-n="rotulo" value="${esc(it&&it.rotulo||'')}" placeholder="pessoas atendidas" aria-label="Rótulo">
+    <button class="btn fantasma" data-remover type="button" aria-label="Remover">✕</button>
+  </div>`;
+};
+
+const CONTATO_PADRAO={telefone:'67 99289-9775',email:'contato.idepsms@gmail.com',
+  endereco:'Rua Dona Rosemaria, 633',bairro:'Tiradentes — Campo Grande, MS',
+  horario:'Segunda a sexta, das 8h às 17h',
+  instagram:'https://www.instagram.com/idepsms/',facebook:'https://www.facebook.com/idepsms',
+  cursos:'https://cursos.idepsms.org',cnpj:'29.768.758/0001-56'};
 
 const paginas={
 
@@ -520,21 +593,30 @@ A sede fica no bairro Tiradentes, e é lá que a maior parte do trabalho acontec
    </tbody>
  </table></div>`,
 
-'/numeros':()=>`
- <div class="topo"><div><h1>Números do topo</h1><p>A faixa de números que aparece logo abaixo da capa. Máximo de quatro.</p></div></div>
- ${maquete}
+'/numeros':()=>{
+  const b=bloco('numeros',NUMEROS_PADRAO);
+  const itens=(b.itens||[]).length?b.itens:NUMEROS_PADRAO.itens;
+  return `
+ <div class="topo"><div><h1>Números do topo</h1><p>A faixa de números que aparece logo abaixo da capa. Máximo de quatro.</p></div>
+   <button class="btn" id="salvarNumeros" type="button">Salvar e publicar</button></div>
+ ${semTabela()?avisoTabela:''}
  <div class="form">
    <div class="caixa">
-     ${[[String(new Date().getFullYear()-2014),'anos de atuação'],[String(PROJETOS.length),'projetos executados'],
-        [String(PROJETOS.filter(p=>p.status==='ativo').length),'projetos em andamento'],['+900','pessoas atendidas']]
-       .map(([n,r])=>`<div class="repetidor">
-         <input type="text" value="${n}" style="max-width:90px;font-family:var(--display);font-size:1.3rem;font-weight:700">
-         <input type="text" value="${r}">
-         <button class="btn fantasma" aria-label="Remover">✕</button></div>`).join('')}
-     <div class="rodape-form"><button class="btn">Salvar e publicar</button></div>
+     <div id="listaNumeros">${itens.slice(0,4).map(it=>linhaNumero(it,b.desde)).join('')}</div>
+     <button class="btn linha" id="addNumero" type="button" style="margin-top:4px">+ Adicionar número</button>
+     <div class="rodape-form">
+       <button class="btn" id="salvarNumeros2" type="button">Salvar e publicar</button></div>
    </div>
-   <div class="dica" style="margin-top:0"><b>Três destes já se calculam sozinhos</b>Anos de atuação, projetos executados e projetos em andamento saem da própria lista de projetos e mudam sozinhos no site. Só "pessoas atendidas" é digitado.</div>
- </div>`,
+   <div>
+     <div class="caixa" style="margin-bottom:16px"><h2>Ano de fundação</h2>
+       <div class="campo" style="margin-bottom:0">
+         <label for="desde">Desde<small>É a base do cálculo de "anos de atuação".</small></label>
+         <input type="number" id="desde" min="1900" max="${new Date().getFullYear()}" value="${esc(b.desde||2014)}"></div>
+     </div>
+     <div class="dica" style="margin-top:0"><b>Três destes se calculam sozinhos</b>Anos de atuação, projetos executados e projetos em andamento saem da própria lista de projetos e mudam sozinhos no site — você só escolhe o rótulo. Os campos digitados à mão ficam editáveis.</div>
+   </div>
+ </div>`;
+},
 
 '/midia':()=>`
  <div class="topo"><div><h1>Fotos e arquivos</h1><p>Tudo que você já enviou. Use fotos reais das atividades sempre que possível.</p></div>
@@ -552,27 +634,40 @@ A sede fica no bairro Tiradentes, e é lá que a maior parte do trabalho acontec
      .map(([u,n])=>`<figure><img src="${IMG}${u}" alt=""><figcaption>${n}</figcaption></figure>`).join('')}
  </div>`,
 
-'/contato':()=>`
- <div class="topo"><div><h1>Contato e rodapé</h1><p>Aparece na página de contato e no rodapé de todas as páginas.</p></div></div>
- ${maquete}
+'/contato':()=>{
+  const c=bloco('contato',CONTATO_PADRAO);
+  const campo=(k,rot,dica,tipo)=>`<div class="campo">
+    <label for="c-${k}">${rot}${dica?`<small>${dica}</small>`:''}</label>
+    <input type="${tipo||'text'}" id="c-${k}" data-contato="${k}" value="${esc(c[k]||'')}"></div>`;
+  return `
+ <div class="topo"><div><h1>Contato e rodapé</h1><p>Aparece na página de contato e no rodapé de todas as páginas.</p></div>
+   <button class="btn" id="salvarContato" type="button">Salvar e publicar</button></div>
+ ${semTabela()?avisoTabela:''}
  <div class="form">
    <div class="caixa">
      <div class="dois">
-       <div class="campo"><label>Telefone e WhatsApp</label><input type="text" value="67 99289-9775"></div>
-       <div class="campo"><label>E-mail</label><input type="text" value="idepsms@gmail.com"></div>
+       ${campo('telefone','Telefone e WhatsApp','O link do WhatsApp sai daí sozinho.')}
+       ${campo('email','E-mail','','email')}
      </div>
-     <div class="campo"><label>Endereço</label><input type="text" value="Rua Dona Rosemaria, 633 — Tiradentes, Campo Grande, MS"></div>
-     <div class="campo"><label>Horário de atendimento</label><input type="text" value="Segunda a sexta, das 8h às 17h"></div>
+     ${campo('endereco','Endereço','Rua e número.')}
+     ${campo('bairro','Bairro e cidade','Aparece na linha de baixo do endereço.')}
+     ${campo('horario','Horário de atendimento')}
      <div class="dois">
-       <div class="campo"><label>Instagram</label><input type="text" value="https://instagram.com/idepsms"></div>
-       <div class="campo"><label>Facebook</label><input type="text" value="https://facebook.com/idepsms"></div>
+       ${campo('instagram','Instagram','Endereço completo, começando com https://','url')}
+       ${campo('facebook','Facebook','Endereço completo, começando com https://','url')}
      </div>
-     <div class="campo"><label>Endereço da plataforma de cursos<small>Para onde o botão "Cursos" leva.</small></label>
-       <input type="text" value="https://cursos.idepsms.org"></div>
-     <div class="rodape-form"><button class="btn">Salvar e publicar</button></div>
+     ${campo('cursos','Endereço da plataforma de cursos','Para onde o botão "Cursos" leva.','url')}
+     ${campo('cnpj','CNPJ','Aparece na última linha do rodapé.')}
+     <div class="rodape-form"><button class="btn" id="salvarContato2" type="button">Salvar e publicar</button></div>
    </div>
-   <div class="dica" style="margin-top:0"><b>Muda em todo lugar</b>O que você salva aqui é atualizado no rodapé de todas as páginas de uma vez.</div>
- </div>`,
+   <div>
+     <div class="caixa" style="margin-bottom:16px"><h2>Como vai ficar</h2>
+       <div id="previaContato" style="font-size:.88rem;color:var(--texto-2);line-height:1.7"></div>
+     </div>
+     <div class="dica" style="margin-top:0"><b>Muda em todo lugar</b>O que você salva aqui é atualizado de uma vez na página de contato e no rodapé de todas as páginas.</div>
+   </div>
+ </div>`;
+},
 
 '/equipe':()=>`
  <div class="topo"><div><h1>Quem tem acesso</h1><p>Pessoas que podem entrar neste painel e o que cada uma pode fazer.</p></div>
@@ -841,6 +936,100 @@ function ligarLista(){
   situacao.onchange=aplicar;
 }
 
+/* ---------- tela: números do topo ---------- */
+function lerNumeros(){
+  const desde=Number(app.querySelector('#desde').value)||NUMEROS_PADRAO.desde;
+  const itens=[...app.querySelectorAll('[data-numero]')].map(l=>{
+    const g=n=>l.querySelector(`[data-n="${n}"]`);
+    const fonte=g('fonte').value;
+    const it={fonte,rotulo:g('rotulo').value.trim()};
+    /* o número calculado não é gravado: ele se refaz a cada visita */
+    if(fonte==='manual') it.numero=g('numero').value.trim();
+    return it;
+  }).filter(it=>it.rotulo||it.numero);
+  return {desde,itens};
+}
+
+/* mantem o campo do número coerente com a fonte escolhida */
+function sincronizarLinha(linha){
+  const fonte=linha.querySelector('[data-n="fonte"]').value;
+  const campo=linha.querySelector('[data-n="numero"]');
+  const auto=fonte!=='manual';
+  campo.disabled=auto;
+  if(auto) campo.value=calcularNumero(fonte,app.querySelector('#desde').value);
+}
+
+function ligarNumeros(){
+  const lista=app.querySelector('#listaNumeros');
+  const add=app.querySelector('#addNumero');
+  const sincronizarTudo=()=>lista.querySelectorAll('[data-numero]').forEach(sincronizarLinha);
+  const limite=()=>add.disabled=lista.children.length>=4;
+
+  app.addEventListener('input',()=>{edicao.sujo=true;});
+  app.querySelector('#desde').addEventListener('input',sincronizarTudo);
+  lista.addEventListener('change',e=>{
+    const l=e.target.closest('[data-numero]');
+    if(l&&e.target.matches('[data-n="fonte"]')){sincronizarLinha(l);edicao.sujo=true;}
+  });
+  lista.addEventListener('click',e=>{
+    if(!e.target.closest('[data-remover]')) return;
+    if(lista.children.length<=1) return recado('A faixa precisa de pelo menos um número.',true);
+    e.target.closest('[data-numero]').remove(); limite(); edicao.sujo=true;
+  });
+  add.onclick=()=>{
+    if(lista.children.length>=4) return;
+    lista.insertAdjacentHTML('beforeend',linhaNumero({fonte:'manual'},app.querySelector('#desde').value));
+    lista.lastElementChild.querySelector('[data-n="numero"]').focus();
+    limite(); edicao.sujo=true;
+  };
+
+  const botoes=[app.querySelector('#salvarNumeros'),app.querySelector('#salvarNumeros2')];
+  const salvar=()=>{
+    const d=lerNumeros();
+    if(!d.itens.length) return recado('Preencha ao menos um número.',true);
+    const semRotulo=d.itens.find(it=>!it.rotulo);
+    if(semRotulo) return recado('Cada número precisa de um rótulo, como "pessoas atendidas".',true);
+    const vazio=d.itens.find(it=>it.fonte==='manual'&&!it.numero);
+    if(vazio) return recado(`Falta o número de "${vazio.rotulo}".`,true);
+    salvarBloco('numeros',d,botoes,'Números publicados no site.');
+  };
+  botoes.forEach(b=>b&&(b.onclick=salvar));
+  sincronizarTudo(); limite();
+}
+
+/* ---------- tela: contato e rodapé ---------- */
+function ligarContato(){
+  const previa=app.querySelector('#previaContato');
+  const ler=()=>{
+    const d={};
+    app.querySelectorAll('[data-contato]').forEach(i=>d[i.dataset.contato]=i.value.trim());
+    return d;
+  };
+  const pintar=()=>{
+    const c=ler();
+    previa.innerHTML=`
+      <b style="color:var(--texto)">${esc(c.telefone||'—')}</b><br>
+      ${esc(c.email||'—')}<br>
+      ${esc(c.endereco||'—')}<br>${esc(c.bairro||'')}<br>
+      <span style="font-size:.82rem">${esc(c.horario||'')}</span><br>
+      <span style="font-family:var(--dado);font-size:.76rem">CNPJ ${esc(c.cnpj||'—')}</span>`;
+  };
+  app.querySelectorAll('[data-contato]').forEach(i=>
+    i.addEventListener('input',()=>{edicao.sujo=true;pintar();}));
+  pintar();
+
+  const botoes=[app.querySelector('#salvarContato'),app.querySelector('#salvarContato2')];
+  const salvar=()=>{
+    const c=ler();
+    if(!c.telefone&&!c.email) return recado('Informe ao menos um telefone ou um e-mail.',true);
+    if(c.email&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(c.email)) return recado('O e-mail não parece válido.',true);
+    const url=['instagram','facebook','cursos'].find(k=>c[k]&&!/^https?:\/\//i.test(c[k]));
+    if(url) return recado(`O endereço de ${url} precisa começar com https://`,true);
+    salvarBloco('contato',c,botoes,'Contato publicado no site.');
+  };
+  botoes.forEach(b=>b&&(b.onclick=salvar));
+}
+
 /* ---------- roteador ---------- */
 function render(){
   const r=location.hash.replace(/^#/,'')||'/';
@@ -851,6 +1040,8 @@ function render(){
     edicao={id:null,capa:'',sujo:false};
     app.innerHTML=(paginas[r]||paginas['/'])();
     if(r==='/projetos') ligarLista();
+    if(r==='/numeros')  ligarNumeros();
+    if(r==='/contato')  ligarContato();
   }
   document.querySelectorAll('aside nav a').forEach(a=>{
     const h=a.getAttribute('href').slice(1);
