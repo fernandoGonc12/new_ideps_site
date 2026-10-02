@@ -212,7 +212,6 @@ textarea{min-height:120px;resize:vertical;line-height:1.6}
       <a href="#/">Resumo</a>
       <a href="#/projetos">Projetos <span class="conta" id="contaProjetos"></span></a>
       <a href="#/paginas">Páginas</a>
-      <a href="#/transparencia">Transparência</a>
       <a href="#/numeros">Números do topo</a>
       <a href="#/midia">Fotos e arquivos</a>
     </nav>
@@ -419,7 +418,7 @@ const pendencias=p=>{
 /* ---------- números do topo ----------
    Um número ou sai da lista de projetos (e aí muda sozinho no site,
    sem ninguém precisar lembrar de atualizar) ou é digitado à mão. */
-const NUMEROS_PADRAO={desde:2014,itens:[
+const NUMEROS_PADRAO={desde:2017,itens:[
   {fonte:'anos',rotulo:'anos de atuação'},
   {fonte:'total',rotulo:'projetos executados'},
   {fonte:'ativos',rotulo:'projetos em andamento'},
@@ -431,7 +430,7 @@ const FONTES={anos:'Anos de atuação',total:'Total de projetos',
 /* conta só os publicados: é o que o visitante vê na página inicial */
 const calcularNumero=(fonte,desde)=>{
   const pub=PROJETOS.filter(p=>p.publicado);
-  if(fonte==='anos')   return String(new Date().getFullYear()-(Number(desde)||2014));
+  if(fonte==='anos')   return String(new Date().getFullYear()-(Number(desde)||NUMEROS_PADRAO.desde));
   if(fonte==='total')  return String(pub.length);
   if(fonte==='ativos') return String(pub.filter(p=>p.status==='ativo').length);
   return '';
@@ -451,7 +450,7 @@ const linhaNumero=(it,desde)=>{
 };
 
 const CONTATO_PADRAO={telefone:'67 99289-9775',email:'contato.idepsms@gmail.com',
-  endereco:'Rua Dona Rosemaria, 633',bairro:'Tiradentes — Campo Grande, MS',
+  endereco:'Rua Dona Rosa Maria, 633',bairro:'Tiradentes — Campo Grande, MS',
   horario:'Segunda a sexta, das 8h às 17h',
   instagram:'https://www.instagram.com/idepsms/',facebook:'https://www.facebook.com/idepsms',
   cursos:'https://cursos.idepsms.org',cnpj:'29.768.758/0001-56'};
@@ -535,7 +534,7 @@ const paginas={
    <thead><tr><th>Página</th><th>Endereço</th><th>No site</th><th>Editado</th><th></th></tr></thead>
    <tbody>
      ${[['Início','/','20/07/2026'],['Quem somos','/quem-somos','14/06/2026'],
-        ['Transparência','/transparencia','01/07/2026'],['Contato','/contato','22/03/2026']]
+        ['Contato','/contato','22/03/2026']]
        .map(([n,u,d])=>`<tr><td><b>${n}</b></td>
          <td style="font-family:var(--dado);font-size:.82rem;color:var(--texto-2)">${u}</td>
          <td>${selo(true)}</td>
@@ -550,48 +549,24 @@ const paginas={
  ${maquete}
  <div class="form">
    <div class="caixa">
-     <div class="campo"><label>Título da página</label><input type="text" value="Uma ponte entre a sociedade civil e a equidade social."></div>
+     <div class="campo"><label>Título da página</label><input type="text" value="Desde 2017, transformando vidas."></div>
      <div class="campo"><label>Texto de abertura<small>Aparece maior, logo abaixo do título.</small></label>
-       <textarea style="min-height:90px">O Instituto de Desenvolvimento Pró-Social é uma organização da sociedade civil com sede em Campo Grande, Mato Grosso do Sul, que atua na defesa de direitos e no desenvolvimento comunitário.</textarea></div>
+       <textarea style="min-height:90px">Por meio da convivência, do cuidado, da inclusão e do desenvolvimento social.</textarea></div>
      <div class="campo"><label>Conteúdo</label>
-       <textarea style="min-height:260px">Nossa missão é ampliar o acesso à informação e à educação como direitos fundamentais. Acreditamos que, ao conhecer seus direitos e as políticas públicas disponíveis, as pessoas passam a ocupar seus espaços, decidir por si e participar da vida da cidade.
+       <textarea style="min-height:260px">O IDEPS é uma Organização da Sociedade Civil que promove desenvolvimento humano, cidadania, inclusão social e qualidade de vida para pessoas em situação de vulnerabilidade — sempre pautado no acolhimento, na garantia de direitos e no fortalecimento dos vínculos comunitários.
 
-A sede fica no bairro Tiradentes, e é lá que a maior parte do trabalho acontece.</textarea></div>
+Hoje, uma de nossas principais frentes é o Centro de Convivência para Pessoas Idosas, com atenção especial às mulheres idosas em situação de vulnerabilidade econômica e social.</textarea></div>
      <div class="rodape-form"><button class="btn linha">Salvar rascunho</button><button class="btn">Publicar</button></div>
    </div>
    <div>
      <div class="caixa"><h2>Ficha lateral</h2>
-       <div class="campo"><label>Fundação</label><input type="text" value="2014"></div>
-       <div class="campo"><label>CNPJ</label><input type="text" value="00.000.000/0001-00"></div>
-       <div class="campo" style="margin-bottom:0"><label>Natureza jurídica</label><input type="text" value="Associação de defesa de direitos sociais"></div>
+       <div class="campo"><label>Fundação</label><input type="text" value="2017"></div>
+       <div class="campo"><label>CNPJ</label><input type="text" value="29.768.758/0001-56"></div>
+       <div class="campo" style="margin-bottom:0"><label>Natureza jurídica</label><input type="text" value="Organização da Sociedade Civil"></div>
      </div>
      <div class="dica"><b>Campo vazio some do site</b>Se você deixar um campo em branco, ele simplesmente não aparece na página — nada de rótulo solto sem informação.</div>
    </div>
  </div>`,
-
-'/transparencia':()=>`
- <div class="topo">
-   <div><h1>Transparência</h1><p>Relatórios e prestações de contas que ficam públicos no site.</p></div>
-   <button class="btn">+ Enviar documento</button>
- </div>
- ${maquete}
- <div class="upload" style="margin-bottom:24px"><b>Arraste um PDF aqui</b>ou clique para escolher do computador — até 20 MB</div>
- <div class="painel"><table>
-   <thead><tr><th>Documento</th><th>Categoria</th><th>Ano</th><th>No site</th><th></th></tr></thead>
-   <tbody>
-     ${[['Relatório de atividades 2025','Relatório anual','2025',false],
-        ['Relatório de atividades 2024','Relatório anual','2024',true],
-        ['Prestação de contas — TF-30-S-FMAS/2025','Prestação de contas','2025',true],
-        ['Prestação de contas — TF-27-S-FMAS/2025','Prestação de contas','2025',true],
-        ['Estatuto social','Documento institucional','2014',true]]
-       .map(([n,c,a,p])=>`<tr>
-         <td><div class="item"><div class="miniatura" style="display:grid;place-items:center;font-family:var(--dado);font-size:.66rem">PDF</div><b>${n}</b></div></td>
-         <td style="color:var(--texto-2)">${c}</td>
-         <td style="font-family:var(--dado);font-size:.82rem">${a}</td>
-         <td>${selo(p)}</td>
-         <td class="acoes"><button class="btn fantasma">Substituir</button><button class="btn fantasma">Remover</button></td></tr>`).join('')}
-   </tbody>
- </table></div>`,
 
 '/numeros':()=>{
   const b=bloco('numeros',NUMEROS_PADRAO);
@@ -611,7 +586,7 @@ A sede fica no bairro Tiradentes, e é lá que a maior parte do trabalho acontec
      <div class="caixa" style="margin-bottom:16px"><h2>Ano de fundação</h2>
        <div class="campo" style="margin-bottom:0">
          <label for="desde">Desde<small>É a base do cálculo de "anos de atuação".</small></label>
-         <input type="number" id="desde" min="1900" max="${new Date().getFullYear()}" value="${esc(b.desde||2014)}"></div>
+         <input type="number" id="desde" min="1900" max="${new Date().getFullYear()}" value="${esc(b.desde||NUMEROS_PADRAO.desde)}"></div>
      </div>
      <div class="dica" style="margin-top:0"><b>Três destes se calculam sozinhos</b>Anos de atuação, projetos executados e projetos em andamento saem da própria lista de projetos e mudam sozinhos no site — você só escolhe o rótulo. Os campos digitados à mão ficam editáveis.</div>
    </div>

@@ -1,7 +1,7 @@
 # Estado do painel de administração — IDEPS
 
 > Arquivo de continuidade. Sempre que uma etapa mudar, atualize aqui.
-> **Última atualização:** 09/09/2026
+> **Última atualização:** 02/10/2026
 
 ---
 
@@ -32,17 +32,18 @@ entrar. Se não entrar, crie em **Authentication → Users → Add user**.
 
 ---
 
-## 2. Falta rodar UM SQL ⚠️
+## 2. Dois ajustes no painel ⚠️
 
-As telas de **Números do topo** e **Contato e rodapé** já estão escritas e
-testadas, mas a tabela que elas usam ainda não existe no banco.
+A tabela `conteudo` **já existe e está populada** (verificado pela API em
+02/10/2026). Mas o banco ainda guarda dois valores antigos, e o banco vence os
+padrões do código:
 
-**O que fazer, uma vez só:** abra o **SQL Editor** do Supabase, cole o conteúdo
-inteiro de [`dados/conteudo.sql`](dados/conteudo.sql) e rode.
-
-Até isso acontecer, nada quebra: o painel mostra um aviso nessas duas telas
-("Falta criar a tabela de conteúdo") e o site público continua exibindo
-exatamente os mesmos números e o mesmo contato de antes.
+1. **Números do topo → Desde:** está `2014`. O documento institucional diz
+   **2017**. Enquanto não trocar, a home mostra "12 anos de atuação" em vez de 9.
+2. **Contato e rodapé → Endereço:** está `Rua Dona Rosemaria, 633`. O documento
+   institucional escreve **Rua Dona Rosa Maria, 633**. Confirmar qual é o certo
+   (o mapa da página de contato usa esse texto). O código já usa a grafia do
+   documento como padrão.
 
 ---
 
@@ -96,13 +97,12 @@ idênticos ao que o site mostrava antes. A home nunca fica com rodapé vazio.
 
 ## 4. O que falta — as telas de demonstração
 
-Restam 4 telas com a tarja **"Tela de demonstração"**. Nada do que se digita
+Restam 3 telas com a tarja **"Tela de demonstração"**. Nada do que se digita
 nelas é salvo.
 
 | Tela | Rota | Alimenta o quê no site |
 |---|---|---|
 | Páginas | `#/paginas`, `#/pagina` | textos de Quem somos, Início, Contato |
-| Transparência | `#/transparencia` | seção de PDFs (ainda não existe no site) |
 | Fotos e arquivos | `#/midia` | carrossel do hero + banco de imagens |
 | Quem tem acesso | `#/equipe` | usuários do painel |
 
@@ -120,16 +120,8 @@ O padrão a seguir, no `admin.html`:
 `bloco(id, PADRAO)` para ler → uma função `ligarX()` chamada pelo roteador →
 `salvarBloco(id, dados, botoes, msg)` para gravar.
 
-Transparência é a exceção: precisa de tabela própria, por ser uma lista com
-upload de arquivo.
-
-```sql
-create table public.documentos (
-  id text primary key, titulo text not null, categoria text,
-  ano int, arquivo text, publicado boolean default false, ...
-);
--- + bucket 'documentos' (PDFs)
-```
+> A seção **Transparência** foi retirada do site e do painel em 02/10/2026 —
+> não será usada. Não há tabela nem bucket de documentos a criar.
 
 ### Ordem recomendada
 
@@ -138,9 +130,7 @@ create table public.documentos (
 3. **Páginas** — textos longos; é o mesmo padrão `conteudo`, com mais campos.
 4. **Fotos e arquivos** — listar o bucket via `storage.list()`, permitir
    upload e remoção. Também passa a alimentar o carrossel do hero.
-5. **Transparência** — tabela nova + bucket de PDFs + **seção nova no site**,
-   que ainda não existe.
-6. **Quem tem acesso** — ⚠️ **limitação real**: listar e convidar usuários
+5. **Quem tem acesso** — ⚠️ **limitação real**: listar e convidar usuários
    exige a chave `service_role`, que **não pode** ir para o navegador. Só é
    possível com uma Edge Function no Supabase. Alternativa honesta: transformar
    essa tela em instruções apontando para o painel do Supabase.
@@ -166,3 +156,4 @@ create table public.documentos (
 |---|---|
 | 09/09/2026 | Auditoria do estado real; confirmado que o Supabase já está ligado, populado e com RLS ativa. Criado este arquivo. |
 | 09/09/2026 | Telas de **Números do topo** e **Contato e rodapé** ligadas ao banco. Criado `dados/conteudo.sql` (tabela `conteudo`, chave→jsonb, com RLS). O `index.html` passou a puxar do painel a faixa de números, a página de contato, o rodapé, o botão Cursos, a sede em Quem somos e o telefone da página de projeto, com valores padrão como rede de segurança. 43 testes de lógica passando (banco no ar, banco fora, valores editados, escape de HTML). **Falta rodar o SQL da §2.** |
+| 02/10/2026 | Textos do site reescritos a partir do documento *IDEPS Institucional – quem somos*: nova capa ("Um espaço onde mulheres continuam florescendo"), bloco do Centro de Convivência na home, página Quem somos completa (atividades e serviços, cuidado integral, missão/visão/valores, parceiros), rodapé e contato. Fundação corrigida para **2017** e CNPJ real na ficha. Removida a seção **Transparência** do site (menu, rodapé, rota) e do painel. **Falta no painel:** trocar "Desde" para 2017 em Números do topo e conferir o endereço em Contato (ver §2). |

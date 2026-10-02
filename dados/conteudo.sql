@@ -60,7 +60,7 @@ create policy "editor edita conteúdo"
 --   manual → o que estiver em "numero"
 insert into public.conteudo (id, dados) values
   ('numeros', '{
-     "desde": 2014,
+     "desde": 2017,
      "itens": [
        {"fonte":"anos",   "rotulo":"anos de atuação"},
        {"fonte":"total",  "rotulo":"projetos executados"},
@@ -71,7 +71,7 @@ insert into public.conteudo (id, dados) values
   ('contato', '{
      "telefone":  "67 99289-9775",
      "email":     "contato.idepsms@gmail.com",
-     "endereco":  "Rua Dona Rosemaria, 633",
+     "endereco":  "Rua Dona Rosa Maria, 633",
      "bairro":    "Tiradentes — Campo Grande, MS",
      "horario":   "Segunda a sexta, das 8h às 17h",
      "instagram": "https://www.instagram.com/idepsms/",

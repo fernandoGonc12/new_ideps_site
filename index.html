@@ -129,11 +129,11 @@ section{padding:88px 0}
   margin-bottom:44px;flex-wrap:wrap}
 
 /* ---------- linha do tempo ---------- */
-.tempo{background:var(--azul);color:#CFCCF0}
-.tempo .eyebrow{color:var(--amarelo)}
-.tempo .eyebrow::after{background:#3A32A6}
-.tempo h2{color:#fff}
-.tempo .lead{color:#B4AFE8}
+.tempo,.escuro{background:var(--azul);color:#CFCCF0}
+.tempo .eyebrow,.escuro .eyebrow{color:var(--amarelo)}
+.tempo .eyebrow::after,.escuro .eyebrow::after{background:#3A32A6}
+.tempo h2,.escuro h2{color:#fff}
+.tempo .lead,.escuro .lead{color:#B4AFE8}
 .tl{margin-top:44px;border-top:1px solid #3A32A6}
 .tl-anos{display:flex;font-family:var(--dado);font-size:.72rem;color:#948DD6;padding:10px 0 16px}
 .tl-anos span{flex:1;border-left:1px solid #3A32A6;padding-left:6px}
@@ -202,12 +202,35 @@ section{padding:88px 0}
 .lista-check li:nth-child(3)::before{border-color:var(--laranja)}
 .lista-check b{color:var(--azul)}
 
-.docs{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
-.doc{background:var(--papel);border:1px solid var(--linha);border-radius:16px;padding:24px;
-  text-decoration:none;display:block;border-left:5px solid var(--azul);transition:border-color .15s}
-.doc:hover{border-color:var(--magenta);border-left-color:var(--magenta)}
-.doc span{font-family:var(--dado);font-size:.72rem;letter-spacing:.09em;color:var(--texto-2);text-transform:uppercase}
-.doc strong{display:block;margin-top:9px;font-size:1.02rem;color:var(--azul)}
+/* ---------- quem somos ---------- */
+.verbos,.hero p.verbos{font-family:var(--dado);font-size:.8rem;letter-spacing:.08em;color:var(--magenta-forte);margin-top:22px}
+.atividades{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
+.atividade{background:var(--papel);border:1px solid var(--linha);border-radius:18px;padding:22px;
+  border-top:4px solid var(--cor)}
+.atividade .icone{width:46px;height:46px;border-radius:50%;background:var(--cor-clara);
+  display:grid;place-items:center;font-size:1.35rem;margin-bottom:14px}
+.atividade h3{font-size:1.06rem}
+.atividade p{font-size:.94rem;color:var(--texto-2);line-height:1.55;margin-top:8px}
+.atividades.compacta{grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.atividades.compacta .atividade{display:flex;align-items:center;gap:12px;padding:14px 16px;
+  border-top:1px solid var(--linha);border-left:4px solid var(--cor)}
+.atividades.compacta .icone{width:38px;height:38px;font-size:1.1rem;margin:0;flex-shrink:0}
+.atividades.compacta h3{font-size:.96rem}
+.duas{display:grid;grid-template-columns:1fr 1fr;gap:56px}
+.duas h2+p{margin-top:18px}
+.mvv{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:44px}
+.mvv h3{color:#fff;margin-bottom:12px}
+.mvv p{color:#CFCCF0}
+.valores{display:flex;flex-wrap:wrap;gap:10px;list-style:none;margin-top:18px}
+.valores li{padding:8px 16px;border-radius:99px;font-size:.92rem;font-weight:500;color:#fff;
+  box-shadow:inset 0 0 0 1.5px #4A42B8}
+.frase{text-align:center;max-width:820px;margin:0 auto}
+.frase h2{font-size:clamp(1.6rem,3.2vw,2.3rem)}
+.frase .verbos{margin-top:26px}
+.frase .lead{margin:30px auto 0;font-size:1.04rem}
+.parceiros{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;list-style:none;margin-top:40px}
+.parceiros li{background:var(--papel);border:1px solid var(--linha);border-radius:14px;min-height:84px;
+  display:grid;place-items:center;text-align:center;padding:14px;font-weight:700;color:var(--azul);font-size:.96rem}
 
 .contato-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px}
 .contato-item{border-top:1px solid var(--linha);padding:22px 0}
@@ -226,7 +249,7 @@ footer .logo-rodape{height:82px;margin-bottom:20px}
   justify-content:space-between;gap:20px;flex-wrap:wrap;font-family:var(--dado);font-size:.76rem;color:var(--texto-2)}
 
 @media (max-width:900px){
-  .hero-grid,.cursos-grid,.contato-grid,.projeto-grid{grid-template-columns:1fr;gap:36px}
+  .hero-grid,.cursos-grid,.contato-grid,.projeto-grid,.duas,.mvv{grid-template-columns:1fr;gap:36px}
   .hero-foto{aspect-ratio:16/10;box-shadow:none}
   .numeros{grid-template-columns:1fr 1fr}
   .rodape-grid{grid-template-columns:1fr 1fr}
@@ -257,7 +280,6 @@ footer .logo-rodape{height:82px;margin-bottom:20px}
       <a href="#/">Início</a>
       <a href="#/quem-somos">Quem somos</a>
       <a href="#/projetos">Projetos</a>
-      <a href="#/transparencia">Transparência</a>
       <a href="#/contato">Contato</a>
     </nav>
     <div class="ferramentas">
@@ -273,20 +295,19 @@ footer .logo-rodape{height:82px;margin-bottom:20px}
     <div class="rodape-grid">
       <div>
         <img class="logo-rodape" src="ideps-logo.png" alt="IDEPS">
-        <p style="max-width:34ch;color:var(--texto-2)">Organização da sociedade civil em Campo Grande, MS, dedicada ao acesso à informação e à educação como direitos.</p>
+        <p style="max-width:34ch;color:var(--texto-2)">Organização da Sociedade Civil em Campo Grande, MS. Desde 2017 construindo oportunidades e fortalecendo vidas.</p>
       </div>
       <div>
         <h4>Navegar</h4>
         <a href="#/quem-somos">Quem somos</a>
         <a href="#/projetos">Projetos</a>
-        <a href="#/transparencia">Transparência</a>
         <a href="#/contato">Contato</a>
       </div>
       <div>
         <h4>Contato</h4>
         <a id="peTelefone" href="tel:+5567992899775">67 99289-9775</a>
         <a id="peEmail" href="mailto:contato.idepsms@gmail.com">contato.idepsms@gmail.com</a>
-        <a id="peEndereco" href="#/contato">Rua Dona Rosemaria, 633<br>Tiradentes — Campo Grande</a>
+        <a id="peEndereco" href="#/contato">Rua Dona Rosa Maria, 633<br>Tiradentes — Campo Grande</a>
       </div>
       <div>
         <h4>Acompanhe</h4>
@@ -323,6 +344,31 @@ const EIXOS={
   'Juventude':{cor:'var(--vermelho)',clara:'#FDE6E6'}
 };
 
+/* textos institucionais — vêm do documento "IDEPS Institucional – quem somos" */
+const ATIVIDADES=[
+  ['🧠','Atendimento psicológico individual','Escuta, acolhimento e acompanhamento das demandas emocionais de cada participante.'],
+  ['💜','Apoio psicológico em grupo','Espaços de diálogo e troca onde vivências são compartilhadas e vínculos se fortalecem.'],
+  ['🥗','Atendimento nutricional individual','Acompanhamento personalizado para hábitos alimentares mais saudáveis e conscientes.'],
+  ['🍎','Apoio nutricional em grupo','Alimentação saudável, aproveitamento de alimentos e segurança nutricional em encontros coletivos.'],
+  ['🧘','Pilates e atividades corporais','Movimento, disposição e autonomia para um estilo de vida mais ativo.'],
+  ['🏊','Hidroginástica','Saúde, convivência e bem-estar em um ambiente coletivo e leve.'],
+  ['💆','Massagem terapêutica','Momentos de relaxamento e autocuidado, com atenção plena ao corpo.'],
+  ['💃','Dança e expressão corporal','Alegria, socialização e fortalecimento da autoestima em movimento.'],
+  ['🎨','Arte, cultura e criatividade','Pintura, artesanato, crochê e bordado que revelam talentos e geram renda.'],
+  ['💻','Inclusão digital','Autonomia no uso de celulares, aplicativos e internet para se comunicar e informar.'],
+  ['👩‍🍳','Cursos e oficinas de culinária','Conhecimento, convivência e novas habilidades ao redor da mesa.'],
+  ['🥦','Segurança alimentar e nutricional','Projetos e parcerias que ampliam o acesso a alimentos e à educação alimentar.'],
+  ['📚','Palestras e atividades educativas','Saúde, direitos, cidadania e bem-estar como ferramentas de autonomia.'],
+  ['🤝','Convivência e vínculos','O coração do IDEPS: pertencimento, amizade e novos vínculos a cada encontro.']
+];
+/* as atividades se revezam nas cores da logo */
+const CORES_MARCA=[['var(--magenta)','var(--magenta-claro)'],['var(--azul)','var(--azul-claro)'],
+  ['var(--verde)','var(--verde-claro)'],['var(--laranja)','var(--laranja-claro)'],['var(--agua)','var(--agua-claro)']];
+const VALORES=['Humanização','Acolhimento','Respeito','Inclusão','Autonomia','Cidadania',
+  'Solidariedade','Participação','Ética','Transparência'];
+const PARCEIROS=['SEAD','SAS','Secretaria de Estado de Educação','SENAR','SESC','Mesa Brasil',
+  'CMAS','CMDPI','Fórum das Entidades','Comper','República das Arteiras','Cleber das Onças','ISA'];
+
 /* ---------- de onde vêm os projetos ----------
    Preencha com os dados do seu projeto no Supabase: Project Settings → API.
    A chave "anon" é pública por natureza — quem protege o banco são as regras
@@ -340,14 +386,14 @@ let PROJETOS=[];
    tabela "conteudo" e são editados no painel. Os padrões abaixo são a rede de
    segurança: se o banco não responder, o site mostra exatamente o que mostrava
    antes, em vez de rodapé vazio. */
-const NUMEROS_PADRAO={desde:2014,itens:[
+const NUMEROS_PADRAO={desde:2017,itens:[
   {fonte:'anos',rotulo:'anos de atuação'},
   {fonte:'total',rotulo:'projetos executados'},
   {fonte:'ativos',rotulo:'projetos em andamento'},
   {fonte:'manual',numero:'+900',rotulo:'pessoas atendidas'}]};
 
 const CONTATO_PADRAO={telefone:'67 99289-9775',email:'contato.idepsms@gmail.com',
-  endereco:'Rua Dona Rosemaria, 633',bairro:'Tiradentes — Campo Grande, MS',
+  endereco:'Rua Dona Rosa Maria, 633',bairro:'Tiradentes — Campo Grande, MS',
   horario:'Segunda a sexta, das 8h às 17h',
   instagram:'https://www.instagram.com/idepsms/',facebook:'https://www.facebook.com/idepsms',
   cursos:'https://cursos.idepsms.org',cnpj:'29.768.758/0001-56'};
@@ -382,7 +428,7 @@ async function carregarConteudo(){
 
 /* um número ou sai da lista de projetos ou foi digitado no painel */
 const valorDoNumero=it=>{
-  if(it.fonte==='anos')   return String(new Date().getFullYear()-(Number(NUMEROS.desde)||2014));
+  if(it.fonte==='anos')   return String(new Date().getFullYear()-(Number(NUMEROS.desde)||NUMEROS_PADRAO.desde));
   if(it.fonte==='total')  return String(PROJETOS.length);
   if(it.fonte==='ativos') return String(PROJETOS.filter(p=>p.status==='ativo').length);
   return String(it.numero||'');
@@ -490,6 +536,18 @@ function cartao(p){
     </div></a>`;
 }
 
+function atividades(compacta){
+  return `<div class="atividades${compacta?' compacta':''}">${ATIVIDADES.map(([icone,nome,texto],i)=>{
+    const [c,clara]=CORES_MARCA[i%CORES_MARCA.length];
+    return `<div class="atividade" style="--cor:${c};--cor-clara:${clara}">
+      <span class="icone" aria-hidden="true">${icone}</span>
+      <div><h3>${nome}</h3>${compacta?'':`<p>${texto}</p>`}</div></div>`;
+  }).join('')}</div>`;
+}
+
+const POR_EXTENSO=['Nenhuma','Uma','Duas','Três','Quatro','Cinco','Seis','Sete','Oito','Nove','Dez'];
+const frentesAtivas=n=>`${POR_EXTENSO[n]||n} ${n===1?'frente ativa':'frentes ativas'}`;
+
 function linhaDoTempo(){
   const A0=2016,A1=2027,span=A1-A0,anos=[];
   const FUNDO='var(--azul)';                       /* fundo da seção .tempo */
@@ -522,12 +580,13 @@ const paginas={
 '/':()=>`
  <div class="hero"><div class="wrap"><div class="hero-grid">
    <div>
-     <p class="eyebrow">Campo Grande, MS · desde 2014</p>
-     <h1>Informação é o primeiro <em>direito</em> a ser garantido.</h1>
-     <p>O IDEPS leva conhecimento sobre políticas públicas e direitos a quem mais precisa, para que cada pessoa possa decidir sobre a própria vida.</p>
+     <p class="eyebrow">Campo Grande, MS · desde 2017</p>
+     <h1>Um espaço onde mulheres continuam <em>florescendo</em>.</h1>
+     <p>O IDEPS é uma Organização da Sociedade Civil que promove desenvolvimento humano, cidadania, inclusão social e qualidade de vida para pessoas em situação de vulnerabilidade, com atenção especial às mulheres idosas.</p>
+     <p class="verbos">Cuidar · Acolher · Incluir · Desenvolver · Transformar</p>
      <div class="hero-acoes">
-       <a class="btn" href="#/projetos">Conheça os projetos</a>
-       <a class="btn linha" href="#/cursos">Estudar de graça</a>
+       <a class="btn" href="#/quem-somos">Conheça o IDEPS</a>
+       <a class="btn linha" href="#/projetos">Ver os projetos</a>
      </div>
    </div>
    <div class="hero-foto" id="heroFoto" aria-roledescription="carrossel" aria-label="Fotos das atividades do IDEPS">
@@ -546,18 +605,30 @@ const paginas={
      `<div><strong>${esc(valorDoNumero(it))}</strong><span>${esc(it.rotulo)}</span></div>`).join('')}
  </div></div>
 
+ <section><div class="wrap">
+   <div class="secao-cabeca">
+     <div style="max-width:62ch">
+       <p class="eyebrow">Centro de Convivência</p>
+       <h2>Um lugar para continuar vivendo, aprendendo e florescendo.</h2>
+       <p class="lead" style="margin-top:18px">Uma de nossas principais frentes é o Centro de Convivência para Pessoas Idosas, com atenção especial às mulheres idosas em situação de vulnerabilidade. Um lugar de encontro, aprendizagem e cuidado, onde muitas mulheres redescobrem talentos, constroem novos vínculos e se tornam protagonistas de suas próprias histórias.</p>
+     </div>
+     <a class="btn linha" href="#/quem-somos">Conheça o centro</a>
+   </div>
+   ${atividades(true)}
+ </div></section>
+
  <section class="tempo"><div class="wrap">
    <div class="secao-cabeca"><div style="max-width:60ch">
-     <p class="eyebrow">Uma década de trabalho</p>
-     <h2>Cada projeto tem começo, meio e prestação de contas.</h2>
-     <p class="lead">Nada aqui é permanente por acaso: cada linha abaixo é um termo de fomento com prazo, meta e recurso público acompanhado. A cor indica a área de atuação.</p>
+     <p class="eyebrow">Desde 2017</p>
+     <h2>Cada projeto é um compromisso.</h2>
+     <p class="lead">Com as pessoas atendidas, com nossos parceiros e com a sociedade. Cada linha abaixo é um termo de fomento, com prazo e metas definidos. A cor indica a área de atuação.</p>
    </div></div>
    ${linhaDoTempo()}
  </div></section>
 
  <section><div class="wrap">
    <div class="secao-cabeca">
-     <div><p class="eyebrow">Em andamento agora</p><h2>Cinco frentes ativas</h2></div>
+     <div><p class="eyebrow">Em andamento agora</p><h2>${frentesAtivas(PROJETOS.filter(p=>p.status==='ativo').length)}</h2></div>
      <a class="btn linha" href="#/projetos">Ver todos os projetos</a>
    </div>
    <div class="grade">${PROJETOS.filter(p=>p.status==='ativo').map(cartao).join('')}</div>
@@ -566,7 +637,7 @@ const paginas={
  <section class="claro"><div class="wrap"><div class="cursos-grid">
    <div>
      <p class="eyebrow">Plataforma de cursos</p>
-     <h2>Aprender também é um direito.</h2>
+     <h2>Aprender algo novo, em qualquer fase da vida.</h2>
      <p class="lead">Cursos online e gratuitos, feitos para caber na rotina de quem trabalha, cuida da casa e da família.</p>
      <ul class="lista-check">
        <li><b>Gratuitos.</b></li>
@@ -581,29 +652,83 @@ const paginas={
 '/quem-somos':()=>`
  <section><div class="wrap">
    <p class="eyebrow">Quem somos</p>
-   <h2 style="max-width:22ch">Uma ponte entre a sociedade civil e a equidade social.</h2>
+   <h2 style="max-width:22ch">Desde 2017, transformando vidas.</h2>
+   <p class="lead" style="margin-top:18px">Por meio da convivência, do cuidado, da inclusão e do desenvolvimento social.</p>
    <div class="projeto-grid" style="margin-top:44px">
      <div class="corpo-texto">
-       <p class="lead">O Instituto de Desenvolvimento Pró-Social é uma organização da sociedade civil com sede em Campo Grande, Mato Grosso do Sul, que atua na defesa de direitos e no desenvolvimento comunitário.</p>
-       <p>Nossa missão é ampliar o acesso à informação e à educação como direitos fundamentais. Acreditamos que, ao conhecer seus direitos e as políticas públicas disponíveis, as pessoas passam a ocupar seus espaços, decidir por si e participar da vida da cidade.</p>
-       <p>A sede fica no bairro Tiradentes, e é lá que a maior parte do trabalho acontece: atendimento a pessoas idosas, oficinas de formação cidadã, apoio a famílias em insegurança alimentar e cuidado continuado com quem chega até nós.</p>
-       <h3>No que acreditamos</h3>
-       <ul>
-         <li><b>Direito à informação.</b> Ninguém acessa o que não sabe que existe.</li>
-         <li><b>Protagonismo.</b> As pessoas atendidas decidem o rumo do próprio percurso.</li>
-         <li><b>Vínculo.</b> Presença continuada vale mais do que ação pontual.</li>
-         <li><b>Transparência.</b> Recurso público exige prestação de contas aberta.</li>
-       </ul>
-       <h3>Como nos organizamos</h3>
-       <p>O instituto é formado por uma diretoria voluntária, uma equipe técnica multidisciplinar — assistência social, psicologia, nutrição e educação física — e uma rede de parceiros que viabiliza as ações no território.</p>
+       <p>O IDEPS é uma Organização da Sociedade Civil que promove desenvolvimento humano, cidadania, inclusão social e qualidade de vida para pessoas em situação de vulnerabilidade — sempre pautado no acolhimento, na garantia de direitos e no fortalecimento dos vínculos comunitários.</p>
+       <p>Hoje, uma de nossas principais frentes é o Centro de Convivência para Pessoas Idosas, com atenção especial às mulheres idosas em situação de vulnerabilidade econômica e social. É um lugar de encontro, aprendizagem e cuidado, onde muitas mulheres redescobrem talentos, constroem novos vínculos e se tornam protagonistas de suas próprias histórias.</p>
      </div>
      <div class="ficha"><dl>
        <dt>Razão social</dt><dd>Instituto de Desenvolvimento Pró-Social</dd>
-       <dt>Natureza jurídica</dt><dd>Associação de defesa de direitos sociais</dd>
-       <dt>Fundação</dt><dd>2014</dd>
-       <dt>Sede</dt><dd>${esc(CONTATO.endereco)}${CONTATO.bairro?'<br>'+esc(CONTATO.bairro):''}</dd>
-       <dt>CNPJ</dt><dd>00.000.000/0001-00</dd>
+       <dt>Natureza jurídica</dt><dd>Organização da Sociedade Civil</dd>
+       <dt>Fundação</dt><dd>2017</dd>
+       ${CONTATO.endereco?`<dt>Sede</dt><dd>${esc(CONTATO.endereco)}${CONTATO.bairro?'<br>'+esc(CONTATO.bairro):''}</dd>`:''}
+       ${CONTATO.cnpj?`<dt>CNPJ</dt><dd>${esc(CONTATO.cnpj)}</dd>`:''}
      </dl></div>
+   </div>
+ </div></section>
+
+ <section class="claro"><div class="wrap">
+   <p class="eyebrow">Um centro de convivência para mulheres idosas</p>
+   <h2 style="max-width:24ch">Um lugar para continuar vivendo, aprendendo e florescendo.</h2>
+   <div class="duas corpo-texto" style="margin-top:36px">
+     <p>No IDEPS, acreditamos que envelhecer não significa deixar de sonhar, aprender e criar. A terceira idade pode ser uma fase de novas descobertas, amizades e possibilidades.</p>
+     <p>Por isso, nosso Centro de Convivência é muito mais do que um espaço de atividades: é onde amizades nascem, talentos são descobertos e novos projetos de vida ganham forma. Atendemos principalmente mulheres idosas em vulnerabilidade, com foco em ampliar autonomia, autoestima, saúde, convivência, participação social e qualidade de vida.</p>
+   </div>
+ </div></section>
+
+ <section><div class="wrap">
+   <p class="eyebrow">Nossas atividades e serviços</p>
+   <h2>Uma programação diversificada.</h2>
+   <p class="lead" style="margin:18px 0 44px">Construída para atender aos interesses e às diferentes dimensões do envelhecimento.</p>
+   ${atividades(false)}
+ </div></section>
+
+ <section class="claro"><div class="wrap"><div class="duas">
+   <div class="corpo-texto">
+     <p class="eyebrow">Cuidado integral</p>
+     <h2>Cuidar é olhar para a pessoa como um todo.</h2>
+     <p>Entendemos o envelhecimento a partir de uma perspectiva integral: corpo, saúde emocional, alimentação, vínculos, autonomia e história caminham juntos. A psicologia oferece escuta; a nutrição, escolhas conscientes; o movimento, disposição; a arte e a convivência, pertencimento. Todas essas experiências convergem para o que buscamos diariamente — mais qualidade de vida e mais possibilidades.</p>
+   </div>
+   <div class="corpo-texto">
+     <p class="eyebrow">Mulheres que continuam florescendo</p>
+     <h2>A vida não para depois dos 60.</h2>
+     <p>Uma mulher pode aprender algo novo, descobrir um talento, fazer amizades, cuidar de si, voltar a estudar ou encontrar uma nova possibilidade de renda — em qualquer fase da vida.</p>
+     <p>Por isso o IDEPS não quer apenas oferecer atividades. Queremos oferecer possibilidades: de convivência, aprendizagem, autonomia, cuidado, participação — e de continuar florescendo.</p>
+   </div>
+ </div></div></section>
+
+ <section class="escuro"><div class="wrap">
+   <p class="eyebrow">O que nos move</p>
+   <h2>Missão, visão e valores</h2>
+   <div class="mvv">
+     <div><h3>Missão</h3>
+       <p>Promover o desenvolvimento humano e social, fortalecendo a autonomia, a cidadania, a convivência, o cuidado e a qualidade de vida de pessoas em situação de vulnerabilidade, com especial atenção às mulheres idosas.</p></div>
+     <div><h3>Visão</h3>
+       <p>Ser uma organização social reconhecida pela seriedade, acolhimento, transparência e impacto de suas ações, contribuindo para uma sociedade mais inclusiva, participativa e comprometida com o envelhecimento digno.</p></div>
+   </div>
+   <h3 style="color:#fff;margin-top:44px">Nossos valores</h3>
+   <ul class="valores">${VALORES.map(v=>`<li>${v}</li>`).join('')}</ul>
+ </div></section>
+
+ <section><div class="wrap"><div class="frase">
+   <h2>Toda pessoa merece oportunidades para viver com dignidade, autonomia e pertencimento. É por isso que o IDEPS existe.</h2>
+   <p class="verbos">Acolher · Ouvir · Ensinar · Cuidar · Alimentar · Conectar · Fortalecer · Transformar</p>
+   <p class="lead">Como Organização da Sociedade Civil, conduzimos nossas ações com responsabilidade, ética e transparência. Cada projeto é um compromisso com as pessoas atendidas, com nossos parceiros e com a sociedade — porque transformar uma vida também é transformar uma comunidade.</p>
+ </div></div></section>
+
+ <section class="claro"><div class="wrap">
+   <p class="eyebrow">Nossos parceiros</p>
+   <h2>Juntos, conseguimos chegar mais longe.</h2>
+   <div class="duas corpo-texto" style="margin-top:36px">
+     <p>Nenhuma transformação social acontece de forma isolada. Construímos uma rede que compartilha o compromisso de melhorar a vida das pessoas — entre eles a Rede Comper de Supermercados e instituições do Sistema S, como SENAR e SESC. Buscamos sempre novas parcerias com empresas, órgãos públicos e organizações comprometidas com o desenvolvimento social.</p>
+     <p>Para o IDEPS, cada parceria representa a união de forças em torno de um propósito maior: transformar oportunidades em impacto social.</p>
+   </div>
+   <ul class="parceiros">${PARCEIROS.map(n=>`<li>${n}</li>`).join('')}</ul>
+   <div style="margin-top:44px;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+     <h3>Faça parte dessa rede de transformação.</h3>
+     <a class="btn" href="#/contato">Fale com a gente</a>
    </div>
  </div></section>`,
 
@@ -629,28 +754,11 @@ const paginas={
   </div></section>`;
 },
 
-'/transparencia':()=>`
- <section><div class="wrap">
-   <p class="eyebrow">Transparência</p>
-   <h2 style="max-width:24ch">Recurso público se acompanha de perto.</h2>
-   <p class="lead" style="margin-top:18px">Publicamos aqui os relatórios de atividade, as prestações de contas e os termos de fomento firmados com o poder público.</p>
-   <h3 style="margin:56px 0 22px">Relatórios anuais</h3>
-   <div class="docs">
-     ${[2025,2024,2023,2022].map(a=>`<a class="doc" href="#"><span>PDF · ${a}</span><strong>Relatório de atividades ${a}</strong></a>`).join('')}
-   </div>
-   <h3 style="margin:56px 0 22px">Prestação de contas</h3>
-   <div class="docs">
-     ${PROJETOS.filter(p=>p.status==='ativo').map(p=>
-       `<a class="doc" href="#" style="border-left-color:${cor(p).cor}"><span>${p.termo}</span><strong>${esc(p.titulo)}</strong></a>`).join('')}
-   </div>
-   <h3 style="margin:56px 0 22px">Parceiros e financiadores</h3>
-   <p class="lead">Fundo Municipal de Assistência Social de Campo Grande, Mesa Brasil SESC, Comper e demais parceiros doadores que sustentam as ações no território.</p>
- </div></section>`,
-
 '/contato':()=>`
  <section><div class="wrap">
    <p class="eyebrow">Contato</p>
    <h2>Venha até a sede ou fale com a gente.</h2>
+   <p class="lead" style="margin-top:18px">Para participar das atividades, apoiar o instituto ou propor uma parceria. Faça parte dessa rede de transformação.</p>
    <div class="contato-grid" style="margin-top:44px">
      <div>
        <dl>

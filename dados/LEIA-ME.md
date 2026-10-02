@@ -67,7 +67,7 @@ E abra <http://localhost:8000>. No ar, pelo GitHub Pages, funciona normalmente.
 ## O que ainda não salva
 
 Gravam no banco: **Projetos**, **Números do topo** e **Contato e rodapé**.
-Páginas, Transparência, Fotos e arquivos e Quem tem acesso continuam como
+Páginas, Fotos e arquivos e Quem tem acesso continuam como
 demonstração — cada uma dessas telas avisa isso no topo.
 
 O andamento fica em [`../ESTADO.md`](../ESTADO.md).
