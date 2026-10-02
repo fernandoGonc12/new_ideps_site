@@ -34,7 +34,8 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 :focus-visible{outline:3px solid var(--magenta);outline-offset:3px;border-radius:3px}
 .wrap{width:100%;max-width:1160px;margin:0 auto;padding:0 24px}
 
-h1,h2,h3{font-family:var(--display);font-weight:700;line-height:1.08;letter-spacing:-.02em;color:var(--azul)}
+h1,h2,h3{font-family:var(--display);font-weight:700;line-height:1.08;letter-spacing:-.02em;color:var(--azul);
+  text-wrap:balance}
 h1{font-size:clamp(2.4rem,6vw,4.1rem)}
 h2{font-size:clamp(1.8rem,3.6vw,2.6rem)}
 h3{font-size:1.32rem;line-height:1.25}
@@ -90,6 +91,7 @@ nav a.ativo{color:#fff;background:var(--azul)}
 .hero h1 em::after{content:"";position:absolute;left:-.04em;right:-.04em;bottom:.06em;height:.24em;
   background:var(--amarelo);z-index:-1;border-radius:3px}
 .hero p{margin-top:26px;font-size:1.2rem;color:var(--texto-2);max-width:52ch}
+.hero p.eyebrow{margin-top:0;font-size:.78rem;color:var(--magenta-forte);max-width:none}
 .hero-acoes{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}
 .hero-foto{position:relative;aspect-ratio:4/5;border-radius:24px;overflow:hidden;background:var(--azul-claro);
   box-shadow:14px 14px 0 var(--amarelo)}
@@ -144,6 +146,11 @@ section{padding:88px 0}
   text-decoration:none;transition:transform .15s;text-overflow:ellipsis}
 .tl-barra:hover{transform:translateY(-2px)}
 .tl-barra.feito{background:transparent;color:#CFCCF0;box-shadow:inset 0 0 0 2px currentColor}
+.tl-barra span{overflow:hidden;text-overflow:ellipsis}
+.tl-barra.rotulo-fora{overflow:visible}
+.tl-barra.rotulo-fora span{position:absolute;top:50%;transform:translateY(-50%);color:var(--tom);overflow:visible}
+.tl-barra.rotulo-fora.dir span{left:calc(100% + 10px)}
+.tl-barra.rotulo-fora.esq span{right:calc(100% + 10px)}
 .tl-legenda{display:flex;gap:10px 20px;margin-top:28px;flex-wrap:wrap;align-items:center}
 .tl-legenda span{font-size:.86rem;color:#CFCCF0;display:flex;align-items:center;gap:8px}
 .anel{width:15px;height:15px;border-radius:50%;border:3.5px solid;flex-shrink:0}
@@ -161,15 +168,21 @@ section{padding:88px 0}
 .cartao{background:var(--papel);border:1px solid var(--linha);border-radius:20px;overflow:hidden;
   text-decoration:none;display:flex;flex-direction:column;transition:transform .15s,box-shadow .15s}
 .cartao:hover{transform:translateY(-4px);box-shadow:0 10px 0 -4px var(--cor)}
-.cartao-topo{aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;padding:22px;
-  background:var(--cor-clara)}
-.cartao-topo img{max-height:100%;width:auto;object-fit:contain}
+.cartao-topo{position:relative;aspect-ratio:16/10;background:var(--cor-clara)}
+/* posicionada, a capa não muda a altura do bloco — capas quadradas, largas ou
+   com fundo branco ficam todas do mesmo tamanho; multiply some com o branco */
+.cartao-topo img{position:absolute;top:22px;left:22px;width:calc(100% - 44px);height:calc(100% - 44px);
+  object-fit:contain;mix-blend-mode:multiply}
+.cartao-topo .selo{position:absolute;top:14px;left:14px;background:#fff;box-shadow:0 1px 4px rgba(22,21,64,.12)}
 .cartao-corpo{padding:24px;display:flex;flex-direction:column;gap:11px;flex:1}
 .eixo-tag{display:flex;align-items:center;gap:8px;font-family:var(--dado);font-size:.68rem;
   letter-spacing:.09em;text-transform:uppercase;color:var(--texto-2)}
 .eixo-tag i{width:11px;height:11px;border-radius:50%;background:var(--cor);flex-shrink:0}
 .cartao h3{font-size:1.16rem}
 .cartao p{font-size:.96rem;color:var(--texto-2);line-height:1.55}
+/* na home: última linha incompleta fica centralizada em vez de colada à esquerda */
+.grade.centrada{display:flex;flex-wrap:wrap;justify-content:center}
+.grade.centrada>.cartao{flex:0 1 calc((100% - 52px)/3)}
 .cartao .ver{margin-top:auto;padding-top:14px;font-weight:700;color:var(--magenta-forte);font-size:.94rem}
 .selo{font-family:var(--dado);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
   padding:5px 12px;border-radius:99px;align-self:flex-start;font-weight:500}
@@ -203,34 +216,50 @@ section{padding:88px 0}
 .lista-check b{color:var(--azul)}
 
 /* ---------- quem somos ---------- */
-.verbos,.hero p.verbos{font-family:var(--dado);font-size:.8rem;letter-spacing:.08em;color:var(--magenta-forte);margin-top:22px}
-.atividades{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
-.atividade{background:var(--papel);border:1px solid var(--linha);border-radius:18px;padding:22px;
-  border-top:4px solid var(--cor)}
-.atividade .icone{width:46px;height:46px;border-radius:50%;background:var(--cor-clara);
-  display:grid;place-items:center;font-size:1.35rem;margin-bottom:14px}
-.atividade h3{font-size:1.06rem}
-.atividade p{font-size:.94rem;color:var(--texto-2);line-height:1.55;margin-top:8px}
-.atividades.compacta{grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
-.atividades.compacta .atividade{display:flex;align-items:center;gap:12px;padding:14px 16px;
-  border-top:1px solid var(--linha);border-left:4px solid var(--cor)}
-.atividades.compacta .icone{width:38px;height:38px;font-size:1.1rem;margin:0;flex-shrink:0}
-.atividades.compacta h3{font-size:.96rem}
-.duas{display:grid;grid-template-columns:1fr 1fr;gap:56px}
+.verbos,.hero p.verbos{font-family:var(--dado);font-size:.8rem;letter-spacing:.08em;
+  color:var(--magenta-forte);margin-top:22px;max-width:none}
+.verbos span{white-space:nowrap}
+.verbos span+span::before{content:"·";margin-right:.6em}
+.dimensoes{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.dimensao{background:var(--papel);border:1px solid var(--linha);border-top:5px solid var(--cor);
+  border-radius:20px;padding:26px 24px}
+.dimensao-cabeca{display:flex;flex-direction:column;gap:16px}
+.dimensao .icone{width:52px;height:52px;border-radius:16px;background:var(--cor-clara);
+  display:grid;place-items:center;font-size:1.5rem;flex-shrink:0}
+.dimensao-lema{font-family:var(--dado);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--cor-texto);margin-bottom:6px}
+.dimensao h3{font-size:1.16rem}
+.dimensao ul{list-style:none;margin-top:18px}
+.dimensao li{padding:10px 0;border-top:1px solid var(--linha);font-size:.95rem;color:var(--texto);line-height:1.4}
+.dimensoes.detalhe{grid-template-columns:1fr 1fr;gap:24px}
+.dimensoes.detalhe .dimensao{padding:30px}
+.dimensoes.detalhe .dimensao-cabeca{flex-direction:row;align-items:center}
+.dimensoes.detalhe li{display:flex;gap:14px;padding:16px 0}
+.dimensoes.detalhe li .icone{width:38px;height:38px;border-radius:50%;font-size:1.1rem}
+.dimensoes.detalhe li b{color:var(--azul)}
+.dimensoes.detalhe li p{font-size:.93rem;color:var(--texto-2);line-height:1.5;margin-top:3px}
+.duas{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
 .duas h2+p{margin-top:18px}
+.destaque{font-family:var(--display);font-size:clamp(1.3rem,2.2vw,1.65rem);font-weight:500;line-height:1.3;
+  letter-spacing:-.01em;color:var(--azul);border-left:5px solid var(--magenta);padding-left:24px}
 .mvv{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:44px}
 .mvv h3{color:#fff;margin-bottom:12px}
 .mvv p{color:#CFCCF0}
-.valores{display:flex;flex-wrap:wrap;gap:10px;list-style:none;margin-top:18px}
-.valores li{padding:8px 16px;border-radius:99px;font-size:.92rem;font-weight:500;color:#fff;
+.valores{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;list-style:none;margin-top:18px}
+.valores li{padding:9px 12px;border-radius:99px;font-size:.92rem;font-weight:500;color:#fff;text-align:center;
   box-shadow:inset 0 0 0 1.5px #4A42B8}
 .frase{text-align:center;max-width:820px;margin:0 auto}
 .frase h2{font-size:clamp(1.6rem,3.2vw,2.3rem)}
+.frase-fecho{font-family:var(--display);font-size:clamp(1.2rem,2vw,1.45rem);font-weight:700;
+  color:var(--magenta-forte);margin-top:14px}
 .frase .verbos{margin-top:26px}
 .frase .lead{margin:30px auto 0;font-size:1.04rem}
-.parceiros{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;list-style:none;margin-top:40px}
-.parceiros li{background:var(--papel);border:1px solid var(--linha);border-radius:14px;min-height:84px;
-  display:grid;place-items:center;text-align:center;padding:14px;font-weight:700;color:var(--azul);font-size:.96rem}
+/* parede de parceiros: 7 por linha, linhas incompletas centralizadas.
+   Quando houver logos, basta trocar o nome por <img> dentro do li */
+.parceiros{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;list-style:none;margin-top:44px}
+.parceiros li{flex:0 0 calc((100% - 72px)/7);background:var(--papel);border:1px solid var(--linha);
+  border-radius:14px;min-height:92px;display:grid;place-items:center;text-align:center;padding:14px 10px;
+  font-weight:700;color:var(--azul);font-size:.92rem;line-height:1.3}
 
 .contato-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px}
 .contato-item{border-top:1px solid var(--linha);padding:22px 0}
@@ -248,8 +277,14 @@ footer .logo-rodape{height:82px;margin-bottom:20px}
 .rodape-fim{border-top:1px solid var(--linha);margin-top:48px;padding-top:24px;display:flex;
   justify-content:space-between;gap:20px;flex-wrap:wrap;font-family:var(--dado);font-size:.76rem;color:var(--texto-2)}
 
+@media (max-width:1060px){
+  .dimensoes{grid-template-columns:1fr 1fr}
+  .grade.centrada>.cartao{flex-basis:calc((100% - 26px)/2)}
+  .parceiros li{flex-basis:calc((100% - 48px)/5)}
+}
 @media (max-width:900px){
-  .hero-grid,.cursos-grid,.contato-grid,.projeto-grid,.duas,.mvv{grid-template-columns:1fr;gap:36px}
+  .hero-grid,.cursos-grid,.contato-grid,.projeto-grid,.duas,.mvv,.dimensoes.detalhe{grid-template-columns:1fr;gap:36px}
+  .dimensoes.detalhe{gap:20px}
   .hero-foto{aspect-ratio:16/10;box-shadow:none}
   .numeros{grid-template-columns:1fr 1fr}
   .rodape-grid{grid-template-columns:1fr 1fr}
@@ -259,6 +294,13 @@ footer .logo-rodape{height:82px;margin-bottom:20px}
   nav.aberto{display:flex}
   .menu-btn{display:block}
   .ferramentas .btn{display:none}
+}
+@media (max-width:640px){
+  .dimensoes{grid-template-columns:1fr}
+  .dimensoes.detalhe .dimensao{padding:24px 20px}
+  .grade.centrada>.cartao{flex-basis:100%}
+  .valores{grid-template-columns:1fr 1fr}
+  .parceiros li{flex-basis:calc((100% - 24px)/3);min-height:76px;font-size:.82rem}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -345,25 +387,33 @@ const EIXOS={
 };
 
 /* textos institucionais — vêm do documento "IDEPS Institucional – quem somos" */
-const ATIVIDADES=[
-  ['🧠','Atendimento psicológico individual','Escuta, acolhimento e acompanhamento das demandas emocionais de cada participante.'],
-  ['💜','Apoio psicológico em grupo','Espaços de diálogo e troca onde vivências são compartilhadas e vínculos se fortalecem.'],
-  ['🥗','Atendimento nutricional individual','Acompanhamento personalizado para hábitos alimentares mais saudáveis e conscientes.'],
-  ['🍎','Apoio nutricional em grupo','Alimentação saudável, aproveitamento de alimentos e segurança nutricional em encontros coletivos.'],
-  ['🧘','Pilates e atividades corporais','Movimento, disposição e autonomia para um estilo de vida mais ativo.'],
-  ['🏊','Hidroginástica','Saúde, convivência e bem-estar em um ambiente coletivo e leve.'],
-  ['💆','Massagem terapêutica','Momentos de relaxamento e autocuidado, com atenção plena ao corpo.'],
-  ['💃','Dança e expressão corporal','Alegria, socialização e fortalecimento da autoestima em movimento.'],
-  ['🎨','Arte, cultura e criatividade','Pintura, artesanato, crochê e bordado que revelam talentos e geram renda.'],
-  ['💻','Inclusão digital','Autonomia no uso de celulares, aplicativos e internet para se comunicar e informar.'],
-  ['👩‍🍳','Cursos e oficinas de culinária','Conhecimento, convivência e novas habilidades ao redor da mesa.'],
-  ['🥦','Segurança alimentar e nutricional','Projetos e parcerias que ampliam o acesso a alimentos e à educação alimentar.'],
-  ['📚','Palestras e atividades educativas','Saúde, direitos, cidadania e bem-estar como ferramentas de autonomia.'],
-  ['🤝','Convivência e vínculos','O coração do IDEPS: pertencimento, amizade e novos vínculos a cada encontro.']
+/* as 14 atividades, agrupadas pelas quatro dimensões do cuidado integral que o
+   próprio documento descreve: "a psicologia oferece escuta; a nutrição, escolhas
+   conscientes; o movimento, disposição; a arte e a convivência, pertencimento" */
+const DIMENSOES=[
+  {titulo:'Psicologia e autocuidado',lema:'Escuta',icone:'🧠',
+   cor:'var(--magenta)',clara:'var(--magenta-claro)',texto:'var(--magenta-forte)',itens:[
+    ['🧠','Atendimento psicológico individual','Escuta, acolhimento e acompanhamento das demandas emocionais de cada participante.'],
+    ['💜','Apoio psicológico em grupo','Espaços de diálogo e troca onde vivências são compartilhadas e vínculos se fortalecem.'],
+    ['💆','Massagem terapêutica','Momentos de relaxamento e autocuidado, com atenção plena ao corpo.']]},
+  {titulo:'Nutrição e alimentação',lema:'Escolhas conscientes',icone:'🥗',
+   cor:'var(--verde)',clara:'var(--verde-claro)',texto:'var(--verde-esc)',itens:[
+    ['🥗','Atendimento nutricional individual','Acompanhamento personalizado para hábitos alimentares mais saudáveis e conscientes.'],
+    ['🍎','Apoio nutricional em grupo','Alimentação saudável, aproveitamento de alimentos e segurança nutricional em encontros coletivos.'],
+    ['👩‍🍳','Cursos e oficinas de culinária','Conhecimento, convivência e novas habilidades ao redor da mesa.'],
+    ['🥦','Segurança alimentar e nutricional','Projetos e parcerias que ampliam o acesso a alimentos e à educação alimentar.']]},
+  {titulo:'Movimento e bem-estar',lema:'Disposição',icone:'🧘',
+   cor:'var(--laranja)',clara:'var(--laranja-claro)',texto:'var(--laranja-esc)',itens:[
+    ['🧘','Pilates e atividades corporais','Movimento, disposição e autonomia para um estilo de vida mais ativo.'],
+    ['🏊','Hidroginástica','Saúde, convivência e bem-estar em um ambiente coletivo e leve.'],
+    ['💃','Dança e expressão corporal','Alegria, socialização e fortalecimento da autoestima em movimento.']]},
+  {titulo:'Arte, aprendizagem e convivência',lema:'Pertencimento',icone:'🎨',
+   cor:'var(--azul)',clara:'var(--azul-claro)',texto:'var(--azul)',itens:[
+    ['🎨','Arte, cultura e criatividade','Pintura, artesanato, crochê e bordado que revelam talentos e geram renda.'],
+    ['💻','Inclusão digital','Autonomia no uso de celulares, aplicativos e internet para se comunicar e informar.'],
+    ['📚','Palestras e atividades educativas','Saúde, direitos, cidadania e bem-estar como ferramentas de autonomia.'],
+    ['🤝','Convivência e vínculos','O coração do IDEPS: pertencimento, amizade e novos vínculos a cada encontro.']]}
 ];
-/* as atividades se revezam nas cores da logo */
-const CORES_MARCA=[['var(--magenta)','var(--magenta-claro)'],['var(--azul)','var(--azul-claro)'],
-  ['var(--verde)','var(--verde-claro)'],['var(--laranja)','var(--laranja-claro)'],['var(--agua)','var(--agua-claro)']];
 const VALORES=['Humanização','Acolhimento','Respeito','Inclusão','Autonomia','Cidadania',
   'Solidariedade','Participação','Ética','Transparência'];
 const PARCEIROS=['SEAD','SAS','Secretaria de Estado de Educação','SENAR','SESC','Mesa Brasil',
@@ -526,24 +576,33 @@ const cor=p=>EIXOS[p.eixo]||{cor:'var(--azul)',clara:'var(--azul-claro)'};
 function cartao(p){
   const c=cor(p);
   return `<a class="cartao" href="#/projeto/${p.id}" style="--cor:${c.cor};--cor-clara:${c.clara}">
-    <div class="cartao-topo"><img src="${p.capa}" alt=""></div>
+    <div class="cartao-topo"><img src="${p.capa}" alt="">
+      <span class="selo ${p.status}">${p.status==='ativo'?'Em andamento':'Finalizado'}</span></div>
     <div class="cartao-corpo">
       <span class="eixo-tag"><i></i>${esc(p.eixo)}</span>
       <h3>${esc(p.titulo)}</h3>
       <p>${esc(p.resumo)}</p>
-      <span class="selo ${p.status}">${p.status==='ativo'?'Em andamento':'Finalizado'}</span>
       <span class="ver">Ver o projeto →</span>
     </div></a>`;
 }
 
-function atividades(compacta){
-  return `<div class="atividades${compacta?' compacta':''}">${ATIVIDADES.map(([icone,nome,texto],i)=>{
-    const [c,clara]=CORES_MARCA[i%CORES_MARCA.length];
-    return `<div class="atividade" style="--cor:${c};--cor-clara:${clara}">
-      <span class="icone" aria-hidden="true">${icone}</span>
-      <div><h3>${nome}</h3>${compacta?'':`<p>${texto}</p>`}</div></div>`;
-  }).join('')}</div>`;
+/* na home, cada dimensão lista só os nomes; em Quem somos, com a descrição */
+function dimensoes(detalhe){
+  return `<div class="dimensoes${detalhe?' detalhe':''}">${DIMENSOES.map(d=>`
+    <article class="dimensao" style="--cor:${d.cor};--cor-clara:${d.clara};--cor-texto:${d.texto}">
+      <div class="dimensao-cabeca">
+        <span class="icone" aria-hidden="true">${d.icone}</span>
+        <div><p class="dimensao-lema">${d.lema}</p><h3>${d.titulo}</h3></div>
+      </div>
+      <ul>${d.itens.map(([icone,nome,texto])=>detalhe
+        ?`<li><span class="icone" aria-hidden="true">${icone}</span><div><b>${nome}</b><p>${texto}</p></div></li>`
+        :`<li>${nome}</li>`).join('')}</ul>
+    </article>`).join('')}</div>`;
 }
+
+/* "Cuidar · Acolher · …": cada verbo leva seu ponto junto, para a linha
+   quebrar entre palavras e nunca deixar um "·" sozinho no fim */
+const verbos=lista=>`<p class="verbos">${lista.map(v=>`<span>${v}</span>`).join(' ')}</p>`;
 
 const POR_EXTENSO=['Nenhuma','Uma','Duas','Três','Quatro','Cinco','Seis','Sete','Oito','Nove','Dez'];
 const frentesAtivas=n=>`${POR_EXTENSO[n]||n} ${n===1?'frente ativa':'frentes ativas'}`;
@@ -562,8 +621,8 @@ function linhaDoTempo(){
       : `color:${t}`;
     return `<div class="tl-linha"><div class="tl-trilho">
       <a class="tl-barra ${p.status}" href="#/projeto/${p.id}"
-         style="left:${esq.toFixed(2)}%;width:${Math.max(larg,10).toFixed(2)}%;${estilo}"
-         title="${esc(p.titulo)} — ${p.ini} a ${p.fim}">${esc(p.nome)}</a>
+         style="left:${esq.toFixed(2)}%;width:${Math.max(larg,10).toFixed(2)}%;--tom:${t};${estilo}"
+         title="${esc(p.titulo)} — ${p.ini} a ${p.fim}"><span>${esc(p.nome)}</span></a>
     </div></div>`;
   }).join('');
   const legenda=Object.entries(EIXOS).map(([n,c])=>
@@ -575,6 +634,18 @@ function linhaDoTempo(){
   </div>`;
 }
 
+/* nome que não cabe na barra vai para fora dela, do lado vazio da linha
+   (barras da metade esquerda escrevem à direita, e vice-versa). Depende da
+   largura real na tela, por isso roda depois do render e a cada redimensionamento. */
+function ajustarRotulos(){
+  document.querySelectorAll('.tl-barra').forEach(b=>{
+    b.classList.remove('rotulo-fora','dir','esq');
+    const r=b.firstElementChild;                   /* o span corta com reticências: mede ele */
+    if(r&&r.scrollWidth>r.clientWidth+1)
+      b.classList.add('rotulo-fora',parseFloat(b.style.left)<50?'dir':'esq');
+  });
+}
+
 const paginas={
 
 '/':()=>`
@@ -583,7 +654,7 @@ const paginas={
      <p class="eyebrow">Campo Grande, MS · desde 2017</p>
      <h1>Um espaço onde mulheres continuam <em>florescendo</em>.</h1>
      <p>O IDEPS é uma Organização da Sociedade Civil que promove desenvolvimento humano, cidadania, inclusão social e qualidade de vida para pessoas em situação de vulnerabilidade, com atenção especial às mulheres idosas.</p>
-     <p class="verbos">Cuidar · Acolher · Incluir · Desenvolver · Transformar</p>
+     ${verbos(['Cuidar','Acolher','Incluir','Desenvolver','Transformar'])}
      <div class="hero-acoes">
        <a class="btn" href="#/quem-somos">Conheça o IDEPS</a>
        <a class="btn linha" href="#/projetos">Ver os projetos</a>
@@ -605,7 +676,7 @@ const paginas={
      `<div><strong>${esc(valorDoNumero(it))}</strong><span>${esc(it.rotulo)}</span></div>`).join('')}
  </div></div>
 
- <section><div class="wrap">
+ <section class="claro"><div class="wrap">
    <div class="secao-cabeca">
      <div style="max-width:62ch">
        <p class="eyebrow">Centro de Convivência</p>
@@ -614,7 +685,7 @@ const paginas={
      </div>
      <a class="btn linha" href="#/quem-somos">Conheça o centro</a>
    </div>
-   ${atividades(true)}
+   ${dimensoes(false)}
  </div></section>
 
  <section class="tempo"><div class="wrap">
@@ -631,7 +702,7 @@ const paginas={
      <div><p class="eyebrow">Em andamento agora</p><h2>${frentesAtivas(PROJETOS.filter(p=>p.status==='ativo').length)}</h2></div>
      <a class="btn linha" href="#/projetos">Ver todos os projetos</a>
    </div>
-   <div class="grade">${PROJETOS.filter(p=>p.status==='ativo').map(cartao).join('')}</div>
+   <div class="grade centrada">${PROJETOS.filter(p=>p.status==='ativo').map(cartao).join('')}</div>
  </div></section>
 
  <section class="claro"><div class="wrap"><div class="cursos-grid">
@@ -652,7 +723,7 @@ const paginas={
 '/quem-somos':()=>`
  <section><div class="wrap">
    <p class="eyebrow">Quem somos</p>
-   <h2 style="max-width:22ch">Desde 2017, transformando vidas.</h2>
+   <h2>Desde 2017, transformando vidas.</h2>
    <p class="lead" style="margin-top:18px">Por meio da convivência, do cuidado, da inclusão e do desenvolvimento social.</p>
    <div class="projeto-grid" style="margin-top:44px">
      <div class="corpo-texto">
@@ -672,9 +743,12 @@ const paginas={
  <section class="claro"><div class="wrap">
    <p class="eyebrow">Um centro de convivência para mulheres idosas</p>
    <h2 style="max-width:24ch">Um lugar para continuar vivendo, aprendendo e florescendo.</h2>
-   <div class="duas corpo-texto" style="margin-top:36px">
-     <p>No IDEPS, acreditamos que envelhecer não significa deixar de sonhar, aprender e criar. A terceira idade pode ser uma fase de novas descobertas, amizades e possibilidades.</p>
+   <div class="duas" style="margin-top:36px">
+     <p class="destaque">No IDEPS, acreditamos que envelhecer não significa deixar de sonhar, aprender e criar.</p>
+     <div class="corpo-texto">
+     <p>A terceira idade pode ser uma fase de novas descobertas, amizades e possibilidades.</p>
      <p>Por isso, nosso Centro de Convivência é muito mais do que um espaço de atividades: é onde amizades nascem, talentos são descobertos e novos projetos de vida ganham forma. Atendemos principalmente mulheres idosas em vulnerabilidade, com foco em ampliar autonomia, autoestima, saúde, convivência, participação social e qualidade de vida.</p>
+     </div>
    </div>
  </div></section>
 
@@ -682,7 +756,7 @@ const paginas={
    <p class="eyebrow">Nossas atividades e serviços</p>
    <h2>Uma programação diversificada.</h2>
    <p class="lead" style="margin:18px 0 44px">Construída para atender aos interesses e às diferentes dimensões do envelhecimento.</p>
-   ${atividades(false)}
+   ${dimensoes(true)}
  </div></section>
 
  <section class="claro"><div class="wrap"><div class="duas">
@@ -713,17 +787,18 @@ const paginas={
  </div></section>
 
  <section><div class="wrap"><div class="frase">
-   <h2>Toda pessoa merece oportunidades para viver com dignidade, autonomia e pertencimento. É por isso que o IDEPS existe.</h2>
-   <p class="verbos">Acolher · Ouvir · Ensinar · Cuidar · Alimentar · Conectar · Fortalecer · Transformar</p>
+   <h2>Toda pessoa merece oportunidades para viver com dignidade, autonomia e pertencimento.</h2>
+   <p class="frase-fecho">É por isso que o IDEPS existe.</p>
+   ${verbos(['Acolher','Ouvir','Ensinar','Cuidar','Alimentar','Conectar','Fortalecer','Transformar'])}
    <p class="lead">Como Organização da Sociedade Civil, conduzimos nossas ações com responsabilidade, ética e transparência. Cada projeto é um compromisso com as pessoas atendidas, com nossos parceiros e com a sociedade — porque transformar uma vida também é transformar uma comunidade.</p>
  </div></div></section>
 
  <section class="claro"><div class="wrap">
    <p class="eyebrow">Nossos parceiros</p>
    <h2>Juntos, conseguimos chegar mais longe.</h2>
-   <div class="duas corpo-texto" style="margin-top:36px">
-     <p>Nenhuma transformação social acontece de forma isolada. Construímos uma rede que compartilha o compromisso de melhorar a vida das pessoas — entre eles a Rede Comper de Supermercados e instituições do Sistema S, como SENAR e SESC. Buscamos sempre novas parcerias com empresas, órgãos públicos e organizações comprometidas com o desenvolvimento social.</p>
-     <p>Para o IDEPS, cada parceria representa a união de forças em torno de um propósito maior: transformar oportunidades em impacto social.</p>
+   <div class="duas" style="margin-top:36px">
+     <div class="corpo-texto"><p>Nenhuma transformação social acontece de forma isolada. Construímos uma rede que compartilha o compromisso de melhorar a vida das pessoas — entre eles a Rede Comper de Supermercados e instituições do Sistema S, como SENAR e SESC. Buscamos sempre novas parcerias com empresas, órgãos públicos e organizações comprometidas com o desenvolvimento social.</p></div>
+     <p class="destaque">Para o IDEPS, cada parceria representa a união de forças em torno de um propósito maior: transformar oportunidades em impacto social.</p>
    </div>
    <ul class="parceiros">${PARCEIROS.map(n=>`<li>${n}</li>`).join('')}</ul>
    <div style="margin-top:44px;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
@@ -811,7 +886,7 @@ function paginaProjeto(id){
         <h3>Resultados esperados</h3>
         <ul>${p.resultados.map(r=>`<li>${esc(r)}</li>`).join('')}</ul>
         <h3>Quer participar?</h3>
-        <p>As inscrições acontecem na sede, no bairro Tiradentes, ou pelo telefone ${esc(CONTATO.telefone)}.</p>
+        <p>As inscrições acontecem na sede, no bairro Tiradentes, ou pelo telefone <span style="white-space:nowrap">${esc(CONTATO.telefone)}</span>.</p>
         <a class="btn" href="#/contato">Falar com a equipe</a>
       </div>
       <div class="ficha" style="border-top:5px solid ${c.cor}"><dl>
@@ -860,7 +935,13 @@ function render(){
   document.querySelectorAll('[data-status]').forEach(b=>b.onclick=()=>{filtroStatus=b.dataset.status;render();});
   document.querySelectorAll('[data-eixo]').forEach(b=>b.onclick=()=>{filtroEixo=b.dataset.eixo;render();});
   iniciarCarrossel();
+  ajustarRotulos();
 }
+let quadroRotulos=0;
+window.addEventListener('resize',()=>{
+  cancelAnimationFrame(quadroRotulos); quadroRotulos=requestAnimationFrame(ajustarRotulos);});
+/* a largura do texto muda quando a fonte da web termina de carregar */
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(ajustarRotulos);
 document.getElementById('menuBtn').onclick=()=>document.getElementById('nav').classList.toggle('aberto');
 
 /* O rodapé e o botão "Cursos" ficam fora do #app, então não passam pelo
