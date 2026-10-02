@@ -30,12 +30,9 @@ a{color:inherit;text-decoration:none}
 h1{font-family:var(--display);font-size:1.85rem;letter-spacing:-.02em;line-height:1.15}
 h2{font-family:var(--display);font-size:1.15rem;font-weight:700;letter-spacing:-.01em}
 
-.aviso{background:var(--folha);color:#CFE0D7;font-family:var(--dado);font-size:.7rem;
-  letter-spacing:.06em;text-align:center;padding:6px 16px}
-
 .faixa{display:flex;height:5px}
 .faixa i{flex:1}
-.app{display:grid;grid-template-columns:252px 1fr;min-height:calc(100vh - 26px)}
+.app{display:grid;grid-template-columns:252px 1fr;min-height:calc(100vh - 5px)}
 
 /* ---------- lateral ---------- */
 aside{background:var(--folha);color:#C6C3EC;padding:24px 16px;display:flex;flex-direction:column;gap:26px}
@@ -69,6 +66,7 @@ main{padding:34px 40px 64px;overflow-x:auto}
 .btn.linha:hover{background:var(--branco);box-shadow:inset 0 0 0 1.5px var(--folha)}
 .btn.fantasma{background:transparent;color:var(--texto-2);padding:9px 12px}
 .btn.fantasma:hover{background:var(--mata-claro);color:var(--folha)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
 
 /* ---------- cartões e tabelas ---------- */
 .painel{background:var(--branco);border:1px solid var(--linha);border-radius:14px;overflow:hidden}
@@ -90,7 +88,9 @@ tbody tr:hover{background:#FAFBF9}
 .selo.publicado{background:var(--mata-claro);color:var(--folha)}
 .selo.rascunho{background:var(--amarelo-claro);color:#8A4C00}
 .selo.ativo{background:var(--ipe-claro);color:#A00060}
-.acoes{display:flex;gap:4px;justify-content:flex-end}
+.selo.encerrado{background:#ECECF2;color:var(--texto-2)}
+/* continua célula de tabela: com display:flex a borda da linha saía desalinhada */
+.acoes{text-align:right;white-space:nowrap}
 
 /* ---------- resumo ---------- */
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:30px}
@@ -106,7 +106,8 @@ tbody tr:hover{background:#FAFBF9}
 .campo{margin-bottom:20px}
 label{display:block;font-weight:500;font-size:.9rem;margin-bottom:6px}
 label small{display:block;font-weight:400;color:var(--texto-2);font-size:.82rem;margin-top:2px}
-input[type=text],input[type=date],select,textarea{
+input[type=text],input[type=date],input[type=email],input[type=url],input[type=number],
+input[type=password],select,textarea{
   width:100%;padding:11px 13px;border:1.5px solid var(--linha);border-radius:9px;
   background:var(--branco);font-size:.95rem}
 input:focus,select:focus,textarea:focus{border-color:var(--mata);outline:none}
@@ -131,11 +132,33 @@ textarea{min-height:120px;resize:vertical;line-height:1.6}
 .upload b{display:block;color:var(--folha);margin-bottom:4px}
 
 /* ---------- mídia ---------- */
-.midia{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.midia{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
 .midia figure{background:var(--branco);border:1px solid var(--linha);border-radius:12px;overflow:hidden}
 .midia img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:var(--mata-claro)}
 .midia figcaption{padding:9px 11px;font-family:var(--dado);font-size:.7rem;color:var(--texto-2);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.figura-acoes{display:flex;align-items:center;justify-content:space-between;gap:4px;padding:0 6px 8px;min-height:38px}
+.figura-acoes .btn{padding:6px 9px;font-size:.8rem}
+.figura-acoes .selo{margin-left:5px}
+.carrossel-foto{width:64px;height:80px;object-fit:cover;border-radius:8px;flex-shrink:0;background:var(--mata-claro)}
+
+/* ---------- prévia do banner de aviso: imita o que o site desenha ---------- */
+.aviso-previa{border-radius:14px;padding:16px 18px 16px 22px;display:flex;gap:14px;align-items:flex-start}
+.aviso-previa img{width:64px;height:64px;border-radius:10px;object-fit:cover;flex-shrink:0;background:#fff}
+.aviso-previa-tipo{font-family:var(--dado);font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;
+  font-weight:500;margin-bottom:3px}
+.aviso-previa b{display:block;font-family:var(--display);font-size:1.05rem;color:var(--folha);line-height:1.25}
+.aviso-previa p{font-size:.85rem;color:var(--texto-2);margin-top:5px;line-height:1.45}
+.aviso-previa-botao{display:inline-block;margin-top:10px;color:#fff;font-weight:700;font-size:.8rem;
+  padding:6px 13px;border-radius:99px}
+.ponto-tipo{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:9px;vertical-align:-1px}
+
+/* ---------- páginas e equipe ---------- */
+.indice{display:block;width:100%;text-align:left;padding:7px 10px;font-size:.88rem;font-weight:500}
+.atividade-textos{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
+.passos{margin:12px 0 14px 20px;color:var(--texto-2);font-size:.92rem}
+.passos li{margin-bottom:8px}
+.passos b{color:var(--texto)}
 
 .vazio{padding:56px 22px;text-align:center;color:var(--texto-2)}
 .vazio b{display:block;font-family:var(--display);font-size:1.15rem;color:var(--folha);margin-bottom:6px}
@@ -157,7 +180,7 @@ textarea{min-height:120px;resize:vertical;line-height:1.6}
   color:#948DD6;margin-left:auto;padding:6px 9px;border-radius:7px}
 .sair:hover{background:#2A2296;color:#fff}
 
-/* ---------- telas ainda não conectadas ---------- */
+/* ---------- avisos do painel ---------- */
 .maquete{background:var(--amarelo-claro);color:#8A4C00;border:1px solid var(--amarelo);
   border-radius:10px;padding:12px 16px;font-size:.88rem;margin-bottom:22px}
 .maquete b{font-weight:700}
@@ -197,8 +220,6 @@ textarea{min-height:120px;resize:vertical;line-height:1.6}
   </form>
 </div>
 
-<div class="aviso" id="tarja">Projetos, Números e Contato gravam no banco. As demais telas ainda são demonstração.</div>
-
 <div class="faixa"><i style="background:var(--vermelho)"></i><i style="background:var(--magenta)"></i><i style="background:var(--folha)"></i><i style="background:var(--agua)"></i><i style="background:var(--verde)"></i><i style="background:#F7E600"></i><i style="background:var(--laranja)"></i></div>
 <div class="app" id="app-grade" hidden>
 <aside>
@@ -211,6 +232,7 @@ textarea{min-height:120px;resize:vertical;line-height:1.6}
     <nav id="nav">
       <a href="#/">Resumo</a>
       <a href="#/projetos">Projetos <span class="conta" id="contaProjetos"></span></a>
+      <a href="#/avisos">Avisos e novidades <span class="conta" id="contaAvisos"></span></a>
       <a href="#/paginas">Páginas</a>
       <a href="#/numeros">Números do topo</a>
       <a href="#/midia">Fotos e arquivos</a>
@@ -234,16 +256,18 @@ textarea{min-height:120px;resize:vertical;line-height:1.6}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- números, contato, fotos e textos padrão — o mesmo arquivo que o site lê -->
+<script src="dados/padroes.js?v=2"></script>
 
 <script>
 /* ============================================================
    Painel do IDEPS
-   Nesta etapa só a área de Projetos grava de verdade; as demais
-   telas seguem como demonstração e estão marcadas como tal.
+   Todas as telas gravam no Supabase e o site lê de lá. Os textos e
+   valores padrão ficam em dados/padroes.js, que o site também carrega.
 
    Configuração: Supabase → Project Settings → API.
    A chave "anon" é pública por natureza — quem protege o banco são
-   as regras de RLS de dados/supabase.sql. Nunca use aqui a chave
+   as regras de RLS dos arquivos .sql em dados/. Nunca use aqui a chave
    service_role, que ignora todas as regras.
    ============================================================ */
 const SUPABASE_URL='https://asyqrlmdeptztggapdnn.supabase.co';
@@ -255,6 +279,8 @@ const IMG='imagens/';
 const BASE=SUPABASE_URL.trim().replace(/\/+$/,'').replace(/\/rest\/v1$/,'');
 const sb=(BASE&&SUPABASE_ANON&&window.supabase)
   ? window.supabase.createClient(BASE,SUPABASE_ANON) : null;
+/* painel do próprio Supabase: é lá que se cria e remove quem tem acesso */
+const PAINEL_SUPABASE=BASE?`https://supabase.com/dashboard/project/${new URL(BASE).hostname.split(".")[0]}`:"https://supabase.com/dashboard";
 
 const app=document.getElementById('app');
 const grade=document.getElementById('app-grade');
@@ -277,11 +303,10 @@ const CORES={'Direitos e cidadania':'var(--folha)','Pessoas idosas':'var(--laran
 const ponto=e=>`<span style="display:inline-block;width:11px;height:11px;border-radius:50%;
  background:${CORES[e]||'var(--folha)'};margin-right:9px;vertical-align:-1px"></span>`;
 const selo=pub=>`<span class="selo ${pub?'publicado':'rascunho'}">${pub?'Publicado':'Rascunho'}</span>`;
-const maquete=`<div class="maquete"><b>Tela de demonstração.</b> Esta parte ainda não está ligada ao
- banco: o que você editar aqui não é salvo. Por enquanto gravam Projetos, Números do topo e Contato.</div>`;
 
 let PROJETOS=[];
 let CONTEUDO={};   /* blocos da tabela conteudo, por id */
+let CONTEUDO_EM={}; /* quando cada bloco foi salvo pela última vez */
 let usuario='';
 let edicao={id:null,capa:'',sujo:false};
 
@@ -368,10 +393,11 @@ async function carregar(){
    conteúdo em jsonb. Se a tabela ainda não existir, o painel segue
    funcionando: essas telas avisam que falta rodar dados/conteudo.sql. */
 async function carregarConteudo(){
-  const {data,error}=await sb.from('conteudo').select('id,dados');
+  const {data,error}=await sb.from('conteudo').select('id,dados,atualizado_em');
   if(error){CONTEUDO={_erro:error.message};return;}
-  CONTEUDO={};
-  (data||[]).forEach(r=>CONTEUDO[r.id]=r.dados||{});
+  CONTEUDO={}; CONTEUDO_EM={};
+  (data||[]).forEach(r=>{CONTEUDO[r.id]=r.dados||{};CONTEUDO_EM[r.id]=r.atualizado_em;});
+  contarAvisos();
 }
 
 const semTabela=()=>!!CONTEUDO._erro;
@@ -381,15 +407,18 @@ const avisoTabela=`<div class="maquete"><b>Falta criar a tabela de conteúdo.</b
  Rode <b>dados/conteudo.sql</b> no SQL Editor do Supabase e recarregue esta página.
  Até lá o que você editar aqui não é salvo.</div>`;
 
+/* devolve true quando gravou */
 async function salvarBloco(id,dados,botoes,msg){
-  if(semTabela()) return recado('A tabela de conteúdo ainda não existe. Rode dados/conteudo.sql.',true);
+  if(semTabela()){recado('A tabela de conteúdo ainda não existe. Rode dados/conteudo.sql.',true);return false;}
   botoes.forEach(b=>b&&(b.disabled=true));
   const {error}=await sb.from('conteudo').upsert({id,dados});
   botoes.forEach(b=>b&&(b.disabled=false));
-  if(error) return recado('Não foi possível salvar: '+error.message,true);
+  if(error){recado('Não foi possível salvar: '+error.message,true);return false;}
   CONTEUDO[id]=dados;
+  CONTEUDO_EM[id]=new Date().toISOString();
   edicao.sujo=false;
   recado(msg||'Salvo e publicado no site.');
+  return true;
 }
 
 /* ---------- telas ---------- */
@@ -418,12 +447,6 @@ const pendencias=p=>{
 /* ---------- números do topo ----------
    Um número ou sai da lista de projetos (e aí muda sozinho no site,
    sem ninguém precisar lembrar de atualizar) ou é digitado à mão. */
-const NUMEROS_PADRAO={desde:2017,itens:[
-  {fonte:'anos',rotulo:'anos de atuação'},
-  {fonte:'total',rotulo:'projetos executados'},
-  {fonte:'ativos',rotulo:'projetos em andamento'},
-  {fonte:'manual',numero:'+900',rotulo:'pessoas atendidas'}]};
-
 const FONTES={anos:'Anos de atuação',total:'Total de projetos',
   ativos:'Projetos em andamento',manual:'Digitado à mão'};
 
@@ -448,12 +471,6 @@ const linhaNumero=(it,desde)=>{
     <button class="btn fantasma" data-remover type="button" aria-label="Remover">✕</button>
   </div>`;
 };
-
-const CONTATO_PADRAO={telefone:'67 99289-9775',email:'contato.idepsms@gmail.com',
-  endereco:'Rua Dona Rosa Maria, 633',bairro:'Tiradentes — Campo Grande, MS',
-  horario:'Segunda a sexta, das 8h às 17h',
-  instagram:'https://www.instagram.com/idepsms/',facebook:'https://www.facebook.com/idepsms',
-  cursos:'https://cursos.idepsms.org',cnpj:'29.768.758/0001-56'};
 
 const paginas={
 
@@ -527,46 +544,35 @@ const paginas={
    </table>
  </div>`,
 
+'/avisos':()=>{
+  const lista=avisosSalvos();
+  return `
+ <div class="topo"><div><h1>Avisos e novidades</h1><p>Banners no alto da página inicial: inscrições abertas, eventos, mudança de horário, um resultado para comemorar. Com data marcada, entram e saem do ar sozinhos.</p></div>
+   <a class="btn" href="#/aviso/novo">+ Novo aviso</a></div>
+ ${semTabela()?avisoTabela:''}
+ <div class="painel">
+   ${lista.length?`<table>
+     <thead><tr><th>Aviso</th><th>Período</th><th>Situação</th><th>Ordem</th><th></th></tr></thead>
+     <tbody id="corpoAvisos">${lista.map((a,i)=>linhaAviso(a,i,lista.length)).join('')}</tbody></table>`
+   :`<div class="vazio"><b>Nenhum aviso no site</b>Crie o primeiro em “+ Novo aviso”. Sem avisos, a página inicial começa direto na capa.</div>`}
+ </div>
+ <div class="dica"><b>Dois ou três de cada vez</b>Um aviso sozinho ocupa a largura toda. Dois ou mais viram cartões lado a lado; passando de três, a capa fica empurrada para baixo. A ordem desta lista é a ordem no site.</div>`;
+},
+
 '/paginas':()=>`
  <div class="topo"><div><h1>Páginas</h1><p>Os textos fixos do site. Edite direto, sem mexer no layout.</p></div></div>
- ${maquete}
+ ${semTabela()?avisoTabela:''}
  <div class="painel"><table>
-   <thead><tr><th>Página</th><th>Endereço</th><th>No site</th><th>Editado</th><th></th></tr></thead>
+   <thead><tr><th>Página</th><th>Endereço</th><th>Última edição</th><th></th></tr></thead>
    <tbody>
-     ${[['Início','/','20/07/2026'],['Quem somos','/quem-somos','14/06/2026'],
-        ['Contato','/contato','22/03/2026']]
-       .map(([n,u,d])=>`<tr><td><b>${n}</b></td>
-         <td style="font-family:var(--dado);font-size:.82rem;color:var(--texto-2)">${u}</td>
-         <td>${selo(true)}</td>
-         <td style="font-family:var(--dado);font-size:.8rem;color:var(--texto-2)">${d}</td>
-         <td class="acoes"><a class="btn fantasma" href="#/pagina">Editar</a></td></tr>`).join('')}
+     ${PAGINAS.map(p=>{
+       const em=CONTEUDO['pagina:'+p.id]?dataBR(CONTEUDO_EM['pagina:'+p.id]):'texto original';
+       return `<tr><td><b>${esc(p.nome)}</b></td>
+         <td style="font-family:var(--dado);font-size:.82rem;color:var(--texto-2)">${esc(p.rota)}</td>
+         <td style="font-family:var(--dado);font-size:.8rem;color:var(--texto-2)">${em}</td>
+         <td class="acoes"><a class="btn fantasma" href="#/pagina/${p.id}">Editar</a></td></tr>`;}).join('')}
    </tbody>
  </table></div>`,
-
-'/pagina':()=>`
- <div class="topo"><div><a class="btn fantasma" href="#/paginas" style="padding-left:0">← Páginas</a>
-   <h1 style="margin-top:6px">Quem somos</h1></div></div>
- ${maquete}
- <div class="form">
-   <div class="caixa">
-     <div class="campo"><label>Título da página</label><input type="text" value="Desde 2017, transformando vidas."></div>
-     <div class="campo"><label>Texto de abertura<small>Aparece maior, logo abaixo do título.</small></label>
-       <textarea style="min-height:90px">Por meio da convivência, do cuidado, da inclusão e do desenvolvimento social.</textarea></div>
-     <div class="campo"><label>Conteúdo</label>
-       <textarea style="min-height:260px">O IDEPS é uma Organização da Sociedade Civil que promove desenvolvimento humano, cidadania, inclusão social e qualidade de vida para pessoas em situação de vulnerabilidade — sempre pautado no acolhimento, na garantia de direitos e no fortalecimento dos vínculos comunitários.
-
-Hoje, uma de nossas principais frentes é o Centro de Convivência para Pessoas Idosas, com atenção especial às mulheres idosas em situação de vulnerabilidade econômica e social.</textarea></div>
-     <div class="rodape-form"><button class="btn linha">Salvar rascunho</button><button class="btn">Publicar</button></div>
-   </div>
-   <div>
-     <div class="caixa"><h2>Ficha lateral</h2>
-       <div class="campo"><label>Fundação</label><input type="text" value="2017"></div>
-       <div class="campo"><label>CNPJ</label><input type="text" value="29.768.758/0001-56"></div>
-       <div class="campo" style="margin-bottom:0"><label>Natureza jurídica</label><input type="text" value="Organização da Sociedade Civil"></div>
-     </div>
-     <div class="dica"><b>Campo vazio some do site</b>Se você deixar um campo em branco, ele simplesmente não aparece na página — nada de rótulo solto sem informação.</div>
-   </div>
- </div>`,
 
 '/numeros':()=>{
   const b=bloco('numeros',NUMEROS_PADRAO);
@@ -575,7 +581,7 @@ Hoje, uma de nossas principais frentes é o Centro de Convivência para Pessoas 
  <div class="topo"><div><h1>Números do topo</h1><p>A faixa de números que aparece logo abaixo da capa. Máximo de quatro.</p></div>
    <button class="btn" id="salvarNumeros" type="button">Salvar e publicar</button></div>
  ${semTabela()?avisoTabela:''}
- <div class="form">
+ <div class="form" id="telaNumeros">
    <div class="caixa">
      <div id="listaNumeros">${itens.slice(0,4).map(it=>linhaNumero(it,b.desde)).join('')}</div>
      <button class="btn linha" id="addNumero" type="button" style="margin-top:4px">+ Adicionar número</button>
@@ -585,7 +591,7 @@ Hoje, uma de nossas principais frentes é o Centro de Convivência para Pessoas 
    <div>
      <div class="caixa" style="margin-bottom:16px"><h2>Ano de fundação</h2>
        <div class="campo" style="margin-bottom:0">
-         <label for="desde">Desde<small>É a base do cálculo de "anos de atuação".</small></label>
+         <label for="desde">Desde<small>É a base do cálculo de "anos de atuação". Também aparece na capa, na linha do tempo e na ficha de Quem somos.</small></label>
          <input type="number" id="desde" min="1900" max="${new Date().getFullYear()}" value="${esc(b.desde||NUMEROS_PADRAO.desde)}"></div>
      </div>
      <div class="dica" style="margin-top:0"><b>Três destes se calculam sozinhos</b>Anos de atuação, projetos executados e projetos em andamento saem da própria lista de projetos e mudam sozinhos no site — você só escolhe o rótulo. Os campos digitados à mão ficam editáveis.</div>
@@ -594,19 +600,31 @@ Hoje, uma de nossas principais frentes é o Centro de Convivência para Pessoas 
 },
 
 '/midia':()=>`
- <div class="topo"><div><h1>Fotos e arquivos</h1><p>Tudo que você já enviou. Use fotos reais das atividades sempre que possível.</p></div>
-   <button class="btn">+ Enviar fotos</button></div>
- ${maquete}
- <div class="midia">
-   ${[['image13-1024x800.jpg','oficina-tiradentes.jpg'],
-      ['jovem-aluna-ouvindo-professora-de-ingles-1024x617.jpg','aluna-curso-online.jpg'],
-      ['Bem-estar-IDEPS-300x300.png','capa-bem-estar.png'],
-      ['Quem-Somos-60-300x300.png','capa-quem-somos-60.png'],
-      ['Mulheres-que-apoiam-mulheres-300x300.png','capa-mulheres.png'],
-      ['Conhecer-para-participar-300x300.png','capa-conhecer.png'],
-      ['Semeando-DH.png','capa-semeando.png'],
-      ['Logo-Participar-e-Preciso-8-sem-fundo-300x300.png','capa-participar.png']]
-     .map(([u,n])=>`<figure><img src="${IMG}${u}" alt=""><figcaption>${n}</figcaption></figure>`).join('')}
+ <div class="topo"><div><h1>Fotos e arquivos</h1><p>As fotos do carrossel da página inicial e tudo o que já foi enviado.</p></div>
+   <button class="btn" id="enviarFotos" type="button">+ Enviar fotos</button>
+   <input type="file" id="arquivoFotos" accept="image/png,image/jpeg,image/webp" multiple hidden></div>
+ ${semTabela()?avisoTabela:''}
+ <div class="form" id="telaMidia">
+   <div class="caixa">
+     <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap">
+       <h2 style="margin:0">Carrossel da página inicial</h2>
+       <button class="btn" id="salvarCarrossel" type="button">Salvar e publicar</button></div>
+     <div id="listaCarrossel"></div>
+   </div>
+   <div>
+     <div class="dica" style="margin-top:0"><b>Como montar o carrossel</b>Envie as fotos pelo botão acima e clique em “Pôr no carrossel”. A primeira da lista é a que aparece primeiro. Fotos em pé ficam melhores: as deitadas são cortadas nas laterais.</div>
+     <div class="dica"><b>Descreva cada foto</b>A descrição é lida em voz alta para quem usa leitor de tela. Diga o que aparece, por exemplo: “Participantes da oficina de crochê na sede”.</div>
+   </div>
+ </div>
+ <div class="painel" style="margin-top:26px">
+   <div class="painel-cabeca"><h2>Fotos</h2>
+     <span id="contaFotos" style="font-family:var(--dado);font-size:.76rem;color:var(--texto-2)"></span></div>
+   <div id="galeriaFotos" style="padding:22px"><div class="vazio">Carregando…</div></div>
+ </div>
+ <div class="painel" style="margin-top:26px">
+   <div class="painel-cabeca"><h2>Capas de projeto</h2>
+     <span style="font-family:var(--dado);font-size:.76rem;color:var(--texto-2)">Enviadas na tela de cada projeto</span></div>
+   <div id="galeriaCapas" style="padding:22px"><div class="vazio">Carregando…</div></div>
  </div>`,
 
 '/contato':()=>{
@@ -633,6 +651,7 @@ Hoje, uma de nossas principais frentes é o Centro de Convivência para Pessoas 
      </div>
      ${campo('cursos','Endereço da plataforma de cursos','Para onde o botão "Cursos" leva.','url')}
      ${campo('cnpj','CNPJ','Aparece na última linha do rodapé.')}
+     ${campo('frase','Frase do rodapé','Fica embaixo da logo, no rodapé de todas as páginas.')}
      <div class="rodape-form"><button class="btn" id="salvarContato2" type="button">Salvar e publicar</button></div>
    </div>
    <div>
@@ -645,23 +664,33 @@ Hoje, uma de nossas principais frentes é o Centro de Convivência para Pessoas 
 },
 
 '/equipe':()=>`
- <div class="topo"><div><h1>Quem tem acesso</h1><p>Pessoas que podem entrar neste painel e o que cada uma pode fazer.</p></div>
-   <button class="btn">+ Convidar pessoa</button></div>
- ${maquete}
- <div class="painel"><table>
-   <thead><tr><th>Pessoa</th><th>Permissão</th><th>Último acesso</th><th></th></tr></thead>
-   <tbody>
-     ${[['MC','Maria Clara','Comunicação','Edita e publica','Hoje, 08:12'],
-        ['RS','Rita Souza','Coordenação','Administra tudo','Ontem, 17:40'],
-        ['JP','João Paulo','Projetos','Edita, não publica','18/07/2026']]
-       .map(([i,n,c,perm,ac])=>`<tr>
-         <td><div class="item"><div class="avatar" style="background:var(--mata-claro);color:var(--folha);font-size:.8rem">${i}</div>
-           <div><b>${n}</b><small>${c}</small></div></div></td>
-         <td>${perm}</td>
-         <td style="font-family:var(--dado);font-size:.8rem;color:var(--texto-2)">${ac}</td>
-         <td class="acoes"><button class="btn fantasma">Alterar</button></td></tr>`).join('')}
-   </tbody>
- </table></div>`
+ <div class="topo"><div><h1>Quem tem acesso</h1><p>As pessoas que podem entrar neste painel. Todas têm a mesma permissão: editar e publicar.</p></div>
+   <a class="btn" href="${PAINEL_SUPABASE}/auth/users" target="_blank" rel="noopener">+ Adicionar pessoa</a></div>
+ <div class="painel" style="margin-bottom:26px"><table>
+   <thead><tr><th>Pessoa</th><th>Tem acesso desde</th><th>Último acesso</th></tr></thead>
+   <tbody id="corpoEquipe"><tr><td colspan="3"><div class="vazio">Carregando…</div></td></tr></tbody>
+ </table></div>
+ <div class="form">
+   <div class="caixa"><h2>Adicionar ou tirar alguém</h2>
+     <p style="color:var(--texto-2);font-size:.92rem">Por segurança, isso se faz no painel do Supabase, não aqui.</p>
+     <ol class="passos">
+       <li>Clique em <b>+ Adicionar pessoa</b>, no alto desta tela. O Supabase abre em outra aba — entre com a conta que criou o projeto.</li>
+       <li>Clique em <b>Add user → Create new user</b>. Preencha o e-mail da pessoa e uma senha provisória, e deixe marcado <b>Auto Confirm User</b>.</li>
+       <li>Passe o e-mail e a senha para ela. No primeiro acesso, ela troca a senha aqui mesmo, nesta tela.</li>
+     </ol>
+     <p style="color:var(--texto-2);font-size:.92rem">Para tirar o acesso de alguém: na mesma lista do Supabase, clique nos três pontinhos ao lado da pessoa e em <b style="color:var(--texto)">Delete user</b>.</p>
+   </div>
+   <div>
+     <div class="caixa" style="margin-bottom:16px"><h2>Trocar minha senha</h2>
+       <div class="campo"><label for="novaSenha">Nova senha<small>No mínimo 8 caracteres.</small></label>
+         <input type="password" id="novaSenha" autocomplete="new-password"></div>
+       <div class="campo"><label for="novaSenha2">Repita a nova senha</label>
+         <input type="password" id="novaSenha2" autocomplete="new-password"></div>
+       <button class="btn" id="trocarSenha" type="button">Trocar senha</button>
+     </div>
+     <div class="dica" style="margin-top:0"><b>Por que não dá para convidar daqui?</b>Criar contas exige a chave mestra do banco, que passa por cima de todas as regras de segurança. Ela não pode ficar numa página que qualquer pessoa consegue abrir.</div>
+   </div>
+ </div>`
 };
 
 /* ---------- formulário de projeto ---------- */
@@ -940,7 +969,7 @@ function ligarNumeros(){
   const sincronizarTudo=()=>lista.querySelectorAll('[data-numero]').forEach(sincronizarLinha);
   const limite=()=>add.disabled=lista.children.length>=4;
 
-  app.addEventListener('input',()=>{edicao.sujo=true;});
+  app.querySelector('#telaNumeros').addEventListener('input',()=>{edicao.sujo=true;});
   app.querySelector('#desde').addEventListener('input',sincronizarTudo);
   lista.addEventListener('change',e=>{
     const l=e.target.closest('[data-numero]');
@@ -983,6 +1012,7 @@ function ligarContato(){
   const pintar=()=>{
     const c=ler();
     previa.innerHTML=`
+      ${c.frase?`<span style="display:block;margin-bottom:10px">${esc(c.frase)}</span>`:''}
       <b style="color:var(--texto)">${esc(c.telefone||'—')}</b><br>
       ${esc(c.email||'—')}<br>
       ${esc(c.endereco||'—')}<br>${esc(c.bairro||'')}<br>
@@ -1005,27 +1035,666 @@ function ligarContato(){
   botoes.forEach(b=>b&&(b.onclick=salvar));
 }
 
+/* ---------- tela: avisos e novidades ----------
+   Bloco "avisos" da tabela conteudo. O formato de cada item e a regra de
+   "no ar / agendado / encerrado / pausado" estão em dados/padroes.js, que
+   o site também usa — os dois nunca discordam sobre o que está no ar. */
+const avisosSalvos=()=>{const l=bloco('avisos',AVISOS_PADRAO).itens;return Array.isArray(l)?l:[];};
+const gravarAvisos=(itens,botoes,msg)=>
+  salvarBloco('avisos',{...bloco('avisos',AVISOS_PADRAO),itens},botoes,msg);
+
+function contarAvisos(){
+  const n=avisosSalvos().filter(a=>situacaoDoAviso(a)==='no-ar').length;
+  const el=document.getElementById('contaAvisos'); if(el) el.textContent=n||'';
+}
+
+/* "2026-10-15" → "15/10/2026" sem passar por Date: new Date("2026-10-15")
+   é meia-noite em UTC, que em Campo Grande ainda é dia 14 */
+const diaBR=d=>d?String(d).slice(0,10).split('-').reverse().join('/'):'';
+const periodoAviso=a=>a.inicio&&a.fim?`${diaBR(a.inicio)} a ${diaBR(a.fim)}`
+  :a.inicio?`a partir de ${diaBR(a.inicio)}`:a.fim?`até ${diaBR(a.fim)}`:'sem data para sair';
+const SITUACOES={'no-ar':['No ar','publicado'],agendado:['Agendado','ativo'],
+  encerrado:['Encerrado','encerrado'],pausado:['Pausado','rascunho']};
+
+const linhaAviso=(a,i,n)=>{
+  const t=TIPOS_AVISO[a.tipo]||TIPOS_AVISO.novidade, [rotulo,classe]=SITUACOES[situacaoDoAviso(a)];
+  return `<tr data-i="${i}">
+  <td><div class="item">${a.imagem?`<img class="miniatura" src="${esc(a.imagem)}" alt="" style="object-fit:cover;padding:0">`
+    :`<span class="miniatura" style="background:${t.clara};display:grid;place-items:center"><span class="ponto-tipo" style="background:${t.cor};margin:0"></span></span>`}
+    <div><b>${esc(a.titulo)}</b><small><span class="ponto-tipo" style="background:${t.cor}"></span>${esc(t.rotulo)}</small></div></div></td>
+  <td style="font-family:var(--dado);font-size:.8rem;color:var(--texto-2)">${periodoAviso(a)}</td>
+  <td><span class="selo ${classe}">${rotulo}</span></td>
+  <td><div style="display:flex;gap:2px">
+    <button class="btn fantasma" data-mover="-1" type="button" ${i===0?'disabled':''} aria-label="Subir">↑</button>
+    <button class="btn fantasma" data-mover="1" type="button" ${i===n-1?'disabled':''} aria-label="Descer">↓</button></div></td>
+  <td class="acoes"><a class="btn fantasma" href="#/aviso/${encodeURIComponent(a.id)}">Editar</a></td></tr>`;
+};
+
+/* a ordem da lista é a ordem no site: mexeu, já grava */
+function ligarAvisos(){
+  const corpo=app.querySelector('#corpoAvisos'); if(!corpo) return;
+  corpo.addEventListener('click',async e=>{
+    const b=e.target.closest('[data-mover]'); if(!b) return;
+    const lista=avisosSalvos().slice();
+    const i=Number(b.closest('[data-i]').dataset.i), j=i+Number(b.dataset.mover);
+    if(j<0||j>=lista.length) return;
+    [lista[i],lista[j]]=[lista[j],lista[i]];
+    corpo.querySelectorAll('button').forEach(x=>x.disabled=true);
+    await gravarAvisos(lista,[],'Ordem salva. O site já mostra assim.');
+    render();
+  });
+}
+
+function previaAviso(a){
+  const t=TIPOS_AVISO[a.tipo]||TIPOS_AVISO.novidade;
+  return `<div class="aviso-previa" style="background:${t.clara};box-shadow:inset 6px 0 0 ${t.cor}">
+    ${a.imagem?`<img src="${esc(a.imagem)}" alt="">`:''}
+    <div style="min-width:0"><p class="aviso-previa-tipo" style="color:${t.texto}">${esc(t.rotulo)}</p>
+      <b>${esc(a.titulo||'O título aparece aqui')}</b>
+      ${a.texto?`<p>${esc(a.texto)}</p>`:''}
+      ${a.link?`<span class="aviso-previa-botao" style="background:${t.texto}">${esc(a.botao||'Saiba mais')} →</span>`:''}
+    </div></div>`;
+}
+
+function explicarSituacao(a){
+  const s=situacaoDoAviso(a);
+  if(s==='no-ar') return `<b>No ar ao salvar</b>${a.fim?`Sai do site sozinho depois de ${diaBR(a.fim)}.`:'Fica no site até você pausar ou remover.'}`;
+  if(s==='agendado') return `<b>Agendado</b>Entra no site sozinho em ${diaBR(a.inicio)}${a.fim?` e sai depois de ${diaBR(a.fim)}`:''}.`;
+  if(s==='encerrado') return `<b>Período encerrado</b>A data final já passou: salvo assim, ele não aparece no site.`;
+  return `<b>Pausado</b>Fica guardado aqui, mas não aparece no site.`;
+}
+
+/* para onde o botão leva: página do site, um projeto ou um endereço de fora */
+function destinosAviso(link){
+  link=link||'';
+  const paginasSite=[['#/quem-somos','Quem somos'],['#/projetos','Projetos'],['#/contato','Contato'],['#/cursos','Cursos']];
+  const projetos=PROJETOS.filter(p=>p.publicado).map(p=>['#/projeto/'+p.id,p.titulo]);
+  const externo=/^https?:/i.test(link);
+  /* projeto que deixou de ser publicado continua na lista, para não sumir calado */
+  const conhecido=!link||externo||[...paginasSite,...projetos].some(([v])=>v===link);
+  const op=([v,r])=>`<option value="${esc(v)}" ${v===link?'selected':''}>${esc(r)}</option>`;
+  return `<option value="">Sem botão</option>
+    <optgroup label="Página do site">${paginasSite.map(op).join('')}</optgroup>
+    ${projetos.length?`<optgroup label="Projeto">${projetos.map(op).join('')}</optgroup>`:''}
+    ${conhecido?'':op([link,'Endereço salvo: '+link])}
+    <option value="externo" ${externo?'selected':''}>Outro endereço (fora do site)…</option>`;
+}
+
+function formAviso(id){
+  const novo=id==='novo';
+  const a=novo?{tipo:'novidade',botao:'Saiba mais',link:''}:avisosSalvos().find(x=>x.id===id);
+  if(!a) return `
+    <div class="topo"><div><a class="btn fantasma" href="#/avisos" style="padding-left:0">← Avisos e novidades</a>
+      <h1 style="margin-top:6px">Aviso não encontrado</h1></div></div>
+    <div class="painel"><div class="vazio"><b>Esse aviso não existe mais</b>Pode ter sido removido. Volte para a lista.</div></div>`;
+  edicao={id:novo?null:a.id,capa:a.imagem||'',sujo:false};
+  const externo=/^https?:/i.test(a.link||'');
+  return `
+  <div class="topo">
+    <div><a class="btn fantasma" href="#/avisos" style="padding-left:0">← Avisos e novidades</a>
+      <h1 style="margin-top:6px">${novo?'Novo aviso':esc(a.titulo)}</h1></div>
+    <button class="btn" id="salvarAviso" type="button">${novo?'Criar aviso':'Salvar alterações'}</button>
+  </div>
+  ${semTabela()?avisoTabela:''}
+  <div class="form" id="formAviso">
+    <div class="caixa">
+      <div class="campo"><label for="av-tipo">Tipo<small>Define a etiqueta e a cor do banner.</small></label>
+        <select id="av-tipo" data-av="tipo">${Object.entries(TIPOS_AVISO).map(([k,t])=>
+          `<option value="${k}" ${a.tipo===k?'selected':''}>${esc(t.rotulo)}</option>`).join('')}</select></div>
+      <div class="campo"><label for="av-titulo">Título<small>Curto e direto: é o que se lê primeiro.</small></label>
+        <input type="text" id="av-titulo" data-av="titulo" maxlength="90" value="${esc(a.titulo)}"
+          placeholder="Inscrições abertas para a oficina de crochê">
+        <div class="contador" data-contador-av="titulo"></div></div>
+      <div class="campo"><label for="av-texto">Texto<small>Opcional. Uma ou duas frases.</small></label>
+        <textarea id="av-texto" data-av="texto" maxlength="240" style="min-height:90px"
+          placeholder="As aulas começam em novembro, às terças, na sede. Vagas limitadas.">${esc(a.texto)}</textarea>
+        <div class="contador" data-contador-av="texto"></div></div>
+      <div class="dois">
+        <div class="campo"><label for="av-destino">O botão leva para</label>
+          <select id="av-destino" data-av="destino">${destinosAviso(a.link)}</select></div>
+        <div class="campo" id="campoBotao"><label for="av-botao">Texto do botão</label>
+          <input type="text" id="av-botao" data-av="botao" maxlength="30" value="${esc(a.botao||'Saiba mais')}"></div>
+      </div>
+      <div class="campo" id="campoUrl" ${externo?'':'hidden'}><label for="av-url">Endereço<small>Completo, começando com https://</small></label>
+        <input type="url" id="av-url" data-av="url" value="${externo?esc(a.link):''}" placeholder="https://"></div>
+      <div class="campo" style="margin-bottom:0"><label>Imagem<small>Opcional. Aparece pequena, ao lado do texto, e fica guardada em Fotos e arquivos.</small></label>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <img id="av-img" class="carrossel-foto" style="width:72px;height:72px" alt="" hidden>
+          <input type="file" id="av-arquivo" accept="image/png,image/jpeg,image/webp" hidden>
+          <button class="btn linha" id="av-escolher" type="button">Escolher imagem</button>
+          <button class="btn fantasma" id="av-tirar" type="button" hidden>Tirar imagem</button>
+        </div></div>
+      <div class="rodape-form">
+        ${novo?'':'<button class="btn fantasma" id="removerAviso" type="button" style="margin-right:auto;color:#B00020">Remover aviso</button>'}
+        <button class="btn" id="salvarAviso2" type="button">${novo?'Criar aviso':'Salvar alterações'}</button></div>
+    </div>
+    <div>
+      <div class="caixa" style="margin-bottom:16px"><h2>Como vai ficar</h2><div id="previaAviso"></div></div>
+      <div class="caixa" style="margin-bottom:16px"><h2>Quando aparece</h2>
+        <div class="campo"><label for="av-inicio">A partir de<small>Em branco: aparece assim que salvar.</small></label>
+          <input type="date" id="av-inicio" data-av="inicio" value="${esc(a.inicio||'')}"></div>
+        <div class="campo"><label for="av-fim">Até<small>Último dia no site. Em branco: fica até você tirar.</small></label>
+          <input type="date" id="av-fim" data-av="fim" value="${esc(a.fim||'')}"></div>
+        <div class="campo" style="margin-bottom:0"><label for="av-situacao">Situação</label>
+          <select id="av-situacao" data-av="situacao">
+            <option value="ativo" ${a.pausado?'':'selected'}>Ativo — segue as datas acima</option>
+            <option value="pausado" ${a.pausado?'selected':''}>Pausado — fora do site</option></select></div>
+      </div>
+      <div class="dica" style="margin-top:0" id="situacaoAviso"></div>
+    </div>
+  </div>`;
+}
+
+function lerAviso(){
+  const g=n=>{const el=app.querySelector(`[data-av="${n}"]`);return el?el.value.trim():'';};
+  const destino=g('destino');
+  const link=destino==='externo'?g('url'):destino;
+  return {id:edicao.id||'',tipo:g('tipo'),titulo:g('titulo'),texto:g('texto'),
+    link,botao:link?(g('botao')||'Saiba mais'):'',imagem:edicao.capa||'',
+    inicio:g('inicio'),fim:g('fim'),pausado:g('situacao')==='pausado'};
+}
+
+/* devolve [mensagem, campo] do primeiro problema, ou null */
+function validarAviso(d,destino){
+  if(!d.titulo) return ['O título é obrigatório.','titulo'];
+  if(destino==='externo'&&!/^https?:\/\/[^\s.]+\.\S+/i.test(d.link))
+    return ['O endereço do botão precisa ser completo, começando com https://','url'];
+  if(d.inicio&&d.fim&&d.fim<d.inicio) return ['A data “até” é anterior à data “a partir de”.','fim'];
+  return null;
+}
+
+function ligarAviso(){
+  const caixa=app.querySelector('#formAviso');
+  const destino=app.querySelector('[data-av="destino"]');
+  const pintar=()=>{
+    const d=lerAviso();
+    app.querySelector('#campoUrl').hidden=destino.value!=='externo';
+    app.querySelector('#campoBotao').hidden=!destino.value;
+    app.querySelector('#previaAviso').innerHTML=previaAviso(d);
+    app.querySelector('#situacaoAviso').innerHTML=explicarSituacao(d);
+    app.querySelectorAll('[data-contador-av]').forEach(c=>{
+      const el=app.querySelector(`[data-av="${c.dataset.contadorAv}"]`);
+      c.textContent=`${el.value.length} / ${el.maxLength}`;
+      c.classList.toggle('estourou',el.value.length>=el.maxLength);
+    });
+  };
+  const mexeu=()=>{edicao.sujo=true;pintar();};
+  caixa.addEventListener('input',mexeu);
+  caixa.addEventListener('change',mexeu);   /* datas e seletores */
+
+  const arquivo=app.querySelector('#av-arquivo'), escolher=app.querySelector('#av-escolher'),
+        tirar=app.querySelector('#av-tirar'), img=app.querySelector('#av-img');
+  const mostrarImagem=()=>{
+    if(edicao.capa) img.src=edicao.capa; else img.removeAttribute('src');
+    img.hidden=tirar.hidden=!edicao.capa;
+    escolher.textContent=edicao.capa?'Trocar imagem':'Escolher imagem';
+    pintar();
+  };
+  escolher.onclick=()=>arquivo.click();
+  tirar.onclick=()=>{edicao.capa='';edicao.sujo=true;mostrarImagem();};
+  arquivo.onchange=async()=>{
+    const f=arquivo.files[0]; arquivo.value=''; if(!f) return;
+    escolher.disabled=true; escolher.textContent='Enviando…';
+    try{
+      edicao.capa=await subirFoto(f,600);   /* aparece com menos de 100px: 600 sobra */
+      edicao.sujo=true;
+      recado('Imagem enviada. Salve o aviso para valer.');
+    }catch(e){recado(e.message,true);}
+    escolher.disabled=false; mostrarImagem();
+  };
+  mostrarImagem();
+
+  const botoes=[app.querySelector('#salvarAviso'),app.querySelector('#salvarAviso2')];
+  const salvar=async()=>{
+    const d=lerAviso(), problema=validarAviso(d,destino.value);
+    if(problema){
+      recado(problema[0],true);
+      const el=app.querySelector(`[data-av="${problema[1]}"]`); if(el) el.focus();
+      return;
+    }
+    if(!d.id) d.id='av-'+Date.now().toString(36);
+    const lista=avisosSalvos().slice(), i=lista.findIndex(x=>x.id===d.id);
+    if(i>=0) lista[i]=d; else lista.unshift(d);   /* aviso novo entra no topo */
+    const s=situacaoDoAviso(d);
+    const msg=s==='no-ar'?'Aviso publicado no site.'
+      :s==='agendado'?`Aviso agendado: entra no site em ${diaBR(d.inicio)}.`
+      :s==='pausado'?'Aviso salvo e pausado: não aparece no site.'
+      :'Aviso salvo, mas o período já terminou: não aparece no site.';
+    if(await gravarAvisos(lista,botoes,msg)){contarAvisos();location.hash='#/avisos';}
+  };
+  botoes.forEach(b=>b.onclick=salvar);
+
+  const remover=app.querySelector('#removerAviso');
+  if(remover) remover.onclick=async()=>{
+    if(!confirm('Remover este aviso? Ele sai do site e não dá para desfazer.')) return;
+    const lista=avisosSalvos().filter(x=>x.id!==edicao.id);
+    if(await gravarAvisos(lista,[remover,...botoes],'Aviso removido.')){contarAvisos();location.hash='#/avisos';}
+  };
+}
+
+/* ---------- tela: textos de uma página ----------
+   O formulário sai da descrição da página em dados/padroes.js: cada campo
+   de lá vira um campo aqui, e o site lê o mesmo bloco "pagina:<id>". */
+const linhaAtividade=a=>`<div class="repetidor" data-atividade>
+  <input type="text" data-a="icone" value="${esc(a.icone)}" aria-label="Ícone (emoji)" placeholder="🙂"
+    style="flex:0 0 40px;text-align:center;font-size:1.2rem">
+  <div class="atividade-textos">
+    <input type="text" data-a="nome" value="${esc(a.nome)}" placeholder="Nome da atividade" aria-label="Nome da atividade" style="font-weight:500">
+    <input type="text" data-a="texto" value="${esc(a.texto)}" placeholder="Uma frase sobre ela" aria-label="Descrição da atividade"
+      style="font-size:.88rem;color:var(--texto-2)">
+  </div>
+  <button class="btn fantasma" data-remover type="button" aria-label="Remover atividade">✕</button></div>`;
+
+function campoPagina(c,v){
+  const id='p-'+c.k;
+  const rotulo=`${esc(c.rotulo)}${c.dica?`<small>${esc(c.dica)}</small>`:''}`;
+  if(c.tipo==='atividades') return `<div class="campo"><label>${rotulo}</label>
+    <div data-p="${c.k}">${(Array.isArray(v)?v:[]).map(linhaAtividade).join('')}</div>
+    <button class="btn linha" data-mais="${c.k}" type="button" style="margin-top:4px">+ Adicionar atividade</button></div>`;
+  if(c.tipo==='titulo'||c.tipo==='linha') return `<div class="campo"><label for="${id}">${rotulo}</label>
+    <input type="text" id="${id}" data-p="${c.k}" value="${esc(v)}"></div>`;
+  const texto=c.tipo==='lista'?(Array.isArray(v)?v:[]).join('\n'):String(v??'');
+  const altura=c.tipo==='paragrafos'?170:c.tipo==='lista'?Math.min(300,48+texto.split('\n').length*25):96;
+  return `<div class="campo"><label for="${id}">${rotulo}</label>
+    <textarea id="${id}" data-p="${c.k}" style="min-height:${altura}px">${esc(texto)}</textarea></div>`;
+}
+
+function formPagina(id,valores){
+  const pg=PAGINAS.find(p=>p.id===id);
+  if(!pg) return `
+    <div class="topo"><div><a class="btn fantasma" href="#/paginas" style="padding-left:0">← Páginas</a>
+      <h1 style="margin-top:6px">Página não encontrada</h1></div></div>
+    <div class="painel"><div class="vazio"><b>Esse endereço não existe</b>Volte para a lista de páginas.</div></div>`;
+  const t=valores||bloco('pagina:'+id,TEXTOS_PADRAO[id]);
+  return `
+  <div class="topo">
+    <div><a class="btn fantasma" href="#/paginas" style="padding-left:0">← Páginas</a>
+      <h1 style="margin-top:6px">${esc(pg.nome)}</h1>
+      <p style="font-family:var(--dado);font-size:.78rem">Endereço no site: /#${esc(pg.rota)}</p></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn linha" id="verPagina" type="button">Ver no site</button>
+      <button class="btn" id="salvarPagina" type="button">Salvar e publicar</button>
+    </div>
+  </div>
+  ${semTabela()?avisoTabela:''}
+  <div class="form" id="formPagina" data-pagina="${esc(pg.id)}">
+    <div>
+      ${pg.secoes.map((s,i)=>`<div class="caixa" id="secao-${i}" style="margin-bottom:16px"><h2>${esc(s.titulo)}</h2>
+        ${s.campos.map(c=>campoPagina(c,t[c.k])).join('')}</div>`).join('')}
+      <div style="display:flex;justify-content:flex-end;margin-top:22px">
+        <button class="btn" id="salvarPagina2" type="button">Salvar e publicar</button></div>
+    </div>
+    <div>
+      ${pg.secoes.length>2?`<div class="caixa" style="margin-bottom:16px"><h2>Nesta página</h2>
+        ${pg.secoes.map((s,i)=>`<button class="btn fantasma indice" data-ir="${i}" type="button">${esc(s.titulo)}</button>`).join('')}</div>`:''}
+      <div class="dica" style="margin-top:0"><b>Campo vazio some do site</b>Se você apagar uma chamada, um texto ou uma lista, aquele pedaço simplesmente não aparece na página. Só os títulos são obrigatórios.</div>
+      <button class="btn fantasma" id="restaurarPagina" type="button" style="margin-top:12px">Voltar ao texto original</button>
+    </div>
+  </div>`;
+}
+
+function lerPagina(pg){
+  const d={};
+  pg.secoes.flatMap(s=>s.campos).forEach(c=>{
+    const el=app.querySelector(`[data-p="${c.k}"]`); if(!el) return;
+    if(c.tipo==='atividades') d[c.k]=[...el.querySelectorAll('[data-atividade]')].map(l=>{
+        const g=n=>l.querySelector(`[data-a="${n}"]`).value.trim();
+        return {icone:g('icone'),nome:g('nome'),texto:g('texto')};
+      }).filter(a=>a.icone||a.nome||a.texto);
+    else if(c.tipo==='lista') d[c.k]=el.value.split('\n').map(s=>s.trim()).filter(Boolean);
+    /* linha em branco entre parágrafos deixa o texto legível no próprio campo */
+    else if(c.tipo==='paragrafos') d[c.k]=el.value.split(/\n+/).map(s=>s.trim()).filter(Boolean).join('\n\n');
+    else d[c.k]=el.value.trim();
+  });
+  return d;
+}
+
+/* devolve [mensagem, campo] do primeiro problema, ou null */
+function validarPagina(pg,d){
+  for(const s of pg.secoes) for(const c of s.campos){
+    if(c.tipo==='titulo'&&!d[c.k])
+      return [`Preencha “${c.rotulo}” em ${s.titulo}: é obrigatório.`,app.querySelector(`[data-p="${c.k}"]`)];
+    if(c.tipo==='atividades'){
+      const sem=(d[c.k]||[]).findIndex(a=>!a.nome);
+      if(sem>=0) return [`Uma atividade em ${s.titulo} está sem nome.`,
+        app.querySelectorAll(`[data-p="${c.k}"] [data-a="nome"]`)[sem]];
+    }
+  }
+  return null;
+}
+
+function ligarPagina(){
+  const caixa=app.querySelector('#formPagina');
+  const pg=PAGINAS.find(p=>p.id===caixa.dataset.pagina);
+  /* a caixa de texto cresce com o conteúdo: texto longo não fica escondido */
+  const ajustar=t=>{t.style.height='auto';t.style.height=(t.scrollHeight+3)+'px';};
+  caixa.querySelectorAll('textarea').forEach(ajustar);
+  caixa.addEventListener('input',e=>{
+    edicao.sujo=true;
+    if(e.target.matches('textarea')) ajustar(e.target);
+  });
+
+  caixa.addEventListener('click',e=>{
+    const ir=e.target.closest('[data-ir]');
+    if(ir) return app.querySelector('#secao-'+ir.dataset.ir).scrollIntoView({behavior:'smooth',block:'start'});
+    const mais=e.target.closest('[data-mais]');
+    if(mais){
+      const lista=caixa.querySelector(`[data-p="${mais.dataset.mais}"]`);
+      lista.insertAdjacentHTML('beforeend',linhaAtividade({}));
+      lista.lastElementChild.querySelector('[data-a="nome"]').focus();
+      edicao.sujo=true; return;
+    }
+    const rem=e.target.closest('[data-atividade] [data-remover]');
+    if(rem){rem.closest('[data-atividade]').remove();edicao.sujo=true;}
+  });
+
+  const botoes=[app.querySelector('#salvarPagina'),app.querySelector('#salvarPagina2')];
+  const salvar=()=>{
+    const d=lerPagina(pg);
+    const problema=validarPagina(pg,d);
+    if(problema){
+      recado(problema[0],true);
+      if(problema[1]){problema[1].focus();problema[1].scrollIntoView({block:'center'});}
+      return;
+    }
+    salvarBloco('pagina:'+pg.id,d,botoes,`${pg.nome}: publicada no site.`);
+  };
+  botoes.forEach(b=>b.onclick=salvar);
+
+  app.querySelector('#verPagina').onclick=()=>{
+    if(edicao.sujo) recado('O site mostra a última versão salva. Salve para ver as mudanças.');
+    window.open('index.html#'+pg.rota,'_blank','noopener');
+  };
+  app.querySelector('#restaurarPagina').onclick=()=>{
+    if(!confirm('Trocar todos os campos pelo texto original? Nada muda no site até você salvar.')) return;
+    app.innerHTML=formPagina(pg.id,TEXTOS_PADRAO[pg.id]);
+    ligarPagina();
+    edicao.sujo=true;
+    recado('Texto original de volta nos campos. Salve para publicar.');
+  };
+}
+
+/* ---------- tela: fotos e arquivos ----------
+   As fotos ficam no bucket "fotos" do Supabase; as capas de projeto, no
+   bucket "capas". O carrossel é o bloco "fotos" da tabela conteudo: uma
+   lista ordenada de { src, alt } que a página inicial percorre. */
+const BALDE_FOTOS='fotos';
+const MAX_FOTO=5*1024*1024;
+const SQL_FOTOS='Rode dados/fotos-e-acesso.sql no SQL Editor do Supabase e recarregue o painel.';
+let midia={carrossel:[],fotos:[],capas:[]};
+
+const tamanho=b=>!b?'':b<1024*1024?Math.max(1,Math.round(b/1024))+' KB':(b/1024/1024).toFixed(1).replace('.',',')+' MB';
+const noCarrossel=url=>midia.carrossel.some(f=>f.src===url);
+const noCarrosselPublicado=url=>(bloco('fotos',FOTOS_PADRAO).carrossel||[]).some(f=>f.src===url);
+/* erro de permissão ou de bucket inexistente = o SQL das fotos não foi rodado */
+const faltaSqlFotos=e=>/bucket not found|row-level security|violates|not authorized|unauthorized/i.test(String(e&&(e.message||e.error)||''));
+
+async function listarBalde(balde){
+  const {data,error}=await sb.storage.from(balde).list('',{limit:1000,sortBy:{column:'created_at',order:'desc'}});
+  if(error) throw error;
+  /* pastas vêm sem id; o marcador de pasta vazia não é foto */
+  return (data||[]).filter(o=>o.id&&o.name!=='.emptyFolderPlaceholder').map(o=>({
+    nome:o.name,url:sb.storage.from(balde).getPublicUrl(o.name).data.publicUrl,
+    bytes:(o.metadata&&o.metadata.size)||0}));
+}
+
+/* foto de celular chega com 4000px e vários MB, e a capa mostra uns 600px.
+   Reduz para 1600px no lado maior antes de enviar: o site abre mais rápido. */
+async function reduzirFoto(arquivo,max=1600){
+  let bmp;
+  try{bmp=await createImageBitmap(arquivo);}catch(e){return arquivo;}
+  const escala=Math.min(1,max/Math.max(bmp.width,bmp.height));
+  if(escala===1&&arquivo.size<=1.5*1024*1024){bmp.close&&bmp.close();return arquivo;}
+  const tela=document.createElement('canvas');
+  tela.width=Math.round(bmp.width*escala); tela.height=Math.round(bmp.height*escala);
+  const g=tela.getContext('2d');
+  g.fillStyle='#fff'; g.fillRect(0,0,tela.width,tela.height);   /* PNG transparente não vira fundo preto */
+  g.drawImage(bmp,0,0,tela.width,tela.height);
+  bmp.close&&bmp.close();
+  const blob=await new Promise(r=>tela.toBlob(r,'image/jpeg',.85));
+  return blob||arquivo;
+}
+
+const linhaCarrossel=(f,i,n)=>`<div class="repetidor" data-i="${i}">
+  <img class="carrossel-foto" src="${esc(f.src)}" alt="">
+  <input type="text" data-alt value="${esc(f.alt)}" placeholder="Descreva a foto" aria-label="Descrição da foto ${i+1}">
+  <button class="btn fantasma" data-mover="-1" type="button" ${i===0?'disabled':''} aria-label="Subir">↑</button>
+  <button class="btn fantasma" data-mover="1" type="button" ${i===n-1?'disabled':''} aria-label="Descer">↓</button>
+  <button class="btn fantasma" data-tirar type="button" aria-label="Tirar do carrossel">✕</button></div>`;
+
+function pintarCarrossel(){
+  const caixa=app.querySelector('#listaCarrossel'); if(!caixa) return;
+  const n=midia.carrossel.length;
+  caixa.innerHTML=n?midia.carrossel.map((f,i)=>linhaCarrossel(f,i,n)).join('')
+    :`<div class="vazio" style="padding:32px 12px"><b>Carrossel vazio</b>Escolha ao menos uma foto lá embaixo, em “Pôr no carrossel”.</div>`;
+}
+
+const figura=(f,acoes,legenda)=>`<figure>
+  <img src="${esc(f.url)}" alt="" loading="lazy">
+  <figcaption title="${esc(f.nome)}">${esc(legenda)}</figcaption>
+  <div class="figura-acoes">${acoes}</div></figure>`;
+
+function pintarGaleria(){
+  const fotos=app.querySelector('#galeriaFotos'), capas=app.querySelector('#galeriaCapas');
+  if(!fotos) return;
+  /* as fotos que vêm com o site (pasta imagens/) também podem voltar ao carrossel */
+  const doSite=FOTOS_PADRAO.carrossel.map(f=>({nome:f.src.split('/').pop(),url:f.src,doSite:true}));
+  const todas=[...midia.fotos,...doSite];
+  app.querySelector('#contaFotos').textContent=
+    midia.fotos.length===1?'1 enviada':`${midia.fotos.length} enviadas`;
+  fotos.innerHTML=`<div class="midia">${todas.map(f=>figura(f,
+    (noCarrossel(f.url)?'<span class="selo publicado">No carrossel</span>'
+      :`<button class="btn fantasma" data-por="${esc(f.url)}" type="button">Pôr no carrossel</button>`)+
+    (f.doSite?'':`<button class="btn fantasma" data-apagar="${esc(f.nome)}" data-balde="${BALDE_FOTOS}" type="button">Apagar</button>`),
+    f.doSite?'vem com o site':`${f.nome} · ${tamanho(f.bytes)}`)).join('')}</div>`;
+
+  capas.innerHTML=midia.capas.length?`<div class="midia">${midia.capas.map(f=>{
+    const dono=PROJETOS.find(p=>p.capa===f.url);
+    return figura(f,dono?`<span class="selo publicado" title="${esc(dono.titulo)}">Em uso</span>`
+      :`<span class="selo rascunho">Sem uso</span><button class="btn fantasma" data-apagar="${esc(f.nome)}" data-balde="capas" type="button">Apagar</button>`,
+      dono?`Capa de ${dono.nome||dono.titulo}`:`${f.nome} · ${tamanho(f.bytes)}`);
+  }).join('')}</div>`
+    :`<div class="vazio" style="padding:24px 12px"><b>Nenhuma capa enviada</b>As capas atuais dos projetos estão na pasta imagens/ do site.</div>`;
+}
+
+async function recarregarGaleria(){
+  const fotos=app.querySelector('#galeriaFotos');
+  try{
+    [midia.fotos,midia.capas]=await Promise.all([listarBalde(BALDE_FOTOS),listarBalde('capas')]);
+  }catch(e){
+    midia.fotos=[]; midia.capas=[];
+    if(fotos) recado('Não foi possível listar as fotos: '+e.message,true);
+  }
+  pintarGaleria();
+}
+
+/* reduz, sobe para o balde de fotos e devolve o endereço público.
+   Erro de envio vem marcado com "parar": os próximos arquivos falhariam igual. */
+async function subirFoto(f,max){
+  if(!/^image\/(png|jpeg|webp)$/.test(f.type)) throw new Error(`“${f.name}” não é PNG, JPG nem WebP.`);
+  const pronta=await reduzirFoto(f,max);
+  if(pronta.size>MAX_FOTO) throw new Error(`“${f.name}” passa de 5 MB mesmo reduzida.`);
+  const ext=pronta.type==='image/jpeg'?'jpg':pronta.type==='image/webp'?'webp':'png';
+  const nome=`${Date.now()}-${slug(f.name.replace(/\.[^.]+$/,''))||'foto'}.${ext}`;
+  /* o nome nunca se repete, então o navegador pode guardar a foto por um ano */
+  const {error}=await sb.storage.from(BALDE_FOTOS).upload(nome,pronta,
+    {cacheControl:'31536000',contentType:pronta.type});
+  if(error) throw Object.assign(new Error(faltaSqlFotos(error)
+    ?'O espaço das fotos ainda não existe no banco. '+SQL_FOTOS
+    :`Não foi possível enviar “${f.name}”: ${error.message}`),{parar:true});
+  return sb.storage.from(BALDE_FOTOS).getPublicUrl(nome).data.publicUrl;
+}
+
+async function enviarFotos(arquivos,botao){
+  botao.disabled=true;
+  let enviadas=0;
+  for(const [i,f] of arquivos.entries()){
+    botao.textContent=`Enviando ${i+1} de ${arquivos.length}…`;
+    try{await subirFoto(f);enviadas++;}
+    catch(e){recado(e.message,true);if(e.parar) break;}
+  }
+  botao.disabled=false; botao.textContent='+ Enviar fotos';
+  if(enviadas){
+    await recarregarGaleria();
+    recado(enviadas===1?'Foto enviada. Use “Pôr no carrossel” para levá-la ao site.'
+      :`${enviadas} fotos enviadas. Use “Pôr no carrossel” para levá-las ao site.`);
+  }
+}
+
+async function apagarArquivo(balde,nome){
+  const url=sb.storage.from(balde).getPublicUrl(nome).data.publicUrl;
+  if(noCarrossel(url)||noCarrosselPublicado(url))
+    return recado('Esta foto está no carrossel. Tire-a de lá e salve antes de apagar.',true);
+  const dono=PROJETOS.find(p=>p.capa===url);
+  if(dono) return recado(`Esta imagem é a capa de “${dono.titulo}”. Troque a capa do projeto antes.`,true);
+  const aviso=avisosSalvos().find(a=>a.imagem===url);
+  if(aviso) return recado(`Esta foto é a imagem do aviso “${aviso.titulo}”. Troque ou tire a imagem do aviso antes.`,true);
+  if(!confirm(`Apagar “${nome}” de vez? Não dá para desfazer.`)) return;
+  const {data,error}=await sb.storage.from(balde).remove([nome]);
+  if(error) return recado('Não foi possível apagar: '+error.message,true);
+  /* sem permissão, o Supabase não dá erro: só não apaga nada */
+  if(!data||!data.length) return recado('O banco não deixou apagar. '+SQL_FOTOS,true);
+  recado('Arquivo apagado.');
+  recarregarGaleria();
+}
+
+function ligarMidia(){
+  midia.carrossel=(bloco('fotos',FOTOS_PADRAO).carrossel||[]).map(f=>({src:f.src,alt:f.alt||''}));
+  pintarCarrossel();
+  recarregarGaleria();
+
+  const lista=app.querySelector('#listaCarrossel');
+  lista.addEventListener('input',e=>{
+    const l=e.target.closest('[data-i]');
+    if(l&&e.target.matches('[data-alt]')){midia.carrossel[l.dataset.i].alt=e.target.value;edicao.sujo=true;}
+  });
+  lista.addEventListener('click',e=>{
+    const l=e.target.closest('[data-i]'); if(!l) return;
+    const i=Number(l.dataset.i), mover=e.target.closest('[data-mover]');
+    if(mover){
+      const j=i+Number(mover.dataset.mover);
+      if(j<0||j>=midia.carrossel.length) return;
+      [midia.carrossel[i],midia.carrossel[j]]=[midia.carrossel[j],midia.carrossel[i]];
+    }else if(e.target.closest('[data-tirar]')) midia.carrossel.splice(i,1);
+    else return;
+    edicao.sujo=true; pintarCarrossel(); pintarGaleria();
+  });
+
+  /* ouvintes nos painéis, não no app: somem junto com a tela */
+  const cliqueGaleria=e=>{
+    const por=e.target.closest('[data-por]');
+    if(por){
+      midia.carrossel.push({src:por.dataset.por,alt:''});
+      edicao.sujo=true; pintarCarrossel(); pintarGaleria();
+      const nova=app.querySelector('#listaCarrossel').lastElementChild.querySelector('[data-alt]');
+      nova.scrollIntoView({block:'center',behavior:'smooth'}); nova.focus({preventScroll:true});
+      return recado('Foto no carrossel. Escreva a descrição e salve.');
+    }
+    const ap=e.target.closest('[data-apagar]');
+    if(ap) apagarArquivo(ap.dataset.balde,ap.dataset.apagar);
+  };
+  app.querySelector('#galeriaFotos').addEventListener('click',cliqueGaleria);
+  app.querySelector('#galeriaCapas').addEventListener('click',cliqueGaleria);
+
+  const arquivo=app.querySelector('#arquivoFotos'), botao=app.querySelector('#enviarFotos');
+  botao.onclick=()=>arquivo.click();
+  arquivo.onchange=async()=>{
+    const escolhidas=[...arquivo.files]; arquivo.value='';
+    if(escolhidas.length) await enviarFotos(escolhidas,botao);
+  };
+
+  const salvar=app.querySelector('#salvarCarrossel');
+  salvar.onclick=()=>{
+    if(!midia.carrossel.length) return recado('O carrossel precisa de ao menos uma foto.',true);
+    const sem=midia.carrossel.findIndex(f=>!f.alt.trim());
+    if(sem>=0){
+      app.querySelectorAll('#listaCarrossel [data-alt]')[sem].focus();
+      return recado(`Falta a descrição da foto ${sem+1}. Ela é lida para quem usa leitor de tela.`,true);
+    }
+    salvarBloco('fotos',{carrossel:midia.carrossel.map(f=>({src:f.src,alt:f.alt.trim()}))},
+      [salvar],'Carrossel publicado no site.');
+  };
+}
+
+/* ---------- tela: quem tem acesso ----------
+   Listar as contas exige ler auth.users, que o navegador não alcança. A
+   função equipe() de dados/fotos-e-acesso.sql faz essa leitura do lado do
+   banco e só responde para quem está logado. */
+async function ligarEquipe(){
+  const corpo=app.querySelector('#corpoEquipe');
+  const [{data:{session}},{data,error}]=await Promise.all([sb.auth.getSession(),sb.rpc('equipe')]);
+  const eu=session&&session.user&&session.user.email;
+  const dataHora=d=>{const x=d?new Date(d):null;
+    return x&&!isNaN(x)?x.toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'}):'nunca entrou';};
+  if(error){
+    const faltaSql=/equipe|schema cache|PGRST202|42883/i.test(`${error.code} ${error.message}`);
+    corpo.innerHTML=`<tr><td colspan="3"><div class="vazio"><b>Não foi possível listar</b>${faltaSql
+      ?'A lista depende de uma função no banco. '+esc(SQL_FOTOS):esc(error.message)}</div></td></tr>`;
+  }else{
+    corpo.innerHTML=(data||[]).map(p=>`<tr>
+      <td><div class="item"><div class="avatar" style="background:var(--mata-claro);color:var(--folha);font-size:.8rem">${esc(String(p.email||'?').slice(0,2).toUpperCase())}</div>
+        <div><b>${esc(p.email)}</b>${p.email===eu?'<small>você</small>':''}</div></div></td>
+      <td style="font-family:var(--dado);font-size:.8rem;color:var(--texto-2)">${dataBR(p.criado_em)}</td>
+      <td style="font-family:var(--dado);font-size:.8rem;color:var(--texto-2)">${dataHora(p.ultimo_acesso)}</td></tr>`).join('');
+  }
+
+  const botao=app.querySelector('#trocarSenha'); if(!botao) return;
+  botao.onclick=async()=>{
+    const a=app.querySelector('#novaSenha'), b=app.querySelector('#novaSenha2');
+    if(a.value.length<8) return recado('A senha precisa de no mínimo 8 caracteres.',true);
+    if(a.value!==b.value) return recado('As duas senhas não são iguais.',true);
+    botao.disabled=true;
+    const {error}=await sb.auth.updateUser({password:a.value});
+    botao.disabled=false;
+    if(error) return recado(/different|same/i.test(error.message)
+      ?'A nova senha é igual à atual. Escolha outra.':'Não foi possível trocar a senha: '+error.message,true);
+    a.value=''; b.value='';
+    recado('Senha trocada. Use a nova no próximo acesso.');
+  };
+}
+
 /* ---------- roteador ---------- */
+let rotaAtual=location.hash||'#/';
 function render(){
   const r=location.hash.replace(/^#/,'')||'/';
+  rotaAtual=location.hash||'#/';
   if(r.startsWith('/projeto/')){
     app.innerHTML=formProjeto(decodeURIComponent(r.split('/')[2]||''));
     if(app.querySelector('#resultados')) ligarForm();
+  }else if(r.startsWith('/aviso/')){
+    app.innerHTML=formAviso(decodeURIComponent(r.split('/')[2]||''));
+    if(app.querySelector('#formAviso')) ligarAviso();
+  }else if(r.startsWith('/pagina/')){
+    edicao={id:null,capa:'',sujo:false};
+    app.innerHTML=formPagina(decodeURIComponent(r.split('/')[2]||''));
+    if(app.querySelector('#formPagina')) ligarPagina();
   }else{
     edicao={id:null,capa:'',sujo:false};
     app.innerHTML=(paginas[r]||paginas['/'])();
     if(r==='/projetos') ligarLista();
+    if(r==='/avisos')   ligarAvisos();
     if(r==='/numeros')  ligarNumeros();
     if(r==='/contato')  ligarContato();
+    if(r==='/midia')    ligarMidia();
+    if(r==='/equipe')   ligarEquipe();
   }
   document.querySelectorAll('aside nav a').forEach(a=>{
     const h=a.getAttribute('href').slice(1);
-    a.classList.toggle('ativo', h===r || (r.startsWith('/projeto/')&&h==='/projetos'));
+    a.classList.toggle('ativo', h===r || (r.startsWith('/projeto/')&&h==='/projetos')
+      || (r.startsWith('/pagina/')&&h==='/paginas') || (r.startsWith('/aviso/')&&h==='/avisos'));
   });
   window.scrollTo(0,0);
 }
 
-window.addEventListener('hashchange',render);
+/* trocar de tela pelo menu descartava o que estava sendo digitado sem avisar */
+window.addEventListener('hashchange',()=>{
+  if(edicao.sujo&&!confirm('Há alterações não salvas nesta tela. Sair mesmo assim?')){
+    history.replaceState(null,'',rotaAtual);   /* volta o endereço sem redesenhar */
+    return;
+  }
+  edicao.sujo=false;
+  render();
+});
 window.addEventListener('beforeunload',e=>{if(edicao.sujo){e.preventDefault();e.returnValue='';}});
 iniciar();
 </script>

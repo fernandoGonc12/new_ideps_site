@@ -8,8 +8,15 @@
 --
 -- Uma linha por bloco do site. O conteúdo vai em jsonb, então uma tela nova
 -- do painel não precisa de uma tabela nova — basta um id novo aqui.
---   'numeros' → a faixa de números da página inicial
---   'contato' → contato, redes e rodapé
+--   'numeros'       → a faixa de números da página inicial
+--   'contato'       → contato, redes e rodapé
+--   'fotos'         → o carrossel da capa
+--   'avisos'        → os banners de avisos e novidades no alto da página inicial
+--   'pagina:<id>'   → os textos de uma página (inicio, quem-somos, projetos,
+--                     contato, cursos). Os campos de cada uma estão descritos
+--                     em dados/padroes.js.
+-- Só 'numeros' e 'contato' nascem aqui; os outros são criados na primeira
+-- vez que alguém salva a tela no painel. Até lá o site usa os padrões.
 -- ============================================================
 
 create table if not exists public.conteudo (

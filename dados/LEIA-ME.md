@@ -12,11 +12,15 @@ mais rápido.
 ## 2. Criar as tabelas
 
 No painel do Supabase, abra **SQL Editor**, cole o conteúdo inteiro de
-[`supabase.sql`](supabase.sql) e rode. Depois repita com
-[`conteudo.sql`](conteudo.sql), que cria os blocos editáveis (números do topo,
-contato e rodapé). Isso cria a tabela de projetos, as regras
-de acesso, o espaço para as imagens de capa e já carrega os 11 projetos que
-estavam no site.
+[`supabase.sql`](supabase.sql) e rode. Depois repita, nesta ordem, com:
+
+1. [`conteudo.sql`](conteudo.sql) — os blocos editáveis: números do topo,
+   contato, textos das páginas e carrossel.
+2. [`fotos-e-acesso.sql`](fotos-e-acesso.sql) — o espaço das fotos e a lista
+   de quem tem acesso ao painel.
+
+Isso cria a tabela de projetos, as regras de acesso, os espaços para imagens
+e já carrega os 11 projetos que estavam no site.
 
 Pode rodar de novo depois sem medo: nada é apagado nem duplicado.
 
@@ -64,11 +68,16 @@ python -m http.server 8000
 
 E abra <http://localhost:8000>. No ar, pelo GitHub Pages, funciona normalmente.
 
-## O que ainda não salva
+## O que o painel grava
 
-Gravam no banco: **Projetos**, **Números do topo** e **Contato e rodapé**.
-Páginas, Fotos e arquivos e Quem tem acesso continuam como
-demonstração — cada uma dessas telas avisa isso no topo.
+Todas as telas gravam no banco e o site lê de lá: **Projetos**, **Avisos e
+novidades** (os banners no alto da página inicial), **Páginas**,
+**Números do topo**, **Fotos e arquivos** (o carrossel da capa), **Contato e
+rodapé** e **Quem tem acesso** (a lista e a troca de senha).
+
+Criar e remover contas do painel continua sendo no painel do Supabase
+(*Authentication → Users*): isso exige a chave `service_role`, que não pode ir
+para o navegador. A tela Quem tem acesso tem o passo a passo e o link direto.
 
 O andamento fica em [`../ESTADO.md`](../ESTADO.md).
 
@@ -77,5 +86,8 @@ O andamento fica em [`../ESTADO.md`](../ESTADO.md).
 | Arquivo | Para que serve |
 |---|---|
 | `supabase.sql` | Cria a tabela de projetos e o espaço das capas. Rodar uma vez. |
-| `conteudo.sql` | Cria a tabela dos blocos editáveis: números do topo e contato. Rodar uma vez, depois de `supabase.sql`. |
-| `projetos.json` | Cópia dos projetos que fica no repositório. O site recorre a ela se o banco estiver fora do ar, para a página inicial nunca ficar vazia. |
+| `conteudo.sql` | Cria a tabela dos blocos editáveis (números, contato, páginas, carrossel). Rodar uma vez, depois de `supabase.sql`. |
+| `fotos-e-acesso.sql` | Cria o espaço `fotos`, deixa o painel listar e apagar capas e cria a função `equipe()`. Rodar uma vez, depois de `conteudo.sql`. |
+| `corrige-participar-e-preciso.sql` | Correção avulsa: leva ao banco os dados reais desse projeto, que só tinham ido para `projetos.json`. Só altera se o rascunho antigo ainda estiver lá. |
+| `padroes.js` | Os textos e valores padrão do site, os tipos e cores dos avisos, lidos pelo `index.html` e pelo `admin.html`. Valem até alguém editar no painel e também quando o banco não responde. Descreve os campos de cada página: um campo novo aqui aparece sozinho no painel. |
+| `projetos.json` | Cópia dos projetos que fica no repositório. O site recorre a ela se o banco estiver fora do ar, para a página inicial nunca ficar vazia. **Não edite projetos aqui:** o banco vence. Edite no painel. |

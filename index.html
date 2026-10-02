@@ -113,6 +113,23 @@ nav a.ativo{color:#fff;background:var(--azul)}
 @media (max-width:520px){.hero-seta{width:36px;height:36px;font-size:1.2rem}
   .hero-seta.ant{left:10px}.hero-seta.prox{right:10px}}
 
+/* ---------- avisos e novidades: banners no alto da página inicial ---------- */
+.avisos{padding:28px 0 0}
+.avisos+.hero{padding-top:52px}
+.avisos-grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+.aviso-card{display:flex;align-items:center;gap:20px;background:var(--cor-clara);border-radius:20px;
+  padding:20px 24px 20px 30px;box-shadow:inset 6px 0 0 var(--cor)}
+.aviso-card img{width:92px;height:92px;border-radius:14px;object-fit:cover;flex-shrink:0;background:#fff}
+.aviso-corpo{flex:1;min-width:0}
+.aviso-tipo{font-family:var(--dado);font-size:.7rem;font-weight:500;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--cor-texto);margin-bottom:5px}
+.aviso-card h3{font-size:1.2rem}
+.aviso-texto{font-size:.96rem;color:var(--texto-2);line-height:1.5;margin-top:6px;max-width:70ch}
+.aviso-acao{display:inline-block;flex-shrink:0;background:var(--cor-texto);color:#fff;text-decoration:none;
+  font-weight:700;font-size:.9rem;padding:10px 18px;border-radius:99px;white-space:nowrap;transition:filter .15s}
+.aviso-acao:hover{filter:brightness(1.15)}
+.aviso-corpo .aviso-acao{margin-top:14px}
+
 .numeros{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--linha);
   border-top:1px solid var(--linha);border-bottom:1px solid var(--linha);margin-top:76px}
 .numeros div{background:var(--papel);padding:30px 24px}
@@ -296,6 +313,9 @@ footer .logo-rodape{height:82px;margin-bottom:20px}
   .ferramentas .btn{display:none}
 }
 @media (max-width:640px){
+  .avisos-grade{grid-template-columns:1fr}
+  .aviso-card{flex-wrap:wrap;gap:14px;padding:18px 18px 18px 24px}
+  .aviso-card img{width:64px;height:64px;border-radius:12px}
   .dimensoes{grid-template-columns:1fr}
   .dimensoes.detalhe .dimensao{padding:24px 20px}
   .grade.centrada>.cartao{flex-basis:100%}
@@ -337,7 +357,7 @@ footer .logo-rodape{height:82px;margin-bottom:20px}
     <div class="rodape-grid">
       <div>
         <img class="logo-rodape" src="ideps-logo.png" alt="IDEPS">
-        <p style="max-width:34ch;color:var(--texto-2)">Organização da Sociedade Civil em Campo Grande, MS. Desde 2017 construindo oportunidades e fortalecendo vidas.</p>
+        <p id="peFrase" style="max-width:34ch;color:var(--texto-2)">Organização da Sociedade Civil em Campo Grande, MS. Desde 2017 construindo oportunidades e fortalecendo vidas.</p>
       </div>
       <div>
         <h4>Navegar</h4>
@@ -365,15 +385,10 @@ footer .logo-rodape{height:82px;margin-bottom:20px}
   </div>
 </footer>
 
+<!-- números, contato, fotos e textos padrão — o mesmo arquivo que o painel lê -->
+<script src="dados/padroes.js?v=2"></script>
 <script>
 const IMG='imagens/';
-
-/* fotos do carrossel da página inicial — para adicionar, basta colocar o arquivo
-   em imagens/ e incluir mais uma linha aqui */
-const HERO_FOTOS=[
-  {src:IMG+'image13-1024x800.jpg',alt:'Participantes do IDEPS com seus certificados ao fim de uma formação'},
-  {src:IMG+'jovem-aluna-ouvindo-professora-de-ingles-1024x617.jpg',alt:'Aluna acompanhando uma aula na plataforma de cursos do IDEPS'}
-];
 const SEM_MOVIMENTO=window.matchMedia('(prefers-reduced-motion: reduce)');
 
 /* cada área de atuação tem uma cor da logo */
@@ -386,38 +401,13 @@ const EIXOS={
   'Juventude':{cor:'var(--vermelho)',clara:'#FDE6E6'}
 };
 
-/* textos institucionais — vêm do documento "IDEPS Institucional – quem somos" */
-/* as 14 atividades, agrupadas pelas quatro dimensões do cuidado integral que o
-   próprio documento descreve: "a psicologia oferece escuta; a nutrição, escolhas
-   conscientes; o movimento, disposição; a arte e a convivência, pertencimento" */
-const DIMENSOES=[
-  {titulo:'Psicologia e autocuidado',lema:'Escuta',icone:'🧠',
-   cor:'var(--magenta)',clara:'var(--magenta-claro)',texto:'var(--magenta-forte)',itens:[
-    ['🧠','Atendimento psicológico individual','Escuta, acolhimento e acompanhamento das demandas emocionais de cada participante.'],
-    ['💜','Apoio psicológico em grupo','Espaços de diálogo e troca onde vivências são compartilhadas e vínculos se fortalecem.'],
-    ['💆','Massagem terapêutica','Momentos de relaxamento e autocuidado, com atenção plena ao corpo.']]},
-  {titulo:'Nutrição e alimentação',lema:'Escolhas conscientes',icone:'🥗',
-   cor:'var(--verde)',clara:'var(--verde-claro)',texto:'var(--verde-esc)',itens:[
-    ['🥗','Atendimento nutricional individual','Acompanhamento personalizado para hábitos alimentares mais saudáveis e conscientes.'],
-    ['🍎','Apoio nutricional em grupo','Alimentação saudável, aproveitamento de alimentos e segurança nutricional em encontros coletivos.'],
-    ['👩‍🍳','Cursos e oficinas de culinária','Conhecimento, convivência e novas habilidades ao redor da mesa.'],
-    ['🥦','Segurança alimentar e nutricional','Projetos e parcerias que ampliam o acesso a alimentos e à educação alimentar.']]},
-  {titulo:'Movimento e bem-estar',lema:'Disposição',icone:'🧘',
-   cor:'var(--laranja)',clara:'var(--laranja-claro)',texto:'var(--laranja-esc)',itens:[
-    ['🧘','Pilates e atividades corporais','Movimento, disposição e autonomia para um estilo de vida mais ativo.'],
-    ['🏊','Hidroginástica','Saúde, convivência e bem-estar em um ambiente coletivo e leve.'],
-    ['💃','Dança e expressão corporal','Alegria, socialização e fortalecimento da autoestima em movimento.']]},
-  {titulo:'Arte, aprendizagem e convivência',lema:'Pertencimento',icone:'🎨',
-   cor:'var(--azul)',clara:'var(--azul-claro)',texto:'var(--azul)',itens:[
-    ['🎨','Arte, cultura e criatividade','Pintura, artesanato, crochê e bordado que revelam talentos e geram renda.'],
-    ['💻','Inclusão digital','Autonomia no uso de celulares, aplicativos e internet para se comunicar e informar.'],
-    ['📚','Palestras e atividades educativas','Saúde, direitos, cidadania e bem-estar como ferramentas de autonomia.'],
-    ['🤝','Convivência e vínculos','O coração do IDEPS: pertencimento, amizade e novos vínculos a cada encontro.']]}
-];
-const VALORES=['Humanização','Acolhimento','Respeito','Inclusão','Autonomia','Cidadania',
-  'Solidariedade','Participação','Ética','Transparência'];
-const PARCEIROS=['SEAD','SAS','Secretaria de Estado de Educação','SENAR','SESC','Mesa Brasil',
-  'CMAS','CMDPI','Fórum das Entidades','Comper','República das Arteiras','Cleber das Onças','ISA'];
+/* os quatro grupos de atividades de Quem somos: o texto vem do painel,
+   a cor é fixa e segue a ordem dos grupos */
+const CORES_GRUPO=[
+  {cor:'var(--magenta)',clara:'var(--magenta-claro)',texto:'var(--magenta-forte)'},
+  {cor:'var(--verde)',clara:'var(--verde-claro)',texto:'var(--verde-esc)'},
+  {cor:'var(--laranja)',clara:'var(--laranja-claro)',texto:'var(--laranja-esc)'},
+  {cor:'var(--azul)',clara:'var(--azul-claro)',texto:'var(--azul)'}];
 
 /* ---------- de onde vêm os projetos ----------
    Preencha com os dados do seu projeto no Supabase: Project Settings → API.
@@ -432,24 +422,15 @@ const BASE=SUPABASE_URL.trim().replace(/\/+$/,'').replace(/\/rest\/v1$/,'');
 let PROJETOS=[];
 
 /* ---------- blocos de conteúdo ----------
-   Números do topo e contato vinham escritos à mão aqui dentro. Agora saem da
-   tabela "conteudo" e são editados no painel. Os padrões abaixo são a rede de
-   segurança: se o banco não responder, o site mostra exatamente o que mostrava
-   antes, em vez de rodapé vazio. */
-const NUMEROS_PADRAO={desde:2017,itens:[
-  {fonte:'anos',rotulo:'anos de atuação'},
-  {fonte:'total',rotulo:'projetos executados'},
-  {fonte:'ativos',rotulo:'projetos em andamento'},
-  {fonte:'manual',numero:'+900',rotulo:'pessoas atendidas'}]};
-
-const CONTATO_PADRAO={telefone:'67 99289-9775',email:'contato.idepsms@gmail.com',
-  endereco:'Rua Dona Rosa Maria, 633',bairro:'Tiradentes — Campo Grande, MS',
-  horario:'Segunda a sexta, das 8h às 17h',
-  instagram:'https://www.instagram.com/idepsms/',facebook:'https://www.facebook.com/idepsms',
-  cursos:'https://cursos.idepsms.org',cnpj:'29.768.758/0001-56'};
-
+   Números, contato, fotos do carrossel e os textos de cada página saem da
+   tabela "conteudo" e são editados no painel. Os padrões ficam em
+   dados/padroes.js e são a rede de segurança: se o banco não responder, o
+   site mostra o texto original em vez de página vazia. */
 let NUMEROS={...NUMEROS_PADRAO};
 let CONTATO={...CONTATO_PADRAO};
+let FOTOS={...FOTOS_PADRAO};
+let TEXTOS={...TEXTOS_PADRAO};
+let AVISOS={...AVISOS_PADRAO};
 
 const CACHE_CONTEUDO='ideps:conteudo';
 
@@ -474,11 +455,21 @@ async function carregarConteudo(){
   if(!blocos) return;                      /* segue com os padrões */
   if(blocos.numeros&&(blocos.numeros.itens||[]).length) NUMEROS={...NUMEROS_PADRAO,...blocos.numeros};
   if(blocos.contato) CONTATO={...CONTATO_PADRAO,...blocos.contato};
+  if(blocos.fotos&&(blocos.fotos.carrossel||[]).length) FOTOS={...FOTOS_PADRAO,...blocos.fotos};
+  if(blocos.avisos) AVISOS={...AVISOS_PADRAO,...blocos.avisos};
+  /* campo que o painel ainda não conhece (página editada antes de o campo
+     existir) continua com o texto padrão */
+  PAGINAS.forEach(p=>{
+    const b=blocos['pagina:'+p.id];
+    if(b) TEXTOS[p.id]={...TEXTOS_PADRAO[p.id],...b};
+  });
 }
+
+const desde=()=>Number(NUMEROS.desde)||NUMEROS_PADRAO.desde;
 
 /* um número ou sai da lista de projetos ou foi digitado no painel */
 const valorDoNumero=it=>{
-  if(it.fonte==='anos')   return String(new Date().getFullYear()-(Number(NUMEROS.desde)||NUMEROS_PADRAO.desde));
+  if(it.fonte==='anos')   return String(new Date().getFullYear()-desde());
   if(it.fonte==='total')  return String(PROJETOS.length);
   if(it.fonte==='ativos') return String(PROJETOS.filter(p=>p.status==='ativo').length);
   return String(it.numero||'');
@@ -570,13 +561,29 @@ function textoSobre(cor){
 
 const app=document.getElementById('app');
 let filtroStatus='todos', filtroEixo='Todos';
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- textos do painel → HTML ----------
+   Tudo o que vem do banco passa por esc(). Campo vazio não deixa rótulo
+   nem parágrafo solto: o pedaço some da página. */
+const lista=v=>Array.isArray(v)?v.filter(x=>x&&String(x).trim()):[];
+const paragrafos=s=>String(s||'').split(/\n+/).map(p=>p.trim()).filter(Boolean)
+  .map(p=>`<p>${esc(p)}</p>`).join('');
+const chamada=s=>s?`<p class="eyebrow">${esc(s)}</p>`:'';
+const lead=(s,estilo)=>s?`<p class="lead"${estilo?` style="${estilo}"`:''}>${esc(s)}</p>`:'';
+/* *palavra* ganha o grifo amarelo do título da capa */
+const grifo=s=>esc(s).replace(/\*([^*]+)\*/g,'<em>$1</em>');
+/* "No seu horário. Você assiste…" → a primeira frase sai em negrito */
+const vantagem=s=>{
+  const m=/^(.*?[.!?])(\s.*)?$/.exec(s);
+  return m?`<b>${esc(m[1])}</b>${esc(m[2]||'')}`:esc(s);
+};
 const cor=p=>EIXOS[p.eixo]||{cor:'var(--azul)',clara:'var(--azul-claro)'};
 
 function cartao(p){
   const c=cor(p);
   return `<a class="cartao" href="#/projeto/${p.id}" style="--cor:${c.cor};--cor-clara:${c.clara}">
-    <div class="cartao-topo"><img src="${p.capa}" alt="">
+    <div class="cartao-topo"><img src="${esc(p.capa)}" alt="">
       <span class="selo ${p.status}">${p.status==='ativo'?'Em andamento':'Finalizado'}</span></div>
     <div class="cartao-corpo">
       <span class="eixo-tag"><i></i>${esc(p.eixo)}</span>
@@ -586,23 +593,62 @@ function cartao(p){
     </div></a>`;
 }
 
+/* ---------- avisos e novidades ----------
+   Só aparecem os que estão no ar hoje (data do visitante), na ordem do painel.
+   Um banner sozinho ocupa a largura toda, com o botão à direita; dois ou
+   mais viram cartões lado a lado, com o botão embaixo do texto. */
+const linkSeguro=l=>/^(#\/|https?:\/\/)/i.test(l||'')?l:'';
+function avisosDaCapa(){
+  const hoje=hojeISO();
+  const lista=(Array.isArray(AVISOS.itens)?AVISOS.itens:[])
+    .filter(a=>a&&a.titulo&&situacaoDoAviso(a,hoje)==='no-ar');
+  if(!lista.length) return '';
+  const sozinho=lista.length===1;
+  return `<section class="avisos" aria-label="Avisos e novidades"><div class="wrap">
+    <div class="avisos-grade">${lista.map(a=>{
+      const t=TIPOS_AVISO[a.tipo]||TIPOS_AVISO.novidade, link=linkSeguro(a.link);
+      const externo=/^https?:/i.test(link);
+      const acao=link?`<a class="aviso-acao" href="${esc(link)}"${externo?' target="_blank" rel="noopener noreferrer"':''}>${esc(a.botao||'Saiba mais')} →</a>`:'';
+      return `<article class="aviso-card" style="--cor:${t.cor};--cor-clara:${t.clara};--cor-texto:${t.texto}">
+        ${a.imagem?`<img src="${esc(a.imagem)}" alt="">`:''}
+        <div class="aviso-corpo">
+          <p class="aviso-tipo">${esc(t.rotulo)}</p>
+          <h3>${esc(a.titulo)}</h3>
+          ${a.texto?`<p class="aviso-texto">${esc(a.texto)}</p>`:''}
+          ${sozinho?'':acao}
+        </div>
+        ${sozinho?acao:''}
+      </article>`;}).join('')}</div>
+  </div></section>`;
+}
+
+/* os grupos de atividades são editados em Quem somos e aparecem também na home */
+function gruposDeAtividades(){
+  const t=TEXTOS['quem-somos'];
+  return CORES_GRUPO.map((c,i)=>{
+    const k=`dim${i+1}_`;
+    return {...c,titulo:t[k+'titulo'],lema:t[k+'lema'],icone:t[k+'icone'],
+      itens:(Array.isArray(t[k+'itens'])?t[k+'itens']:[]).filter(a=>a&&a.nome)};
+  }).filter(d=>d.titulo);
+}
+
 /* na home, cada dimensão lista só os nomes; em Quem somos, com a descrição */
 function dimensoes(detalhe){
-  return `<div class="dimensoes${detalhe?' detalhe':''}">${DIMENSOES.map(d=>`
+  return `<div class="dimensoes${detalhe?' detalhe':''}">${gruposDeAtividades().map(d=>`
     <article class="dimensao" style="--cor:${d.cor};--cor-clara:${d.clara};--cor-texto:${d.texto}">
       <div class="dimensao-cabeca">
-        <span class="icone" aria-hidden="true">${d.icone}</span>
-        <div><p class="dimensao-lema">${d.lema}</p><h3>${d.titulo}</h3></div>
+        ${d.icone?`<span class="icone" aria-hidden="true">${esc(d.icone)}</span>`:''}
+        <div>${d.lema?`<p class="dimensao-lema">${esc(d.lema)}</p>`:''}<h3>${esc(d.titulo)}</h3></div>
       </div>
-      <ul>${d.itens.map(([icone,nome,texto])=>detalhe
-        ?`<li><span class="icone" aria-hidden="true">${icone}</span><div><b>${nome}</b><p>${texto}</p></div></li>`
-        :`<li>${nome}</li>`).join('')}</ul>
+      <ul>${d.itens.map(a=>detalhe
+        ?`<li>${a.icone?`<span class="icone" aria-hidden="true">${esc(a.icone)}</span>`:''}<div><b>${esc(a.nome)}</b>${a.texto?`<p>${esc(a.texto)}</p>`:''}</div></li>`
+        :`<li>${esc(a.nome)}</li>`).join('')}</ul>
     </article>`).join('')}</div>`;
 }
 
 /* "Cuidar · Acolher · …": cada verbo leva seu ponto junto, para a linha
    quebrar entre palavras e nunca deixar um "·" sozinho no fim */
-const verbos=lista=>`<p class="verbos">${lista.map(v=>`<span>${v}</span>`).join(' ')}</p>`;
+const verbos=v=>lista(v).length?`<p class="verbos">${lista(v).map(x=>`<span>${esc(x)}</span>`).join(' ')}</p>`:'';
 
 const POR_EXTENSO=['Nenhuma','Uma','Duas','Três','Quatro','Cinco','Seis','Sete','Oito','Nove','Dez'];
 const frentesAtivas=n=>`${POR_EXTENSO[n]||n} ${n===1?'frente ativa':'frentes ativas'}`;
@@ -648,26 +694,29 @@ function ajustarRotulos(){
 
 const paginas={
 
-'/':()=>`
+'/':()=>{
+  const t=TEXTOS.inicio, fotos=FOTOS.carrossel||[];
+  const ativos=PROJETOS.filter(p=>p.status==='ativo');
+  return `${avisosDaCapa()}
  <div class="hero"><div class="wrap"><div class="hero-grid">
    <div>
-     <p class="eyebrow">Campo Grande, MS · desde 2017</p>
-     <h1>Um espaço onde mulheres continuam <em>florescendo</em>.</h1>
-     <p>O IDEPS é uma Organização da Sociedade Civil que promove desenvolvimento humano, cidadania, inclusão social e qualidade de vida para pessoas em situação de vulnerabilidade, com atenção especial às mulheres idosas.</p>
-     ${verbos(['Cuidar','Acolher','Incluir','Desenvolver','Transformar'])}
+     <p class="eyebrow">Campo Grande, MS · desde ${desde()}</p>
+     <h1>${grifo(t.capa_titulo)}</h1>
+     ${t.capa_texto?`<p>${esc(t.capa_texto)}</p>`:''}
+     ${verbos(t.capa_verbos)}
      <div class="hero-acoes">
        <a class="btn" href="#/quem-somos">Conheça o IDEPS</a>
        <a class="btn linha" href="#/projetos">Ver os projetos</a>
      </div>
    </div>
    <div class="hero-foto" id="heroFoto" aria-roledescription="carrossel" aria-label="Fotos das atividades do IDEPS">
-     ${HERO_FOTOS.map((f,i)=>
-       `<img src="${f.src}" alt="${esc(f.alt)}" class="${i===0?'ativo':''}"${i?' loading="lazy"':''}>`).join('')}
-     ${HERO_FOTOS.length>1?`
+     ${fotos.map((f,i)=>
+       `<img src="${esc(f.src)}" alt="${esc(f.alt)}" class="${i===0?'ativo':''}"${i?' loading="lazy"':''}>`).join('')}
+     ${fotos.length>1?`
      <button type="button" class="hero-seta ant" data-passo="-1" aria-label="Foto anterior">‹</button>
      <button type="button" class="hero-seta prox" data-passo="1" aria-label="Próxima foto">›</button>
-     <div class="hero-pontos">${HERO_FOTOS.map((f,i)=>
-       `<button type="button" aria-current="${i===0}" aria-label="Ver foto ${i+1} de ${HERO_FOTOS.length}"></button>`).join('')}</div>`:''}
+     <div class="hero-pontos">${fotos.map((f,i)=>
+       `<button type="button" aria-current="${i===0}" aria-label="Ver foto ${i+1} de ${fotos.length}"></button>`).join('')}</div>`:''}
    </div>
  </div></div></div>
 
@@ -679,9 +728,9 @@ const paginas={
  <section class="claro"><div class="wrap">
    <div class="secao-cabeca">
      <div style="max-width:62ch">
-       <p class="eyebrow">Centro de Convivência</p>
-       <h2>Um lugar para continuar vivendo, aprendendo e florescendo.</h2>
-       <p class="lead" style="margin-top:18px">Uma de nossas principais frentes é o Centro de Convivência para Pessoas Idosas, com atenção especial às mulheres idosas em situação de vulnerabilidade. Um lugar de encontro, aprendizagem e cuidado, onde muitas mulheres redescobrem talentos, constroem novos vínculos e se tornam protagonistas de suas próprias histórias.</p>
+       ${chamada(t.centro_chamada)}
+       <h2>${esc(t.centro_titulo)}</h2>
+       ${lead(t.centro_texto,'margin-top:18px')}
      </div>
      <a class="btn linha" href="#/quem-somos">Conheça o centro</a>
    </div>
@@ -690,50 +739,48 @@ const paginas={
 
  <section class="tempo"><div class="wrap">
    <div class="secao-cabeca"><div style="max-width:60ch">
-     <p class="eyebrow">Desde 2017</p>
-     <h2>Cada projeto é um compromisso.</h2>
-     <p class="lead">Com as pessoas atendidas, com nossos parceiros e com a sociedade. Cada linha abaixo é um termo de fomento, com prazo e metas definidos. A cor indica a área de atuação.</p>
+     <p class="eyebrow">Desde ${desde()}</p>
+     <h2>${esc(t.tempo_titulo)}</h2>
+     ${lead(t.tempo_texto)}
    </div></div>
    ${linhaDoTempo()}
  </div></section>
 
  <section><div class="wrap">
    <div class="secao-cabeca">
-     <div><p class="eyebrow">Em andamento agora</p><h2>${frentesAtivas(PROJETOS.filter(p=>p.status==='ativo').length)}</h2></div>
+     <div><p class="eyebrow">Em andamento agora</p><h2>${frentesAtivas(ativos.length)}</h2></div>
      <a class="btn linha" href="#/projetos">Ver todos os projetos</a>
    </div>
-   <div class="grade centrada">${PROJETOS.filter(p=>p.status==='ativo').map(cartao).join('')}</div>
+   <div class="grade centrada">${ativos.map(cartao).join('')}</div>
  </div></section>
 
  <section class="claro"><div class="wrap"><div class="cursos-grid">
    <div>
-     <p class="eyebrow">Plataforma de cursos</p>
-     <h2>Aprender algo novo, em qualquer fase da vida.</h2>
-     <p class="lead">Cursos online e gratuitos, feitos para caber na rotina de quem trabalha, cuida da casa e da família.</p>
-     <ul class="lista-check">
-       <li><b>Gratuitos.</b></li>
-       <li><b>No seu horário.</b> Você assiste quando der, de onde estiver.</li>
-       <li><b>Com certificado.</b> Para usar em processos seletivos e no currículo.</li>
-     </ul>
-     <a class="btn" href="#/cursos">Acessar a plataforma</a>
+     ${chamada(t.cursos_chamada)}
+     <h2>${esc(t.cursos_titulo)}</h2>
+     ${lead(t.cursos_texto)}
+     ${lista(t.cursos_itens).length?`<ul class="lista-check">
+       ${lista(t.cursos_itens).map(v=>`<li>${vantagem(v)}</li>`).join('')}
+     </ul>`:''}
+     <a class="btn" href="#/cursos"${lista(t.cursos_itens).length?'':' style="margin-top:32px"'}>Acessar a plataforma</a>
    </div>
    <div class="cursos-foto"><img src="${IMG}jovem-aluna-ouvindo-professora-de-ingles-1024x617.jpg" alt="Aluna estudando online"></div>
- </div></div></section>`,
+ </div></div></section>`;
+},
 
-'/quem-somos':()=>`
+'/quem-somos':()=>{
+  const t=TEXTOS['quem-somos'];
+  return `
  <section><div class="wrap">
    <p class="eyebrow">Quem somos</p>
-   <h2>Desde 2017, transformando vidas.</h2>
-   <p class="lead" style="margin-top:18px">Por meio da convivência, do cuidado, da inclusão e do desenvolvimento social.</p>
+   <h2>${esc(t.abre_titulo)}</h2>
+   ${lead(t.abre_subtitulo,'margin-top:18px')}
    <div class="projeto-grid" style="margin-top:44px">
-     <div class="corpo-texto">
-       <p>O IDEPS é uma Organização da Sociedade Civil que promove desenvolvimento humano, cidadania, inclusão social e qualidade de vida para pessoas em situação de vulnerabilidade — sempre pautado no acolhimento, na garantia de direitos e no fortalecimento dos vínculos comunitários.</p>
-       <p>Hoje, uma de nossas principais frentes é o Centro de Convivência para Pessoas Idosas, com atenção especial às mulheres idosas em situação de vulnerabilidade econômica e social. É um lugar de encontro, aprendizagem e cuidado, onde muitas mulheres redescobrem talentos, constroem novos vínculos e se tornam protagonistas de suas próprias histórias.</p>
-     </div>
+     <div class="corpo-texto">${paragrafos(t.abre_texto)}</div>
      <div class="ficha"><dl>
-       <dt>Razão social</dt><dd>Instituto de Desenvolvimento Pró-Social</dd>
-       <dt>Natureza jurídica</dt><dd>Organização da Sociedade Civil</dd>
-       <dt>Fundação</dt><dd>2017</dd>
+       ${t.razao_social?`<dt>Razão social</dt><dd>${esc(t.razao_social)}</dd>`:''}
+       ${t.natureza?`<dt>Natureza jurídica</dt><dd>${esc(t.natureza)}</dd>`:''}
+       <dt>Fundação</dt><dd>${desde()}</dd>
        ${CONTATO.endereco?`<dt>Sede</dt><dd>${esc(CONTATO.endereco)}${CONTATO.bairro?'<br>'+esc(CONTATO.bairro):''}</dd>`:''}
        ${CONTATO.cnpj?`<dt>CNPJ</dt><dd>${esc(CONTATO.cnpj)}</dd>`:''}
      </dl></div>
@@ -741,35 +788,31 @@ const paginas={
  </div></section>
 
  <section class="claro"><div class="wrap">
-   <p class="eyebrow">Um centro de convivência para mulheres idosas</p>
-   <h2 style="max-width:24ch">Um lugar para continuar vivendo, aprendendo e florescendo.</h2>
+   ${chamada(t.centro_chamada)}
+   <h2 style="max-width:24ch">${esc(t.centro_titulo)}</h2>
    <div class="duas" style="margin-top:36px">
-     <p class="destaque">No IDEPS, acreditamos que envelhecer não significa deixar de sonhar, aprender e criar.</p>
-     <div class="corpo-texto">
-     <p>A terceira idade pode ser uma fase de novas descobertas, amizades e possibilidades.</p>
-     <p>Por isso, nosso Centro de Convivência é muito mais do que um espaço de atividades: é onde amizades nascem, talentos são descobertos e novos projetos de vida ganham forma. Atendemos principalmente mulheres idosas em vulnerabilidade, com foco em ampliar autonomia, autoestima, saúde, convivência, participação social e qualidade de vida.</p>
-     </div>
+     ${t.centro_destaque?`<p class="destaque">${esc(t.centro_destaque)}</p>`:''}
+     <div class="corpo-texto">${paragrafos(t.centro_texto)}</div>
    </div>
  </div></section>
 
  <section><div class="wrap">
-   <p class="eyebrow">Nossas atividades e serviços</p>
-   <h2>Uma programação diversificada.</h2>
-   <p class="lead" style="margin:18px 0 44px">Construída para atender aos interesses e às diferentes dimensões do envelhecimento.</p>
-   ${dimensoes(true)}
+   ${chamada(t.ativ_chamada)}
+   <h2>${esc(t.ativ_titulo)}</h2>
+   ${lead(t.ativ_texto,'margin-top:18px')}
+   <div style="margin-top:44px">${dimensoes(true)}</div>
  </div></section>
 
  <section class="claro"><div class="wrap"><div class="duas">
    <div class="corpo-texto">
-     <p class="eyebrow">Cuidado integral</p>
-     <h2>Cuidar é olhar para a pessoa como um todo.</h2>
-     <p>Entendemos o envelhecimento a partir de uma perspectiva integral: corpo, saúde emocional, alimentação, vínculos, autonomia e história caminham juntos. A psicologia oferece escuta; a nutrição, escolhas conscientes; o movimento, disposição; a arte e a convivência, pertencimento. Todas essas experiências convergem para o que buscamos diariamente — mais qualidade de vida e mais possibilidades.</p>
+     ${chamada(t.cuidado_chamada)}
+     <h2>${esc(t.cuidado_titulo)}</h2>
+     ${paragrafos(t.cuidado_texto)}
    </div>
    <div class="corpo-texto">
-     <p class="eyebrow">Mulheres que continuam florescendo</p>
-     <h2>A vida não para depois dos 60.</h2>
-     <p>Uma mulher pode aprender algo novo, descobrir um talento, fazer amizades, cuidar de si, voltar a estudar ou encontrar uma nova possibilidade de renda — em qualquer fase da vida.</p>
-     <p>Por isso o IDEPS não quer apenas oferecer atividades. Queremos oferecer possibilidades: de convivência, aprendizagem, autonomia, cuidado, participação — e de continuar florescendo.</p>
+     ${chamada(t.florescer_chamada)}
+     <h2>${esc(t.florescer_titulo)}</h2>
+     ${paragrafos(t.florescer_texto)}
    </div>
  </div></div></section>
 
@@ -777,43 +820,43 @@ const paginas={
    <p class="eyebrow">O que nos move</p>
    <h2>Missão, visão e valores</h2>
    <div class="mvv">
-     <div><h3>Missão</h3>
-       <p>Promover o desenvolvimento humano e social, fortalecendo a autonomia, a cidadania, a convivência, o cuidado e a qualidade de vida de pessoas em situação de vulnerabilidade, com especial atenção às mulheres idosas.</p></div>
-     <div><h3>Visão</h3>
-       <p>Ser uma organização social reconhecida pela seriedade, acolhimento, transparência e impacto de suas ações, contribuindo para uma sociedade mais inclusiva, participativa e comprometida com o envelhecimento digno.</p></div>
+     ${t.missao?`<div><h3>Missão</h3><p>${esc(t.missao)}</p></div>`:''}
+     ${t.visao?`<div><h3>Visão</h3><p>${esc(t.visao)}</p></div>`:''}
    </div>
-   <h3 style="color:#fff;margin-top:44px">Nossos valores</h3>
-   <ul class="valores">${VALORES.map(v=>`<li>${v}</li>`).join('')}</ul>
+   ${lista(t.valores).length?`<h3 style="color:#fff;margin-top:44px">Nossos valores</h3>
+   <ul class="valores">${lista(t.valores).map(v=>`<li>${esc(v)}</li>`).join('')}</ul>`:''}
  </div></section>
 
  <section><div class="wrap"><div class="frase">
-   <h2>Toda pessoa merece oportunidades para viver com dignidade, autonomia e pertencimento.</h2>
-   <p class="frase-fecho">É por isso que o IDEPS existe.</p>
-   ${verbos(['Acolher','Ouvir','Ensinar','Cuidar','Alimentar','Conectar','Fortalecer','Transformar'])}
-   <p class="lead">Como Organização da Sociedade Civil, conduzimos nossas ações com responsabilidade, ética e transparência. Cada projeto é um compromisso com as pessoas atendidas, com nossos parceiros e com a sociedade — porque transformar uma vida também é transformar uma comunidade.</p>
+   <h2>${esc(t.frase_titulo)}</h2>
+   ${t.frase_fecho?`<p class="frase-fecho">${esc(t.frase_fecho)}</p>`:''}
+   ${verbos(t.frase_verbos)}
+   ${lead(t.frase_texto)}
  </div></div></section>
 
  <section class="claro"><div class="wrap">
    <p class="eyebrow">Nossos parceiros</p>
-   <h2>Juntos, conseguimos chegar mais longe.</h2>
+   <h2>${esc(t.parceiros_titulo)}</h2>
    <div class="duas" style="margin-top:36px">
-     <div class="corpo-texto"><p>Nenhuma transformação social acontece de forma isolada. Construímos uma rede que compartilha o compromisso de melhorar a vida das pessoas — entre eles a Rede Comper de Supermercados e instituições do Sistema S, como SENAR e SESC. Buscamos sempre novas parcerias com empresas, órgãos públicos e organizações comprometidas com o desenvolvimento social.</p></div>
-     <p class="destaque">Para o IDEPS, cada parceria representa a união de forças em torno de um propósito maior: transformar oportunidades em impacto social.</p>
+     <div class="corpo-texto">${paragrafos(t.parceiros_texto)}</div>
+     ${t.parceiros_destaque?`<p class="destaque">${esc(t.parceiros_destaque)}</p>`:''}
    </div>
-   <ul class="parceiros">${PARCEIROS.map(n=>`<li>${n}</li>`).join('')}</ul>
+   ${lista(t.parceiros_lista).length?`<ul class="parceiros">${lista(t.parceiros_lista).map(n=>`<li>${esc(n)}</li>`).join('')}</ul>`:''}
    <div style="margin-top:44px;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
-     <h3>Faça parte dessa rede de transformação.</h3>
+     ${t.parceiros_convite?`<h3>${esc(t.parceiros_convite)}</h3>`:''}
      <a class="btn" href="#/contato">Fale com a gente</a>
    </div>
- </div></section>`,
+ </div></section>`;
+},
 
 '/projetos':()=>{
-  const lista=PROJETOS.filter(p=>
+  const t=TEXTOS.projetos;
+  const visiveis=PROJETOS.filter(p=>
     (filtroStatus==='todos'||p.status===filtroStatus)&&(filtroEixo==='Todos'||p.eixo===filtroEixo));
   return `<section><div class="wrap">
     <p class="eyebrow">Projetos</p>
-    <h2>Tudo o que já fizemos, e o que está em curso.</h2>
-    <p class="lead" style="margin-top:16px">Filtre por situação ou por área de atuação.</p>
+    <h2>${esc(t.titulo)}</h2>
+    ${lead(t.texto,'margin-top:16px')}
     <div class="filtros" style="margin-top:36px" role="group" aria-label="Situação">
       ${[['todos','Todos'],['ativo','Em andamento'],['feito','Finalizados']].map(([v,r])=>
         `<button data-status="${v}" aria-pressed="${filtroStatus===v}">${r}</button>`).join('')}
@@ -824,16 +867,18 @@ const paginas={
         `<button data-eixo="${n}" aria-pressed="${filtroEixo===n}"
           style="${filtroEixo===n?`background:${c.cor};box-shadow:none;color:${n==='Segurança alimentar'||n==='Saúde e convivência'?'#062F06':'#fff'}`:''}">${n}</button>`).join('')}
     </div>
-    <div class="grade">${lista.length?lista.map(cartao).join('')
+    <div class="grade">${visiveis.length?visiveis.map(cartao).join('')
       :'<p class="lead">Nenhum projeto nessa combinação de filtros. Ajuste a seleção acima.</p>'}</div>
   </div></section>`;
 },
 
-'/contato':()=>`
+'/contato':()=>{
+  const t=TEXTOS.contato;
+  return `
  <section><div class="wrap">
    <p class="eyebrow">Contato</p>
-   <h2>Venha até a sede ou fale com a gente.</h2>
-   <p class="lead" style="margin-top:18px">Para participar das atividades, apoiar o instituto ou propor uma parceria. Faça parte dessa rede de transformação.</p>
+   <h2>${esc(t.titulo)}</h2>
+   ${lead(t.texto,'margin-top:18px')}
    <div class="contato-grid" style="margin-top:44px">
      <div>
        <dl>
@@ -851,18 +896,22 @@ const paginas={
      <div class="mapa"><iframe title="Mapa da sede do IDEPS" loading="lazy"
        src="https://maps.google.com/maps?q=${encodeURIComponent([CONTATO.endereco,CONTATO.bairro].filter(Boolean).join(', '))}&t=m&z=15&output=embed&iwloc=near"></iframe></div>
    </div>
- </div></section>`,
+ </div></section>`;
+},
 
-'/cursos':()=>`
+'/cursos':()=>{
+  const t=TEXTOS.cursos;
+  return `
  <section><div class="wrap">
    <p class="eyebrow">Plataforma de cursos</p>
-   <h2 style="max-width:20ch">Cursos gratuitos, do seu jeito.</h2>
-   <p class="lead" style="margin-top:18px">A plataforma de cursos continua sendo a mesma que você já usa. O acesso é por aqui.</p>
+   <h2 style="max-width:20ch">${esc(t.titulo)}</h2>
+   ${lead(t.texto,'margin-top:18px')}
    <div style="margin-top:36px;display:flex;gap:12px;flex-wrap:wrap">
      <a class="btn" href="${esc(CONTATO.cursos)}">Entrar na plataforma</a>
      <a class="btn linha" href="${esc(CONTATO.cursos)}">Criar minha conta</a>
    </div>
- </div></section>`
+ </div></section>`;
+}
 };
 
 function paginaProjeto(id){
@@ -963,6 +1012,7 @@ function pintarContato(){
   p('peFacebook', el=>{el.href=CONTATO.facebook ||'#';el.hidden=!CONTATO.facebook;});
   p('peCursos',   el=>{el.href=CONTATO.cursos   ||'#';el.hidden=!CONTATO.cursos;});
   p('btnCursos',  el=>{el.href=CONTATO.cursos   ||'#';el.hidden=!CONTATO.cursos;});
+  p('peFrase',el=>{el.textContent=CONTATO.frase||'';el.hidden=!CONTATO.frase;});
   p('peAssinatura',el=>el.textContent=
     `IDEPS © ${new Date().getFullYear()}${CONTATO.cnpj?' — CNPJ '+CONTATO.cnpj:''}`);
 }
